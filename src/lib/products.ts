@@ -6,6 +6,7 @@ export type Product = {
   category: string;
   image: string;
   dataAiHint: string;
+  onSale?: boolean;
 };
 
 export const PRODUCTS: Product[] = [
@@ -16,7 +17,8 @@ export const PRODUCTS: Product[] = [
     description: '128GB de armazenamento, câmera tripla de 108MP e tela Super AMOLED de 6.7 polegadas. Desempenho de ponta para suas tarefas.',
     category: 'Celulares',
     image: 'https://picsum.photos/600/400?random=1',
-    dataAiHint: 'smartphone tech'
+    dataAiHint: 'smartphone tech',
+    onSale: true,
   },
   {
     id: 2,
@@ -70,7 +72,8 @@ export const PRODUCTS: Product[] = [
     description: 'Eau de Toilette de 100ml. Uma fragrância amadeirada aquática que celebra a vitória e a força masculina.',
     category: 'Perfumes Masculino',
     image: 'https://picsum.photos/600/400?random=7',
-    dataAiHint: 'perfume bottle'
+    dataAiHint: 'perfume bottle',
+    onSale: true,
   },
   {
     id: 8,
@@ -97,7 +100,8 @@ export const PRODUCTS: Product[] = [
     description: 'Eau de Parfum de 75ml. Uma declaração de felicidade e feminilidade vibrante, com notas de íris e jasmim.',
     category: 'Perfumes Femininos',
     image: 'https://picsum.photos/600/400?random=10',
-    dataAiHint: 'perfume fragrance'
+    dataAiHint: 'perfume fragrance',
+    onSale: true,
   },
   {
     id: 11,

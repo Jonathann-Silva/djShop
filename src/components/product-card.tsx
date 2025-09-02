@@ -14,7 +14,8 @@ import type { Product } from '@/lib/products';
 import { useAuth } from '@/lib/auth';
 import { useCart } from '@/lib/cart';
 import { useToast } from '@/hooks/use-toast';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Star } from 'lucide-react';
+import { Badge } from './ui/badge';
 
 interface ProductCardProps {
   product: Product;
@@ -45,6 +46,11 @@ export function ProductCard({ product }: ProductCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             data-ai-hint={product.dataAiHint}
           />
+          {product.onSale && (
+            <Badge className="absolute top-2 right-2" variant="destructive">
+              Promoção
+            </Badge>
+          )}
         </div>
       </CardHeader>
       <CardContent className="p-4 flex-grow">
