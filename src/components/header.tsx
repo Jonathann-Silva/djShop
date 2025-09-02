@@ -37,7 +37,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
           <Package2 className="h-6 w-6 text-primary" />
-          <span className="font-headline">Vitrine Digital</span>
+          <span className="font-headline">ShopFast</span>
         </Link>
         <div className="flex items-center gap-4">
           <CartSheet>

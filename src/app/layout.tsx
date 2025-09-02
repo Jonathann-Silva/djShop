@@ -8,8 +8,8 @@ import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Vitrine Digital',
-  description: 'Uma vitrine de e-commerce moderna.',
+  title: 'ShopFast',
+  description: 'Sua loja online rápida e moderna.',
 };
 
 export default function RootLayout({
