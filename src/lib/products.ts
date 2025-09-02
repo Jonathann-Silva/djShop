@@ -11,111 +11,111 @@ export type Product = {
 export const PRODUCTS: Product[] = [
   {
     id: 1,
-    name: 'Ergonomic Office Chair',
-    price: 299.99,
-    description: 'A comfortable and supportive chair designed for long hours at the desk. Features adjustable height, lumbar support, and breathable mesh back.',
-    category: 'Furniture',
+    name: 'Smartphone X Pro',
+    price: 4999.9,
+    description: '128GB de armazenamento, câmera tripla de 108MP e tela Super AMOLED de 6.7 polegadas. Desempenho de ponta para suas tarefas.',
+    category: 'Celulares',
     image: 'https://picsum.photos/600/400?random=1',
-    dataAiHint: 'office chair'
+    dataAiHint: 'smartphone tech'
   },
   {
     id: 2,
-    name: 'Wireless Mechanical Keyboard',
-    price: 129.99,
-    description: 'A tactile and responsive keyboard with customizable RGB lighting. Connect via Bluetooth or USB-C.',
-    category: 'Electronics',
+    name: 'Smartphone Y Lite',
+    price: 2499.9,
+    description: '64GB de armazenamento e bateria de longa duração. O companheiro ideal para o dia a dia, com design moderno e leve.',
+    category: 'Celulares',
     image: 'https://picsum.photos/600/400?random=2',
-    dataAiHint: 'mechanical keyboard'
+    dataAiHint: 'smartphone mobile'
   },
   {
     id: 3,
-    name: '4K UHD Monitor',
-    price: 449.0,
-    description: 'A 27-inch 4K monitor with stunning color accuracy and clarity. Perfect for creative professionals and gamers.',
-    category: 'Electronics',
+    name: 'Smartphone Z Fold',
+    price: 9999.9,
+    description: '256GB de armazenamento e a revolucionária tela dobrável. Um novo conceito de mobilidade e produtividade.',
+    category: 'Celulares',
     image: 'https://picsum.photos/600/400?random=3',
-    dataAiHint: 'computer monitor'
+    dataAiHint: 'foldable smartphone'
   },
   {
     id: 4,
-    name: 'Minimalist Desk Lamp',
-    price: 79.5,
-    description: 'A sleek and modern LED desk lamp with adjustable brightness and color temperature. Provides flicker-free lighting.',
-    category: 'Home Goods',
+    name: 'Notebook Gamer Fire',
+    price: 8999.0,
+    description: '16GB de RAM, placa de vídeo RTX 4060 e processador de última geração. Domine seus jogos com o máximo de performance.',
+    category: 'Computadores',
     image: 'https://picsum.photos/600/400?random=4',
-    dataAiHint: 'desk lamp'
+    dataAiHint: 'gaming laptop'
   },
   {
     id: 5,
-    name: 'Smart Reusable Notebook',
-    price: 34.95,
-    description: 'Write, scan, and erase. This notebook connects to your favorite cloud services for endless use.',
-    category: 'Office Supplies',
+    name: 'Ultrabook Air',
+    price: 6499.0,
+    description: 'Design leve e fino com 8GB de RAM e 512GB de SSD. Perfeito para quem busca portabilidade sem abrir mão da potência.',
+    category: 'Computadores',
     image: 'https://picsum.photos/600/400?random=5',
-    dataAiHint: 'notebook journal'
+    dataAiHint: 'ultrabook laptop'
   },
   {
     id: 6,
-    name: 'Adjustable Standing Desk',
-    price: 599.0,
-    description: 'Switch between sitting and standing with this electric height-adjustable desk. Features a spacious work surface and memory presets.',
-    category: 'Furniture',
+    name: 'PC All-in-One Home',
+    price: 3899.0,
+    description: 'Tela de 24 polegadas, 8GB de RAM e 1TB de HD. A solução completa para trabalho e entretenimento em casa.',
+    category: 'Computadores',
     image: 'https://picsum.photos/600/400?random=6',
-    dataAiHint: 'standing desk'
+    dataAiHint: 'all-in-one computer'
   },
   {
     id: 7,
-    name: 'Noise-Cancelling Headphones',
-    price: 349.99,
-    description: 'Immerse yourself in sound with industry-leading noise cancellation. Features up to 30 hours of battery life.',
-    category: 'Electronics',
+    name: 'Perfume Invictus',
+    price: 459.9,
+    description: 'Eau de Toilette de 100ml. Uma fragrância amadeirada aquática que celebra a vitória e a força masculina.',
+    category: 'Perfumes Masculino',
     image: 'https://picsum.photos/600/400?random=7',
-    dataAiHint: 'headphones music'
+    dataAiHint: 'perfume bottle'
   },
   {
     id: 8,
-    name: 'Gourmet Coffee Beans',
-    price: 22.5,
-    description: 'A 12oz bag of single-origin, medium-roast coffee beans with notes of chocolate and citrus.',
-    category: 'Home Goods',
+    name: 'Perfume Sauvage',
+    price: 529.0,
+    description: 'Eau de Parfum de 60ml. Uma composição radicalmente fresca, ditada por um nome que soa como um manifesto.',
+    category: 'Perfumes Masculino',
     image: 'https://picsum.photos/600/400?random=8',
-    dataAiHint: 'coffee beans'
+    dataAiHint: 'cologne scent'
   },
   {
     id: 9,
-    name: 'Modern Bookshelf',
-    price: 180.0,
-    description: 'A stylish and sturdy 5-tier bookshelf perfect for displaying books, plants, and decor.',
-    category: 'Furniture',
+    name: 'Perfume 1 Million',
+    price: 389.9,
+    description: 'Eau de Toilette de 50ml. Um aroma picante e fresco para o homem que tem o mundo aos seus pés.',
+    category: 'Perfumes Masculino',
     image: 'https://picsum.photos/600/400?random=9',
-    dataAiHint: 'bookshelf interior'
+    dataAiHint: 'luxury perfume'
   },
   {
     id: 10,
-    name: 'High-Speed Blender',
-    price: 99.99,
-    description: 'A powerful blender for smoothies, soups, and sauces. Comes with a 64oz container and multiple speed settings.',
-    category: 'Home Goods',
+    name: 'Perfume La Vie Est Belle',
+    price: 699.0,
+    description: 'Eau de Parfum de 75ml. Uma declaração de felicidade e feminilidade vibrante, com notas de íris e jasmim.',
+    category: 'Perfumes Femininos',
     image: 'https://picsum.photos/600/400?random=10',
-    dataAiHint: 'kitchen blender'
+    dataAiHint: 'perfume fragrance'
   },
   {
     id: 11,
-    name: 'Yoga Mat',
-    price: 45.0,
-    description: 'A non-slip, eco-friendly yoga mat with extra cushioning for comfort and support during your practice.',
-    category: 'Sports',
+    name: 'Perfume Good Girl',
+    price: 649.0,
+    description: 'Eau de Parfum de 80ml. Audacioso e sofisticado, em um frasco icônico em formato de salto agulha.',
+    category: 'Perfumes Femininos',
     image: 'https://picsum.photos/600/400?random=11',
-    dataAiHint: 'yoga mat'
+    dataAiHint: 'elegant perfume'
   },
   {
     id: 12,
-    name: 'Smart Water Bottle',
-    price: 59.95,
-    description: 'Tracks your water intake and glows to remind you to stay hydrated throughout the day.',
-    category: 'Sports',
+    name: 'Perfume Coco Mademoiselle',
+    price: 769.0,
+    description: 'Eau de Parfum de 50ml. A essência de uma mulher livre e audaciosa. Um oriental feminino de personalidade forte.',
+    category: 'Perfumes Femininos',
     image: 'https://picsum.photos/600/400?random=12',
-    dataAiHint: 'water bottle'
+    dataAiHint: 'classic perfume'
   },
 ];
 

@@ -1,4 +1,4 @@
-import { ProductGrid } from '@/components/product-grid';
+import { ProductTabs } from '@/components/product-tabs';
 import { ProductRecommendations } from '@/components/product-recommendations';
 import { getProducts } from '@/lib/products';
 
@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <div className="space-y-12">
-      <ProductGrid products={products} />
+      <ProductTabs products={products} />
       <ProductRecommendations />
     </div>
   );
