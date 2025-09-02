@@ -56,12 +56,12 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="text-center py-20">
-        <h2 className="text-3xl font-bold font-headline mb-2">Your Cart is Empty</h2>
+        <h2 className="text-3xl font-bold font-headline mb-2">Seu Carrinho está Vazio</h2>
         <p className="text-muted-foreground mb-4">
-          Looks like you haven&apos;t added anything to your cart yet.
+          Parece que você ainda não adicionou nada ao seu carrinho.
         </p>
         <Button asChild>
-          <Link href="/">Start Shopping</Link>
+          <Link href="/">Começar a Comprar</Link>
         </Button>
       </div>
     );
@@ -70,13 +70,13 @@ export default function CheckoutPage() {
   return (
     <div className="grid md:grid-cols-5 gap-12">
       <div className="md:col-span-3">
-        <h1 className="text-3xl font-bold font-headline mb-6">Shipping Details</h1>
+        <h1 className="text-3xl font-bold font-headline mb-6">Detalhes do Envio</h1>
         <CheckoutForm />
       </div>
       <div className="md:col-span-2">
         <Card className="sticky top-24">
           <CardHeader>
-            <CardTitle>Order Summary</CardTitle>
+            <CardTitle>Resumo do Pedido</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {items.map((item) => (

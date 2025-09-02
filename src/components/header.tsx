@@ -62,7 +62,7 @@ export function Header() {
                 <>
                   <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>Sair</DropdownMenuItem>
                 </>
               ) : (
                 <>
@@ -70,7 +70,7 @@ export function Header() {
                     <Link href="/login">Login</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/register">Register</Link>
+                    <Link href="/register">Cadastrar</Link>
                   </DropdownMenuItem>
                 </>
               )}

@@ -18,8 +18,8 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address.' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  email: z.string().email({ message: 'Endereço de e-mail inválido.' }),
+  password: z.string().min(6, { message: 'A senha deve ter pelo menos 6 caracteres.' }),
 });
 
 export function LoginForm() {
@@ -36,13 +36,13 @@ export function LoginForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real app, you'd send this to a server.
-    // Here we'll just simulate a login.
+    // Em um aplicativo real, você enviaria isso para um servidor.
+    // Aqui vamos apenas simular um login.
     const name = values.email.split('@')[0];
     login(name, values.email);
     toast({
-      title: 'Login Successful',
-      description: `Welcome back, ${name}!`,
+      title: 'Login bem-sucedido',
+      description: `Bem-vindo de volta, ${name}!`,
     });
     router.push('/');
   }
@@ -55,9 +55,9 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>E-mail</FormLabel>
               <FormControl>
-                <Input placeholder="m@example.com" {...field} />
+                <Input placeholder="m@exemplo.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -68,7 +68,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Senha</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>

@@ -13,15 +13,15 @@ export default function RegisterPage() {
     <div className="flex items-center justify-center min-h-full">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl font-headline">Register</CardTitle>
+          <CardTitle className="text-2xl font-headline">Cadastro</CardTitle>
           <CardDescription>
-            Create an account to start shopping.
+            Crie uma conta para começar a comprar.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <RegisterForm />
           <div className="mt-4 text-center text-sm">
-            Already have an account?{' '}
+            Já tem uma conta?{' '}
             <Link href="/login" className="underline text-primary">
               Login
             </Link>

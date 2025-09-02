@@ -17,10 +17,10 @@ export function ProductRecommendations() {
     if (user) {
       const fetchRecommendations = async () => {
         setLoading(true);
-        // For demo purposes, we use a static history.
-        // In a real app, this would be dynamically tracked per user.
-        const viewingHistory = '4K UHD Monitor, Wireless Mechanical Keyboard';
-        const purchaseHistory = 'Ergonomic Office Chair';
+        // Para fins de demonstração, usamos um histórico estático.
+        // Em um aplicativo real, isso seria rastreado dinamicamente por usuário.
+        const viewingHistory = 'Monitor 4K UHD, Teclado Mecânico Sem Fio';
+        const purchaseHistory = 'Cadeira de Escritório Ergonômica';
         
         try {
             const result = await getRecommendationsAction({ viewingHistory, purchaseHistory });
@@ -30,7 +30,7 @@ export function ProductRecommendations() {
               );
             }
         } catch (error) {
-            console.error("Failed to fetch recommendations:", error);
+            console.error("Falha ao buscar recomendações:", error);
         } finally {
             setLoading(false);
         }
@@ -42,10 +42,10 @@ export function ProductRecommendations() {
   if (!user) {
     return (
         <div className="text-center bg-card p-8 rounded-lg">
-            <h3 className="text-xl font-headline font-semibold">Personalized Recommendations</h3>
-            <p className="text-muted-foreground mt-2 mb-4">Log in to discover products picked just for you.</p>
+            <h3 className="text-xl font-headline font-semibold">Recomendações Personalizadas</h3>
+            <p className="text-muted-foreground mt-2 mb-4">Faça login para descobrir produtos escolhidos para você.</p>
             <Button asChild>
-                <Link href="/login">Login to View</Link>
+                <Link href="/login">Login para Visualizar</Link>
             </Button>
         </div>
     )
@@ -55,13 +55,13 @@ export function ProductRecommendations() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Recommended For You</CardTitle>
-                <CardDescription>Using AI to find your next favorite product.</CardDescription>
+                <CardTitle>Recomendado Para Você</CardTitle>
+                <CardDescription>Usando IA para encontrar seu próximo produto favorito.</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="flex items-center justify-center h-24">
                     <Loader2 className="mr-2 h-6 w-6 animate-spin text-primary" />
-                    <span className="text-muted-foreground">Analyzing your preferences...</span>
+                    <span className="text-muted-foreground">Analisando suas preferências...</span>
                 </div>
             </CardContent>
         </Card>
@@ -69,14 +69,14 @@ export function ProductRecommendations() {
   }
   
   if (recommendations.length === 0) {
-    return null; // Don't show the component if there's nothing to recommend
+    return null; // Não mostra o componente se não há nada para recomendar
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recommended For You</CardTitle>
-        <CardDescription>Based on your activity, you might like these products.</CardDescription>
+        <CardTitle>Recomendado Para Você</CardTitle>
+        <CardDescription>Com base na sua atividade, você pode gostar destes produtos.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

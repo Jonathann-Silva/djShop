@@ -18,9 +18,9 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
-  email: z.string().email({ message: 'Invalid email address.' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  name: z.string().min(2, { message: 'O nome deve ter pelo menos 2 caracteres.' }),
+  email: z.string().email({ message: 'Endereço de e-mail inválido.' }),
+  password: z.string().min(6, { message: 'A senha deve ter pelo menos 6 caracteres.' }),
 });
 
 export function RegisterForm() {
@@ -38,11 +38,11 @@ export function RegisterForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Simulate registration and login
+    // Simular registro e login
     login(values.name, values.email);
     toast({
-      title: 'Registration Successful',
-      description: 'Your account has been created.',
+      title: 'Cadastro Realizado com Sucesso',
+      description: 'Sua conta foi criada.',
     });
     router.push('/');
   }
@@ -55,7 +55,7 @@ export function RegisterForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Nome</FormLabel>
               <FormControl>
                 <Input placeholder="John Doe" {...field} />
               </FormControl>
@@ -68,9 +68,9 @@ export function RegisterForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>E-mail</FormLabel>
               <FormControl>
-                <Input placeholder="m@example.com" {...field} />
+                <Input placeholder="m@exemplo.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -81,7 +81,7 @@ export function RegisterForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Senha</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>
@@ -90,7 +90,7 @@ export function RegisterForm() {
           )}
         />
         <Button type="submit" className="w-full">
-          Create Account
+          Criar Conta
         </Button>
       </form>
     </Form>

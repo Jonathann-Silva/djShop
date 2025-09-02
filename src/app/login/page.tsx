@@ -15,15 +15,15 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle className="text-2xl font-headline">Login</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account.
+            Entre com seu e-mail abaixo para acessar sua conta.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <LoginForm />
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{' '}
+            Não tem uma conta?{' '}
             <Link href="/register" className="underline text-primary">
-              Sign up
+              Cadastre-se
             </Link>
           </div>
         </CardContent>

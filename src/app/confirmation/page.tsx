@@ -12,15 +12,15 @@ export default function ConfirmationPage() {
             <CheckCircle className="h-10 w-10 text-green-600" />
           </div>
           <CardTitle className="text-3xl font-headline mt-4">
-            Thank You For Your Order!
+            Obrigado Pelo Seu Pedido!
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-muted-foreground">
-            Your order has been placed successfully. A confirmation email has been sent (simulation).
+            Seu pedido foi realizado com sucesso. Um e-mail de confirmação foi enviado (simulação).
           </p>
           <Button asChild>
-            <Link href="/">Continue Shopping</Link>
+            <Link href="/">Continuar Comprando</Link>
           </Button>
         </CardContent>
       </Card>

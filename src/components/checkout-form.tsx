@@ -19,13 +19,13 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 
 const formSchema = z.object({
-  fullName: z.string().min(2, 'Full name is required'),
-  address: z.string().min(5, 'Address is required'),
-  city: z.string().min(2, 'City is required'),
-  postalCode: z.string().min(4, 'Postal code is required'),
-  cardNumber: z.string().regex(/^\d{16}$/, 'Must be 16 digits'),
-  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'MM/YY format'),
-  cvc: z.string().regex(/^\d{3,4}$/, 'Must be 3 or 4 digits'),
+  fullName: z.string().min(2, 'O nome completo é obrigatório'),
+  address: z.string().min(5, 'O endereço é obrigatório'),
+  city: z.string().min(2, 'A cidade é obrigatória'),
+  postalCode: z.string().min(4, 'O código postal é obrigatório'),
+  cardNumber: z.string().regex(/^\d{16}$/, 'Deve ter 16 dígitos'),
+  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Formato MM/AA'),
+  cvc: z.string().regex(/^\d{3,4}$/, 'Deve ter 3 ou 4 dígitos'),
 });
 
 export function CheckoutForm() {
@@ -47,10 +47,10 @@ export function CheckoutForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('Order submitted (simulation):', values);
+    console.log('Pedido enviado (simulação):', values);
     toast({
-      title: 'Order Placed!',
-      description: 'Your order has been successfully placed.',
+      title: 'Pedido Realizado!',
+      description: 'Seu pedido foi realizado com sucesso.',
     });
     clearCart();
     router.push('/confirmation');
@@ -65,7 +65,7 @@ export function CheckoutForm() {
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>Nome Completo</FormLabel>
                   <FormControl>
                     <Input placeholder="John Doe" {...field} />
                   </FormControl>
@@ -78,9 +78,9 @@ export function CheckoutForm() {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>Endereço</FormLabel>
                   <FormControl>
-                    <Input placeholder="123 Main St" {...field} />
+                    <Input placeholder="123 Rua Principal" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -92,9 +92,9 @@ export function CheckoutForm() {
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel>Cidade</FormLabel>
                     <FormControl>
-                      <Input placeholder="New York" {...field} />
+                      <Input placeholder="São Paulo" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -105,9 +105,9 @@ export function CheckoutForm() {
                 name="postalCode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Postal Code</FormLabel>
+                    <FormLabel>CEP</FormLabel>
                     <FormControl>
-                      <Input placeholder="10001" {...field} />
+                      <Input placeholder="01000-000" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -118,16 +118,16 @@ export function CheckoutForm() {
         
         <Card>
             <CardHeader>
-                <CardTitle>Payment Details</CardTitle>
+                <CardTitle>Detalhes do Pagamento</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">This is a simulation. Do not enter real card details.</p>
+                <p className="text-sm text-muted-foreground">Isto é uma simulação. Não insira dados reais do cartão.</p>
                 <FormField
                   control={form.control}
                   name="cardNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Card Number</FormLabel>
+                      <FormLabel>Número do Cartão</FormLabel>
                       <FormControl>
                         <Input placeholder="0000 0000 0000 0000" {...field} />
                       </FormControl>
@@ -141,9 +141,9 @@ export function CheckoutForm() {
                     name="expiryDate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Expiry Date</FormLabel>
+                        <FormLabel>Data de Validade</FormLabel>
                         <FormControl>
-                          <Input placeholder="MM/YY" {...field} />
+                          <Input placeholder="MM/AA" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -167,7 +167,7 @@ export function CheckoutForm() {
         </Card>
 
         <Button type="submit" className="w-full" size="lg">
-          Confirm Order
+          Confirmar Pedido
         </Button>
       </form>
     </Form>

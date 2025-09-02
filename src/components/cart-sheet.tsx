@@ -27,7 +27,7 @@ export function CartSheet({ children }: { children: ReactNode }) {
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader>
-          <SheetTitle>Shopping Cart</SheetTitle>
+          <SheetTitle>Carrinho de Compras</SheetTitle>
         </SheetHeader>
         {items.length > 0 ? (
           <>
@@ -58,7 +58,7 @@ export function CartSheet({ children }: { children: ReactNode }) {
                           variant="ghost"
                           size="icon"
                           onClick={() => removeFromCart(item.id)}
-                          aria-label="Remove item"
+                          aria-label="Remover item"
                         >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
@@ -76,20 +76,20 @@ export function CartSheet({ children }: { children: ReactNode }) {
                   <p>${total.toFixed(2)}</p>
                 </div>
                 <Button asChild className="w-full" size="lg">
-                  <Link href="/checkout">Proceed to Checkout</Link>
+                  <Link href="/checkout">Finalizar Compra</Link>
                 </Button>
                 <Button variant="outline" className="w-full" onClick={clearCart}>
-                  Clear Cart
+                  Limpar Carrinho
                 </Button>
               </div>
             </SheetFooter>
           </>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <p className="text-muted-foreground">Your cart is empty.</p>
+            <p className="text-muted-foreground">Seu carrinho está vazio.</p>
             <SheetTrigger asChild>
                 <Button variant="link" asChild>
-                    <Link href="/">Start Shopping</Link>
+                    <Link href="/">Começar a Comprar</Link>
                 </Button>
             </SheetTrigger>
           </div>

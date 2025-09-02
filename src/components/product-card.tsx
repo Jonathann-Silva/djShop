@@ -29,8 +29,8 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleAddToCart = () => {
     addToCart(product);
     toast({
-      title: 'Added to cart',
-      description: `${product.name} has been added to your cart.`,
+      title: 'Adicionado ao carrinho',
+      description: `${product.name} foi adicionado ao seu carrinho.`,
     });
   };
 
@@ -61,12 +61,12 @@ export function ProductCard({ product }: ProductCardProps) {
         {user ? (
           <>
             <p className="text-xl font-bold text-primary">${product.price.toFixed(2)}</p>
-            <Button onClick={handleAddToCart} aria-label={`Add ${product.name} to cart`}>
-              <ShoppingCart className="mr-2 h-4 w-4" /> Add
+            <Button onClick={handleAddToCart} aria-label={`Adicionar ${product.name} ao carrinho`}>
+              <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar
             </Button>
           </>
         ) : (
-          <p className="text-sm text-muted-foreground">Login to see price</p>
+          <p className="text-sm text-muted-foreground">Faça login para ver o preço</p>
         )}
       </CardFooter>
     </Card>
