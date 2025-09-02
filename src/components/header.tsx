@@ -55,9 +55,11 @@ export function Header() {
                 <>
                   <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/admin">Configurações</Link>
-                  </DropdownMenuItem>
+                  {user.email === 'admin@gmail.com' && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin">Configurações</Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout}>Sair</DropdownMenuItem>
                 </>

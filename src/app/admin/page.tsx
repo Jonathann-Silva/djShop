@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth';
 import { ProductForm } from '@/components/product-form';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,10 +22,41 @@ import {
 import { ProductTable } from '@/components/product-table';
 import { getProducts } from '@/lib/products';
 import { PlusCircle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminDashboard() {
   const products = getProducts();
+  const { user } = useAuth();
+  const router = useRouter();
 
+  useEffect(() => {
+    // Se o estado de autenticação ainda está carregando, não faz nada
+    if (user === undefined) {
+      return; 
+    }
+    // Se não há usuário ou o usuário não é o admin, redireciona
+    if (!user || user.email !== 'admin@gmail.com') {
+      router.replace('/');
+    }
+  }, [user, router]);
+  
+  // Mostra um estado de carregamento enquanto verifica o usuário
+  if (user === undefined) {
+      return (
+          <div className="space-y-4">
+              <Skeleton className="h-12 w-1/4" />
+              <Skeleton className="h-8 w-1/2" />
+              <Skeleton className="h-64 w-full" />
+          </div>
+      )
+  }
+
+  // Se o usuário não for o admin, não renderiza nada (será redirecionado)
+  if (!user || user.email !== 'admin@gmail.com') {
+    return null;
+  }
+
+  // Se o usuário é o admin, mostra a página
   return (
     <Dialog>
       <Card>
