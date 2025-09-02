@@ -63,7 +63,7 @@ export function Header() {
                   <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/admin">Admin</Link>
+                    <Link href="/admin">Configurações</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>Sair</DropdownMenuItem>
