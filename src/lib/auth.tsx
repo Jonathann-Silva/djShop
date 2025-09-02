@@ -2,15 +2,27 @@
 
 import type { ReactNode } from 'react';
 import { createContext, useContext, useState, useEffect } from 'react';
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  User as FirebaseUser, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut
+} from 'firebase/auth';
+import { auth } from './firebase'; // Import from your firebase config
+import { useRouter } from 'next/navigation';
 
 type User = {
-  name: string;
-  email: string;
+  uid: string;
+  email: string | null;
+  name: string | null;
 };
 
 type AuthContextType = {
   user: User | null | undefined;
-  login: (name: string, email: string) => void;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -18,29 +30,40 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
+  const router = useRouter();
 
   useEffect(() => {
-    // This is a simple simulation. In a real app, you'd verify a token.
-    const storedUser = localStorage.getItem('vitrine-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
-      setUser(null);
-    }
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Usuário',
+        });
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const login = (name: string, email: string) => {
-    const newUser = { name, email };
-    localStorage.setItem('vitrine-user', JSON.stringify(newUser));
-    setUser(newUser);
+  const signIn = async (email: string, password: string) => {
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
-  const logout = () => {
-    localStorage.removeItem('vitrine-user');
-    setUser(null);
+  const signUp = async (name: string, email: string, password: string) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    // You might want to update the user's profile with the name here
+    // await updateProfile(userCredential.user, { displayName: name });
+  };
+
+  const logout = async () => {
+    await signOut(auth);
+    router.push('/');
   };
   
-  const value = { user, login, logout };
+  const value = { user, signIn, signUp, logout };
 
   return (
     <AuthContext.Provider value={value}>

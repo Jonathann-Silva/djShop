@@ -18,17 +18,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useRouter } from 'next/navigation';
 
 export function Header() {
   const { user, logout } = useAuth();
   const { getItemCount } = useCart();
-  const router = useRouter();
-
-  const handleLogout = () => {
-    logout();
-    router.push('/');
-  };
   
   const itemCount = getItemCount();
 
@@ -66,7 +59,7 @@ export function Header() {
                     <Link href="/admin">Configurações</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>Sair</DropdownMenuItem>
+                  <DropdownMenuItem onClick={logout}>Sair</DropdownMenuItem>
                 </>
               ) : (
                 <>

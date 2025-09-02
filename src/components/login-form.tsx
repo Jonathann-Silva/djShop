@@ -16,6 +16,8 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
+import { FirebaseError } from 'firebase/app';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Endereço de e-mail inválido.' }),
@@ -23,9 +25,10 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
-  const { login } = useAuth();
+  const { signIn } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,16 +38,37 @@ export function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Em um aplicativo real, você enviaria isso para um servidor.
-    // Aqui vamos apenas simular um login.
-    const name = values.email.split('@')[0];
-    login(name, values.email);
-    toast({
-      title: 'Login bem-sucedido',
-      description: `Bem-vindo de volta, ${name}!`,
-    });
-    router.push('/');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      await signIn(values.email, values.password);
+      toast({
+        title: 'Login bem-sucedido',
+        description: `Bem-vindo de volta!`,
+      });
+      router.push('/');
+      router.refresh(); // Forçar atualização para o header refletir o login
+    } catch (error) {
+      const e = error as FirebaseError;
+      let description = 'Ocorreu um erro desconhecido. Tente novamente.';
+      switch (e.code) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-credential':
+          description = 'E-mail ou senha inválidos.';
+          break;
+        case 'auth/too-many-requests':
+          description = 'Muitas tentativas de login. Tente novamente mais tarde.';
+          break;
+      }
+      toast({
+        title: 'Erro de Login',
+        description: description,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -57,7 +81,7 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>E-mail</FormLabel>
               <FormControl>
-                <Input placeholder="m@exemplo.com" {...field} />
+                <Input placeholder="m@exemplo.com" {...field} disabled={isLoading} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -70,14 +94,14 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <Input type="password" placeholder="••••••••" {...field} disabled={isLoading}/>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? 'Entrando...' : 'Login'}
         </Button>
       </form>
     </Form>

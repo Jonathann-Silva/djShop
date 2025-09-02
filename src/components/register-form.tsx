@@ -16,6 +16,9 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
+import { FirebaseError } from 'firebase/app';
+
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'O nome deve ter pelo menos 2 caracteres.' }),
@@ -24,9 +27,11 @@ const formSchema = z.object({
 });
 
 export function RegisterForm() {
-  const { login } = useAuth();
+  const { signUp } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,14 +42,30 @@ export function RegisterForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Simular registro e login
-    login(values.name, values.email);
-    toast({
-      title: 'Cadastro Realizado com Sucesso',
-      description: 'Sua conta foi criada.',
-    });
-    router.push('/');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      await signUp(values.name, values.email, values.password);
+      toast({
+        title: 'Cadastro Realizado com Sucesso',
+        description: 'Sua conta foi criada e você já está logado.',
+      });
+      router.push('/');
+      router.refresh(); // Forçar atualização para o header refletir o login
+    } catch (error) {
+       const e = error as FirebaseError;
+       let description = "Ocorreu um erro ao criar a conta.";
+       if (e.code === 'auth/email-already-in-use') {
+         description = "Este endereço de e-mail já está em uso.";
+       }
+       toast({
+        title: 'Erro no Cadastro',
+        description: description,
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -57,7 +78,7 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Nome</FormLabel>
               <FormControl>
-                <Input placeholder="John Doe" {...field} />
+                <Input placeholder="John Doe" {...field} disabled={isLoading}/>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -70,7 +91,7 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>E-mail</FormLabel>
               <FormControl>
-                <Input placeholder="m@exemplo.com" {...field} />
+                <Input placeholder="m@exemplo.com" {...field} disabled={isLoading}/>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -83,14 +104,14 @@ export function RegisterForm() {
             <FormItem>
               <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <Input type="password" placeholder="••••••••" {...field} disabled={isLoading}/>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Criar Conta
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? 'Criando conta...' : 'Criar Conta'}
         </Button>
       </form>
     </Form>
