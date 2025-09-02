@@ -14,7 +14,7 @@ import type { Product } from '@/lib/products';
 import { useAuth } from '@/lib/auth';
 import { useCart } from '@/lib/cart';
 import { useToast } from '@/hooks/use-toast';
-import { ShoppingCart, Star } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { Badge } from './ui/badge';
 
 interface ProductCardProps {
@@ -37,7 +37,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-105">
       <CardHeader className="p-0">
-        <div className="relative aspect-video">
+        <div className="relative aspect-[4/3]">
           <Image
             src={product.image}
             alt={product.name}
@@ -53,20 +53,20 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
       </CardHeader>
-      <CardContent className="p-4 flex-grow">
-        <CardTitle className="text-lg font-headline">{product.name}</CardTitle>
-        <CardDescription className="mt-2 text-sm line-clamp-2">{product.description}</CardDescription>
+      <CardContent className="p-3 flex-grow">
+        <CardTitle className="text-base font-headline leading-tight">{product.name}</CardTitle>
+        <CardDescription className="mt-1 text-xs line-clamp-2">{product.description}</CardDescription>
       </CardContent>
-      <CardFooter className="p-4 pt-0 flex justify-between items-center">
+      <CardFooter className="p-3 pt-0 flex justify-between items-center">
         {user ? (
           <>
-            <p className="text-xl font-bold text-primary">${product.price.toFixed(2)}</p>
-            <Button onClick={handleAddToCart} aria-label={`Adicionar ${product.name} ao carrinho`}>
+            <p className="text-lg font-bold text-primary">${product.price.toFixed(2)}</p>
+            <Button onClick={handleAddToCart} size="sm" aria-label={`Adicionar ${product.name} ao carrinho`}>
               <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar
             </Button>
           </>
         ) : (
-          <p className="text-sm text-muted-foreground">Faça login para ver o preço</p>
+          <p className="text-xs text-muted-foreground">Faça login para ver o preço</p>
         )}
       </CardFooter>
     </Card>
