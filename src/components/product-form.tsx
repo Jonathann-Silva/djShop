@@ -28,6 +28,7 @@ const formSchema = z.object({
   image: z.string().url('URL da imagem inválida.'),
   dataAiHint: z.string().optional(),
   onSale: z.boolean().default(false),
+  colors: z.string().optional(),
 });
 
 interface ProductFormProps {
@@ -43,6 +44,7 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
     defaultValues: product
       ? {
           ...product,
+          colors: product.colors ? product.colors.join(', ') : '',
         }
       : {
           name: '',
@@ -52,16 +54,23 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
           image: '',
           dataAiHint: '',
           onSale: false,
+          colors: '',
         },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      const colorsArray = values.colors
+        ? values.colors.split(',').map((color) => color.trim())
+        : [];
+
+      const productData = { ...values, colors: colorsArray };
+
       if (product) {
-        await updateProduct({ ...product, ...values });
+        await updateProduct({ ...product, ...productData });
         toast({ title: 'Produto atualizado com sucesso!' });
       } else {
-        await addProduct(values);
+        await addProduct(productData);
         toast({ title: 'Produto adicionado com sucesso!' });
       }
       router.refresh();
@@ -140,6 +149,19 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
               <FormLabel>URL da Imagem</FormLabel>
               <FormControl>
                 <Input placeholder="https://..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="colors"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cores (separadas por vírgula)</FormLabel>
+              <FormControl>
+                <Input placeholder="#FFFFFF, #000000, #FF0000" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

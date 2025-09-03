@@ -15,6 +15,7 @@ const ProductSchema = z.object({
   image: z.string().url('URL da imagem inválida'),
   dataAiHint: z.string().optional(),
   onSale: z.boolean().optional(),
+  colors: z.array(z.string()).optional(),
 });
 
 const productsFilePath = path.join(
@@ -41,6 +42,7 @@ async function writeProductsFile(products: Product[]) {
   image: string;
   dataAiHint: string;
   onSale?: boolean;
+  colors?: string[];
 };
 
 export const PRODUCTS: Product[] = ${JSON.stringify(products, null, 2)};
@@ -69,6 +71,7 @@ export async function addProduct(
     ...validatedData,
     id: (products[products.length - 1]?.id || 0) + 1,
     dataAiHint: validatedData.dataAiHint || '',
+    colors: validatedData.colors || [],
   };
 
   const updatedProducts = [...products, newProduct];
