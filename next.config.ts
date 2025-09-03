@@ -39,6 +39,12 @@ const nextConfig: NextConfig = {
         hostname: 'horizonplay.fbitsstatic.net',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.iceloshop.com.br',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

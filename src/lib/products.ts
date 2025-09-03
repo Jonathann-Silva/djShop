@@ -17,7 +17,7 @@ export const PRODUCTS: Product[] = [
     "price": 8800,
     "description": " Apple iPhone 16 Pro Max é um smartphone iOS com características inovadoras que o tornam uma excelente opção para qualquer tipo de utilização, representando um dos melhores dispositivos móveis já feitos. A tela de 6.9 polegadas coloca esse Apple no topo de sua categoria. A resolução também é alta: 2868x1320 pixel. ",
     "category": "Celulares",
-    "image": "https://horizonplay.fbitsstatic.net/img/p/apple-iphone-15-pro-max-256gb-5g-vitrine-tela-super-retina-xdr-display-6-7-titanio-azul-152591/339194-5.jpg?w=670&h=670&v=202501262008",
+    "image": "https://www.iceloshop.com.br/image/cache/catalog/1-iphone16/16promax-fundo-800x800.png",
     "dataAiHint": "smartphone tech",
     "onSale": true,
     "colors": [
@@ -28,12 +28,18 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": 2,
-    "name": "Smartphone Y Lite",
-    "price": 2499.9,
+    "name": "Iphone 15 Pro max",
+    "price": 5600,
     "description": "64GB de armazenamento e bateria de longa duração. O companheiro ideal para o dia a dia, com design moderno e leve.",
     "category": "Celulares",
-    "image": "https://picsum.photos/600/400?random=2",
-    "dataAiHint": "smartphone mobile"
+    "image": "https://horizonplay.fbitsstatic.net/img/p/apple-iphone-15-pro-max-256gb-5g-vitrine-tela-super-retina-xdr-display-6-7-titanio-azul-152591/339194-5.jpg?w=670&h=670&v=202501262008",
+    "dataAiHint": "smartphone mobile",
+    "onSale": false,
+    "colors": [
+      "amarelo",
+      "verde",
+      "vermelho"
+    ]
   },
   {
     "id": 3,
