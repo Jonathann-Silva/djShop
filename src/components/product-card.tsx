@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,17 +15,36 @@ import type { Product } from '@/lib/products';
 import { useAuth } from '@/lib/auth';
 import { useCart } from '@/lib/cart';
 import { useToast } from '@/hooks/use-toast';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Loader2 } from 'lucide-react';
 import { Badge } from './ui/badge';
+import { fetchProductPrice } from '@/actions/scraping';
 
 interface ProductCardProps {
   product: Product;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product: initialProduct }: ProductCardProps) {
   const { user } = useAuth();
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const [product, setProduct] = useState(initialProduct);
+  const [isLoadingPrice, setIsLoadingPrice] = useState(false);
+
+  useEffect(() => {
+    const syncPrice = async () => {
+      if (product.scrapingUrl && product.price === 0) {
+        setIsLoadingPrice(true);
+        const result = await fetchProductPrice(product.scrapingUrl);
+        if (result.price) {
+          // A action agora deve retornar um número
+           setProduct(prev => ({ ...prev, price: result.price as number }));
+        }
+        setIsLoadingPrice(false);
+      }
+    };
+    syncPrice();
+  }, [product.scrapingUrl, product.price]);
+
 
   const handleAddToCart = () => {
     addToCart(product);
@@ -37,6 +57,21 @@ export function ProductCard({ product }: ProductCardProps) {
   const formatPrice = (price: number) => {
     return `R$ ${price.toFixed(2).replace('.', ',')}`;
   };
+
+  const renderPrice = () => {
+    if (isLoadingPrice) {
+      return (
+         <div className="flex items-center text-sm text-muted-foreground">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <span>Buscando preço...</span>
+        </div>
+      )
+    }
+     if (product.price > 0) {
+      return <p className="text-base font-bold text-primary">{formatPrice(product.price)}</p>;
+    }
+    return <p className="text-xs text-muted-foreground">Preço indisponível</p>
+  }
 
   return (
     <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg group">
@@ -64,8 +99,8 @@ export function ProductCard({ product }: ProductCardProps) {
       <CardFooter className="p-3 pt-0 flex justify-between items-center">
         {user ? (
           <>
-            <p className="text-base font-bold text-primary">{formatPrice(product.price)}</p>
-            <Button onClick={handleAddToCart} size="sm" aria-label={`Adicionar ${product.name} ao carrinho`}>
+            {renderPrice()}
+            <Button onClick={handleAddToCart} size="sm" aria-label={`Adicionar ${product.name} ao carrinho`} disabled={isLoadingPrice || product.price === 0}>
               <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar
             </Button>
           </>

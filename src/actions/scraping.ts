@@ -13,8 +13,12 @@ import { getUsdToBrlRate } from '@/services/currency';
 
 export async function fetchProductPrice(
   url: string
-): Promise<{ price: string | null; error: string | null }> {
+): Promise<{ price: number | string | null; error: string | null }> {
   try {
+    if (!url) {
+        return { price: null, error: "URL não fornecida."};
+    }
+    
     const response = await fetch(url, {
       headers: {
         'User-Agent':
@@ -31,44 +35,42 @@ export async function fetchProductPrice(
 
     const html = await response.text();
     const pricePatterns = [
-      /<div class="fs-sm mb-1"><b>(US\$\s?[\d,.]+)<\/b>/,
-      /<div class="h1.*?">(R\$\s?(\d{1,3}(\.\d{3})*,\d{2}))\s*<\/div>/,
+      // Padrão para R$ como: <div class="h1 ...">R$ 503,10</div>
+      /<div class="h1.*?">\s*R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})\s*<\/div>/,
+      // Padrão para US$ como: <div class="fs-sm ..."><b>US$ 90,00</b></div>
+      /<div class="fs-sm mb-1"><b>US\$\s?([\d,.]+)<\/b>/,
+      // Padrões genéricos
       /((?:R|US)\$\s?(\d{1,3}(?:[.,]\d{3})*[.,]\d{2}))/,
       /"price":\s?"(\d+\.\d{2})"/,
       /meta\s+property="product:price:amount"\s+content="(\d+\.\d{2})"/,
     ];
 
     for (const pattern of pricePatterns) {
-      const match = html.match(pattern);
-      if (match && match[1]) {
-        let priceStr = match[1].replace(/<.*?>/g, '').trim();
+        const match = html.match(pattern);
+        if (match && (match[1] || match[2])) {
+            let priceStr = (match[1] || match[2]).replace(/<.*?>/g, '').trim();
+            const isUsd = priceStr.includes('US$');
+            
+            // Limpa a string para conversão
+            let cleanedPriceStr = priceStr.replace(/US\$\s?|R\$\s?/g, '').replace(/\./g, '').replace(',', '.');
+            let numericPrice = parseFloat(cleanedPriceStr);
 
-        if (priceStr.startsWith('US$')) {
-          const usdValue = parseFloat(priceStr.replace(/US\$\s?/, '').replace(',', '.'));
-          if (!isNaN(usdValue)) {
-            const exchangeRate = await getUsdToBrlRate();
-            if (exchangeRate) {
-              const brlValue = usdValue * exchangeRate;
-              const formattedPrice = `R$ ${brlValue.toFixed(2).replace('.', ',')}`;
-              return {
-                price: formattedPrice,
-                error: null
-              };
-            } else {
-              return {
-                price: null,
-                error: 'Não foi possível obter a taxa de câmbio para converter o valor.',
-              };
+            if (isNaN(numericPrice)) continue;
+
+            if (isUsd) {
+                const exchangeRate = await getUsdToBrlRate();
+                if (exchangeRate) {
+                    numericPrice = numericPrice * exchangeRate;
+                } else {
+                    return {
+                        price: null,
+                        error: 'Não foi possível obter a taxa de câmbio para converter o valor.',
+                    };
+                }
             }
-          }
+            // Retorna o número, a formatação será feita no componente
+            return { price: numericPrice, error: null };
         }
-        
-        if (!priceStr.includes('R$')) {
-            priceStr = 'R$ ' + parseFloat(priceStr).toFixed(2).replace('.', ',');
-        }
-
-        return { price: priceStr, error: null };
-      }
     }
 
     return {
