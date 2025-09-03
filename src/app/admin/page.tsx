@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { ProductForm } from '@/components/product-form';
@@ -28,27 +28,28 @@ export default function AdminDashboard() {
   const products = getProducts();
   const { user } = useAuth();
   const router = useRouter();
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   useEffect(() => {
     // Se o estado de autenticação ainda está carregando, não faz nada
     if (user === undefined) {
-      return; 
+      return;
     }
     // Se não há usuário ou o usuário não é o admin, redireciona
     if (!user || user.email !== 'admin@gmail.com') {
       router.replace('/');
     }
   }, [user, router]);
-  
+
   // Mostra um estado de carregamento enquanto verifica o usuário
   if (user === undefined) {
-      return (
-          <div className="space-y-4">
-              <Skeleton className="h-12 w-1/4" />
-              <Skeleton className="h-8 w-1/2" />
-              <Skeleton className="h-64 w-full" />
-          </div>
-      )
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-12 w-1/4" />
+        <Skeleton className="h-8 w-1/2" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
   }
 
   // Se o usuário não for o admin, não renderiza nada (será redirecionado)
@@ -58,7 +59,7 @@ export default function AdminDashboard() {
 
   // Se o usuário é o admin, mostra a página
   return (
-    <Dialog>
+    <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
@@ -83,7 +84,7 @@ export default function AdminDashboard() {
         <DialogHeader>
           <DialogTitle>Adicionar Novo Produto</DialogTitle>
         </DialogHeader>
-        <ProductForm />
+        <ProductForm onSave={() => setIsAddDialogOpen(false)} />
       </DialogContent>
     </Dialog>
   );

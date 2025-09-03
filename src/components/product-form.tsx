@@ -32,9 +32,10 @@ const formSchema = z.object({
 
 interface ProductFormProps {
   product?: Product | null;
+  onSave?: () => void;
 }
 
-export function ProductForm({ product }: ProductFormProps) {
+export function ProductForm({ product, onSave }: ProductFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,7 +65,7 @@ export function ProductForm({ product }: ProductFormProps) {
         toast({ title: 'Produto adicionado com sucesso!' });
       }
       router.refresh();
-      // TODO: Fechar o Dialog
+      onSave?.(); // Chama a função para fechar o pop-up
     } catch (error) {
       toast({
         title: 'Erro ao salvar o produto',

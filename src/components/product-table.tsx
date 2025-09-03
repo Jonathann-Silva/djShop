@@ -36,13 +36,26 @@ interface ProductTableProps {
 
 export function ProductTable({ products }: ProductTableProps) {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const formatPrice = (price: number) => {
     return `R$ ${price.toFixed(2).replace('.', ',')}`;
   };
 
+  const handleEditClick = (product: Product) => {
+    setEditingProduct(product);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleDialogChange = (open: boolean) => {
+    setIsEditDialogOpen(open);
+    if (!open) {
+      setEditingProduct(null);
+    }
+  };
+
   return (
-    <Dialog onOpenChange={(isOpen) => !isOpen && setEditingProduct(null)}>
+    <Dialog open={isEditDialogOpen} onOpenChange={handleDialogChange}>
       <Table>
         <TableHeader>
           <TableRow>
@@ -94,7 +107,7 @@ export function ProductTable({ products }: ProductTableProps) {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Ações</DropdownMenuLabel>
                     <DialogTrigger asChild>
-                      <DropdownMenuItem onSelect={() => setEditingProduct(product)}>
+                      <DropdownMenuItem onClick={() => handleEditClick(product)}>
                         Editar
                       </DropdownMenuItem>
                     </DialogTrigger>
@@ -110,7 +123,10 @@ export function ProductTable({ products }: ProductTableProps) {
         <DialogHeader>
           <DialogTitle>Editar Produto</DialogTitle>
         </DialogHeader>
-        <ProductForm product={editingProduct} />
+        <ProductForm
+          product={editingProduct}
+          onSave={() => handleDialogChange(false)}
+        />
       </DialogContent>
     </Dialog>
   );
