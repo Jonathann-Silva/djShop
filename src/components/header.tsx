@@ -5,6 +5,7 @@ import {
   Package2,
   ShoppingCart,
   User,
+  History
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { useCart } from '@/lib/cart';
@@ -56,9 +57,14 @@ export function Header() {
                   <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {user.email === 'admin@gmail.com' && (
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin">Configurações</Link>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin">Configurações</Link>
+                      </DropdownMenuItem>
+                       <DropdownMenuItem asChild>
+                        <Link href="/admin/history">Histórico</Link>
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout}>Sair</DropdownMenuItem>
