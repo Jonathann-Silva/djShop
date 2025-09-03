@@ -105,11 +105,13 @@ export const PRODUCTS: Product[] = [
   {
     "id": 9,
     "name": "Perfume 1 Million",
-    "price": 389.9,
+    "price": 850,
     "description": "Eau de Toilette de 50ml. Um aroma picante e fresco para o homem que tem o mundo aos seus pés.",
     "category": "Perfumes Masculino",
-    "image": "https://picsum.photos/600/400?random=9",
-    "dataAiHint": "luxury perfume"
+    "image": "https://www.giraofertas.com.br/wp-content/uploads/2020/06/1-Million-Parfum-Paco-Rabanne-18.jpg",
+    "dataAiHint": "luxury perfume",
+    "onSale": false,
+    "colors": []
   },
   {
     "id": 10,
