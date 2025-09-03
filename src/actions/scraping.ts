@@ -34,10 +34,12 @@ export async function fetchProductPrice(
     // Esta é a parte mais frágil e específica para cada site.
     // As expressões abaixo são exemplos genéricos.
     const pricePatterns = [
+       // Padrão para: <b>US$ 90,00</b> dentro de uma div
+      /<div class="fs-sm mb-1"><b>(US\$\s?[\d,.]+)<\/b>/,
       // Padrão específico para: <div class="h1 ..."> R$ 503,10 ... </div>
       /<div class="h1.*?">(R\$\s?(\d{1,3}(\.\d{3})*,\d{2}))\s*<\/div>/,
-      // Padrão para "R$ 1.234,56"
-      /(R\$\s?(\d{1,3}(\.\d{3})*,\d{2}))/,
+      // Padrão para "R$ 1.234,56" ou "US$ 1,234.56"
+      /((?:R|US)\$\s?(\d{1,3}(?:[.,]\d{3})*[.,]\d{2}))/,
       // Padrão para "price": "1234.56" em scripts JSON
       /"price":\s?"(\d+\.\d{2})"/,
       // Padrão para "price" content="1234.56" em meta tags
@@ -49,12 +51,15 @@ export async function fetchProductPrice(
       if (match && match[1]) {
         // Retorna a primeira correspondência encontrada
         let price = match[1];
+        
         // Limpa qualquer HTML extra que possa ter sido capturado
         price = price.replace(/<.*?>/g, '').trim();
         
-        if (!price.includes('R$')) {
+        // Se encontrou um valor numérico sem símbolo, formata como R$
+        if (!price.includes('R$') && !price.includes('US$')) {
             price = 'R$ ' + parseFloat(price).toFixed(2).replace('.', ',');
         }
+
         return { price, error: null };
       }
     }
