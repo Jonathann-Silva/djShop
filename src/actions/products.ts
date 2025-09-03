@@ -63,7 +63,7 @@ export async function addProduct(
   productData: Omit<Product, 'id'>
 ): Promise<Product> {
   const validatedData = ProductSchema.omit({ id: true }).parse(productData);
-  const products = await readProductsFile();
+  let products = await readProductsFile();
 
   const newProduct: Product = {
     ...validatedData,
@@ -72,11 +72,7 @@ export async function addProduct(
   };
 
   const updatedProducts = [...products, newProduct];
-  // A escrita real será feita pelo Studio.
-  // await writeProductsFile(updatedProducts);
-
-  // Forçar uma "simulação" da atualização para a próxima leitura na mesma requisição
-  PRODUCTS.push(newProduct);
+  await writeProductsFile(updatedProducts);
   
   return newProduct;
 }
@@ -93,11 +89,7 @@ export async function updateProduct(
   }
 
   products[productIndex] = validatedData;
-  // A escrita real será feita pelo Studio.
-  // await writeProductsFile(products);
-
-  // Forçar uma "simulação" da atualização para a próxima leitura na mesma requisição
-  PRODUCTS[productIndex] = validatedData;
+  await writeProductsFile(products);
 
   return validatedData;
 }
