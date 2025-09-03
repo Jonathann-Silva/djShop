@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -19,6 +19,7 @@ import { Separator } from './ui/separator';
 import { Trash2 } from 'lucide-react';
 
 export function CartSheet({ children }: { children: ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
   const { items, removeFromCart, updateQuantity, getTotal, clearCart } = useCart();
   const total = getTotal();
 
@@ -26,8 +27,12 @@ export function CartSheet({ children }: { children: ReactNode }) {
     return `R$ ${price.toFixed(2).replace('.', ',')}`;
   };
 
+  const handleCheckoutClick = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader>
@@ -79,7 +84,7 @@ export function CartSheet({ children }: { children: ReactNode }) {
                   <p>Total</p>
                   <p>{formatPrice(total)}</p>
                 </div>
-                <Button asChild className="w-full" size="lg">
+                <Button asChild className="w-full" size="lg" onClick={handleCheckoutClick}>
                   <Link href="/checkout">Finalizar Compra</Link>
                 </Button>
                 <Button variant="outline" className="w-full" onClick={clearCart}>
@@ -92,7 +97,7 @@ export function CartSheet({ children }: { children: ReactNode }) {
           <div className="flex flex-col items-center justify-center h-full text-center">
             <p className="text-muted-foreground">Seu carrinho está vazio.</p>
             <SheetTrigger asChild>
-                <Button variant="link" asChild>
+                <Button variant="link" asChild onClick={() => setIsOpen(false)}>
                     <Link href="/">Começar a Comprar</Link>
                 </Button>
             </SheetTrigger>
