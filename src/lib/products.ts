@@ -47,7 +47,7 @@ export const PRODUCTS: Product[] = [
     "price": 9999.9,
     "description": "256GB de armazenamento e a revolucionária tela dobrável. Um novo conceito de mobilidade e produtividade.",
     "category": "Celulares",
-    "image": "https://picsum.photos/600/400?random=3",
+    "image": "https://i.zst.com.br/thumbs/12/3c/1c/-1115297546.jpg",
     "dataAiHint": "foldable smartphone"
   },
   {
