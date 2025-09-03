@@ -13,7 +13,7 @@ import { getUsdToBrlRate } from '@/services/currency';
 
 export async function fetchProductPrice(
   url: string
-): Promise<{ price: number | string | null; error: string | null }> {
+): Promise<{ price: number | null; error: string | null }> {
   try {
     if (!url) {
         return { price: null, error: "URL não fornecida."};
@@ -36,20 +36,22 @@ export async function fetchProductPrice(
     const html = await response.text();
     const pricePatterns = [
       // Padrão para R$ como: <div class="h1 ...">R$ 503,10</div>
-      /<div class="h1.*?">\s*R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})\s*<\/div>/,
+      { pattern: /<div class="h1.*?">\s*R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})\s*<\/div>/, isUsd: false },
       // Padrão para US$ como: <div class="fs-sm ..."><b>US$ 90,00</b></div>
-      /<div class="fs-sm mb-1"><b>US\$\s?([\d,.]+)<\/b>/,
+      { pattern: /<div class="fs-sm mb-1"><b>US\$\s?([\d,.]+)<\/b>/, isUsd: true },
       // Padrões genéricos
-      /((?:R|US)\$\s?(\d{1,3}(?:[.,]\d{3})*[.,]\d{2}))/,
-      /"price":\s?"(\d+\.\d{2})"/,
-      /meta\s+property="product:price:amount"\s+content="(\d+\.\d{2})"/,
+      { pattern: /((?:R|US)\$\s?(\d{1,3}(?:[.,]\d{3})*[.,]\d{2}))/, isUsd: null }, // isUsd null para verificar na string
+      { pattern: /"price":\s?"(\d+\.\d{2})"/, isUsd: false }, // Assume BRL por padrão se não especificado
+      { pattern: /meta\s+property="product:price:amount"\s+content="(\d+\.\d{2})"/, isUsd: false },
     ];
 
-    for (const pattern of pricePatterns) {
+    for (const { pattern, isUsd: isUsdFlag } of pricePatterns) {
         const match = html.match(pattern);
         if (match && (match[1] || match[2])) {
             let priceStr = (match[1] || match[2]).replace(/<.*?>/g, '').trim();
-            const isUsd = priceStr.includes('US$');
+            
+            // Determina se é USD
+            const isUsd = isUsdFlag === null ? priceStr.toUpperCase().includes('US') : isUsdFlag;
             
             // Limpa a string para conversão
             let cleanedPriceStr = priceStr.replace(/US\$\s?|R\$\s?/g, '').replace(/\./g, '').replace(',', '.');
