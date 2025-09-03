@@ -113,15 +113,15 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": 9,
-    "name": "Perfume 1 Million",
-    "price": 850,
-    "description": "Eau de Toilette de 50ml. Um aroma picante e fresco para o homem que tem o mundo aos seus pés.",
+    "name": "Paco Rabanne 1 Million Parfum",
+    "price": 0,
+    "description": "O Paco Rabanne 1 Million Parfum é uma fragrância masculina que combina ousadia, sofisticação e uma sensualidade envolvente, sendo uma releitura moderna e intensa da icônica linha 1 Million. Lançado em 2020, este parfum possui uma concentração maior que as versões anteriores, garantindo maior fixação e presença marcante na pele.",
     "category": "Perfumes Masculino",
-    "image": "https://www.giraofertas.com.br/wp-content/uploads/2020/06/1-Million-Parfum-Paco-Rabanne-18.jpg",
+    "image": "https://www.lgimportados.com/img/m/IMG_576796_1.JPG?v=1756943786",
     "dataAiHint": "luxury perfume",
     "onSale": false,
     "colors": [],
-    "scrapingUrl": ""
+    "scrapingUrl": "https://www.lgimportados.com/busca/1-million/?rc=1+Million"
   },
   {
     "id": 10,

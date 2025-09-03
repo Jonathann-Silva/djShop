@@ -57,6 +57,12 @@ const nextConfig: NextConfig = {
         hostname: 'www.giraofertas.com.br',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.lgimportados.com',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
