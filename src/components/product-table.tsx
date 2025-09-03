@@ -37,6 +37,10 @@ interface ProductTableProps {
 export function ProductTable({ products }: ProductTableProps) {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
+  const formatPrice = (price: number) => {
+    return `R$ ${price.toFixed(2).replace('.', ',')}`;
+  };
+
   return (
     <Dialog onOpenChange={(isOpen) => !isOpen && setEditingProduct(null)}>
       <Table>
@@ -75,7 +79,7 @@ export function ProductTable({ products }: ProductTableProps) {
                   <Badge variant="outline">Ativo</Badge>
                 )}
               </TableCell>
-              <TableCell>${product.price.toFixed(2)}</TableCell>
+              <TableCell>{formatPrice(product.price)}</TableCell>
               <TableCell className="hidden md:table-cell">
                 {product.category}
               </TableCell>

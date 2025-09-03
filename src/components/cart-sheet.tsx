@@ -22,6 +22,10 @@ export function CartSheet({ children }: { children: ReactNode }) {
   const { items, removeFromCart, updateQuantity, getTotal, clearCart } = useCart();
   const total = getTotal();
 
+  const formatPrice = (price: number) => {
+    return `R$ ${price.toFixed(2).replace('.', ',')}`;
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -45,7 +49,7 @@ export function CartSheet({ children }: { children: ReactNode }) {
                     />
                     <div className="flex-grow space-y-1">
                       <h3 className="font-semibold">{item.name}</h3>
-                      <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
+                      <p className="text-sm text-muted-foreground">{formatPrice(item.price)}</p>
                       <div className="flex items-center gap-2">
                         <Input
                           type="number"
@@ -73,7 +77,7 @@ export function CartSheet({ children }: { children: ReactNode }) {
                 <Separator />
                 <div className="flex justify-between font-bold text-lg">
                   <p>Total</p>
-                  <p>${total.toFixed(2)}</p>
+                  <p>{formatPrice(total)}</p>
                 </div>
                 <Button asChild className="w-full" size="lg">
                   <Link href="/checkout">Finalizar Compra</Link>

@@ -33,6 +33,10 @@ export function ProductCard({ product }: ProductCardProps) {
       description: `${product.name} foi adicionado ao seu carrinho.`,
     });
   };
+  
+  const formatPrice = (price: number) => {
+    return `R$ ${price.toFixed(2).replace('.', ',')}`;
+  };
 
   return (
     <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg">
@@ -60,7 +64,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <CardFooter className="p-3 pt-0 flex justify-between items-center">
         {user ? (
           <>
-            <p className="text-lg font-bold text-primary">${product.price.toFixed(2)}</p>
+            <p className="text-lg font-bold text-primary">{formatPrice(product.price)}</p>
             <Button onClick={handleAddToCart} size="sm" aria-label={`Adicionar ${product.name} ao carrinho`}>
               <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar
             </Button>

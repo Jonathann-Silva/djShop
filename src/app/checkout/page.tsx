@@ -30,6 +30,10 @@ export default function CheckoutPage() {
     }
   }, [user, router]);
 
+  const formatPrice = (price: number) => {
+    return `R$ ${price.toFixed(2).replace('.', ',')}`;
+  };
+
   if (user === undefined) {
     return (
         <div className="grid md:grid-cols-2 gap-12">
@@ -84,13 +88,13 @@ export default function CheckoutPage() {
                 <span>
                   {item.name} <span className="text-muted-foreground">x {item.quantity}</span>
                 </span>
-                <span className='font-medium'>${(item.price * item.quantity).toFixed(2)}</span>
+                <span className='font-medium'>{formatPrice(item.price * item.quantity)}</span>
               </div>
             ))}
             <Separator />
             <div className="flex justify-between font-bold text-lg">
               <span>Total</span>
-              <span>${getTotal().toFixed(2)}</span>
+              <span>{formatPrice(getTotal())}</span>
             </div>
           </CardContent>
         </Card>
