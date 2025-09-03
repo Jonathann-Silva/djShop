@@ -39,15 +39,15 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg">
+    <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg group">
       <CardHeader className="p-0">
-        <div className="relative aspect-[4/3]">
+        <div className="relative aspect-[4/3] overflow-hidden">
           <Image
             src={product.image}
             alt={product.name}
             fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
             data-ai-hint={product.dataAiHint}
           />
           {product.onSale && (
@@ -58,13 +58,13 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </CardHeader>
       <CardContent className="p-3 flex-grow">
-        <CardTitle className="text-base font-headline leading-tight">{product.name}</CardTitle>
+        <CardTitle className="text-sm font-headline leading-tight h-10 line-clamp-2">{product.name}</CardTitle>
         <CardDescription className="mt-1 text-xs line-clamp-2">{product.description}</CardDescription>
       </CardContent>
       <CardFooter className="p-3 pt-0 flex justify-between items-center">
         {user ? (
           <>
-            <p className="text-lg font-bold text-primary">{formatPrice(product.price)}</p>
+            <p className="text-base font-bold text-primary">{formatPrice(product.price)}</p>
             <Button onClick={handleAddToCart} size="sm" aria-label={`Adicionar ${product.name} ao carrinho`}>
               <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar
             </Button>
