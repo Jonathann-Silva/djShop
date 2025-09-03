@@ -93,9 +93,9 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": 8,
-    "name": "Perfume Sauvage",
+    "name": "DIOR SAUVAGE MEN 100ML EDT",
     "price": 650,
-    "description": "Eau de Parfum de 60ml. Uma composição radicalmente fresca, ditada por um nome que soa como um manifesto.",
+    "description": "É uma fragrância masculina vibrante, intensa e sofisticada, que traduz liberdade, autenticidade e poder natural. Inspirada nos grandes espaços abertos e na força selvagem da natureza, sua construção olfativa une frescor extremo com uma base amadeirada envolvente. A abertura traz uma bergamota da Calábria luminosa e picante, com facetas cítricas levemente amargas e frutadas que energizam a pele de forma limpa e refrescante. Em seguida, o coração se revela com uma explosão aromática e especiada, marcada pela pimenta sichuan vibrante, lavanda fresca e herbal, elemi resinoso e um gerânio verde com nuances florais, criando um contraste quente e frio que equilibra força e elegância.",
     "category": "Perfumes Masculino",
     "image": "https://epocacosmeticos.vteximg.com.br/arquivos/ids/961941-450-450/6.3348901428545-6.3348901608053.jpg?v=638906129512430000",
     "dataAiHint": "cologne scent",
