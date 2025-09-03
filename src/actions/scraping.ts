@@ -51,7 +51,7 @@ export async function fetchProductPrice(
               const brlValue = usdValue * exchangeRate;
               const formattedPrice = `R$ ${brlValue.toFixed(2).replace('.', ',')}`;
               return {
-                price: `${formattedPrice} (convertido de US$ ${usdValue.toFixed(2)})`,
+                price: formattedPrice,
                 error: null
               };
             } else {
