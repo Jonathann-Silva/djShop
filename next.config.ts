@@ -45,6 +45,12 @@ const nextConfig: NextConfig = {
         hostname: 'www.iceloshop.com.br',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.cestasmichelli.com.br',
+        port: '',
+        pathname: '/**',
       }
     ],
   },

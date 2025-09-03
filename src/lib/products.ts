@@ -34,7 +34,6 @@ export const PRODUCTS: Product[] = [
     "category": "Celulares",
     "image": "https://horizonplay.fbitsstatic.net/img/p/apple-iphone-15-pro-max-256gb-5g-vitrine-tela-super-retina-xdr-display-6-7-titanio-azul-152591/339194-5.jpg?w=670&h=670&v=202501262008",
     "dataAiHint": "smartphone mobile",
-    "onSale": false,
     "colors": [
       "amarelo",
       "verde",
@@ -113,12 +112,13 @@ export const PRODUCTS: Product[] = [
   {
     "id": 10,
     "name": "Perfume La Vie Est Belle",
-    "price": 699,
+    "price": 450,
     "description": "Eau de Parfum de 75ml. Uma declaração de felicidade e feminilidade vibrante, com notas de íris e jasmim.",
     "category": "Perfumes Femininos",
-    "image": "https://picsum.photos/600/400?random=10",
+    "image": "https://static.cestasmichelli.com.br/images/product/rs-2047-2515-0.jpg?ims=750x750",
     "dataAiHint": "perfume fragrance",
-    "onSale": true
+    "onSale": true,
+    "colors": []
   },
   {
     "id": 11,
