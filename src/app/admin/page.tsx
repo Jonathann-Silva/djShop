@@ -20,15 +20,34 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { ProductTable } from '@/components/product-table';
-import { getProducts } from '@/lib/products';
+import { getProducts, getCategories } from '@/lib/products';
+import type { Product } from '@/lib/products';
 import { PlusCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export default function AdminDashboard() {
   const products = getProducts();
+  const categories = ['Todas as Categorias', ...getCategories()];
   const { user } = useAuth();
   const router = useRouter();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('Todas as Categorias');
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
+
+  useEffect(() => {
+    if (selectedCategory === 'Todas as Categorias') {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(products.filter((p) => p.category === selectedCategory));
+    }
+  }, [selectedCategory, products]);
 
   useEffect(() => {
     // Se o estado de autenticação ainda está carregando, não faz nada
@@ -70,6 +89,18 @@ export default function AdminDashboard() {
             </CardDescription>
           </div>
           <div className="flex gap-2">
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filtrar por categoria" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <DialogTrigger asChild>
               <Button size="sm" className="gap-1">
                 <PlusCircle />
@@ -79,7 +110,7 @@ export default function AdminDashboard() {
           </div>
         </CardHeader>
         <CardContent>
-          <ProductTable products={products} />
+          <ProductTable products={filteredProducts} />
         </CardContent>
       </Card>
       <DialogContent>

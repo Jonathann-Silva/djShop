@@ -94,11 +94,13 @@ export const PRODUCTS: Product[] = [
   {
     "id": 8,
     "name": "Perfume Sauvage",
-    "price": 529,
+    "price": 650,
     "description": "Eau de Parfum de 60ml. Uma composição radicalmente fresca, ditada por um nome que soa como um manifesto.",
     "category": "Perfumes Masculino",
-    "image": "https://picsum.photos/600/400?random=8",
-    "dataAiHint": "cologne scent"
+    "image": "https://epocacosmeticos.vteximg.com.br/arquivos/ids/961941-450-450/6.3348901428545-6.3348901608053.jpg?v=638906129512430000",
+    "dataAiHint": "cologne scent",
+    "onSale": false,
+    "colors": []
   },
   {
     "id": 9,
