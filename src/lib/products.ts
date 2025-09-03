@@ -8,6 +8,7 @@ export type Product = {
   dataAiHint: string;
   onSale?: boolean;
   colors?: string[];
+  scrapingUrl?: string;
 };
 
 export const PRODUCTS: Product[] = [
@@ -24,7 +25,8 @@ export const PRODUCTS: Product[] = [
       "#000000",
       "#FFFFFF",
       "#0D47A1"
-    ]
+    ],
+    "scrapingUrl": ""
   },
   {
     "id": 2,
@@ -38,7 +40,8 @@ export const PRODUCTS: Product[] = [
       "amarelo",
       "verde",
       "vermelho"
-    ]
+    ],
+    "scrapingUrl": ""
   },
   {
     "id": 3,
@@ -47,7 +50,8 @@ export const PRODUCTS: Product[] = [
     "description": "256GB de armazenamento e a revolucionária tela dobrável. Um novo conceito de mobilidade e produtividade.",
     "category": "Celulares",
     "image": "https://i.zst.com.br/thumbs/12/3c/1c/-1115297546.jpg",
-    "dataAiHint": "foldable smartphone"
+    "dataAiHint": "foldable smartphone",
+    "scrapingUrl": ""
   },
   {
     "id": 4,
@@ -61,7 +65,8 @@ export const PRODUCTS: Product[] = [
       "#FF0000",
       "#00FF00",
       "#0000FF"
-    ]
+    ],
+    "scrapingUrl": ""
   },
   {
     "id": 5,
@@ -70,7 +75,8 @@ export const PRODUCTS: Product[] = [
     "description": "Design leve e fino com 8GB de RAM e 512GB de SSD. Perfeito para quem busca portabilidade sem abrir mão da potência.",
     "category": "Computadores",
     "image": "https://picsum.photos/600/400?random=5",
-    "dataAiHint": "ultrabook laptop"
+    "dataAiHint": "ultrabook laptop",
+    "scrapingUrl": ""
   },
   {
     "id": 6,
@@ -79,7 +85,8 @@ export const PRODUCTS: Product[] = [
     "description": "Tela de 24 polegadas, 8GB de RAM e 1TB de HD. A solução completa para trabalho e entretenimento em casa.",
     "category": "Computadores",
     "image": "https://picsum.photos/600/400?random=6",
-    "dataAiHint": "all-in-one computer"
+    "dataAiHint": "all-in-one computer",
+    "scrapingUrl": ""
   },
   {
     "id": 7,
@@ -89,7 +96,8 @@ export const PRODUCTS: Product[] = [
     "category": "Perfumes Masculino",
     "image": "https://epocacosmeticos.vteximg.com.br/arquivos/ids/544346/invictus-victory-elixir-paco-rabanne-perfume-masculino-parfum--2-.jpg?v=638168120498430000",
     "dataAiHint": "perfume bottle",
-    "onSale": true
+    "onSale": true,
+    "scrapingUrl": ""
   },
   {
     "id": 8,
@@ -100,7 +108,8 @@ export const PRODUCTS: Product[] = [
     "image": "https://epocacosmeticos.vteximg.com.br/arquivos/ids/961941-450-450/6.3348901428545-6.3348901608053.jpg?v=638906129512430000",
     "dataAiHint": "cologne scent",
     "onSale": false,
-    "colors": []
+    "colors": [],
+    "scrapingUrl": ""
   },
   {
     "id": 9,
@@ -111,7 +120,8 @@ export const PRODUCTS: Product[] = [
     "image": "https://www.giraofertas.com.br/wp-content/uploads/2020/06/1-Million-Parfum-Paco-Rabanne-18.jpg",
     "dataAiHint": "luxury perfume",
     "onSale": false,
-    "colors": []
+    "colors": [],
+    "scrapingUrl": ""
   },
   {
     "id": 10,
@@ -122,7 +132,8 @@ export const PRODUCTS: Product[] = [
     "image": "https://static.cestasmichelli.com.br/images/product/rs-2047-2515-0.jpg?ims=750x750",
     "dataAiHint": "perfume fragrance",
     "onSale": true,
-    "colors": []
+    "colors": [],
+    "scrapingUrl": ""
   },
   {
     "id": 11,
@@ -131,7 +142,8 @@ export const PRODUCTS: Product[] = [
     "description": "Eau de Parfum de 80ml. Audacioso e sofisticado, em um frasco icônico em formato de salto agulha.",
     "category": "Perfumes Femininos",
     "image": "https://picsum.photos/600/400?random=11",
-    "dataAiHint": "elegant perfume"
+    "dataAiHint": "elegant perfume",
+    "scrapingUrl": ""
   },
   {
     "id": 12,
@@ -140,7 +152,8 @@ export const PRODUCTS: Product[] = [
     "description": "Eau de Parfum de 50ml. A essência de uma mulher livre e audaciosa. Um oriental feminino de personalidade forte.",
     "category": "Perfumes Femininos",
     "image": "https://picsum.photos/600/400?random=12",
-    "dataAiHint": "classic perfume"
+    "dataAiHint": "classic perfume",
+    "scrapingUrl": ""
   }
 ];
 

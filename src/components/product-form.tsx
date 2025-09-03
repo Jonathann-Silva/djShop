@@ -29,6 +29,7 @@ const formSchema = z.object({
   dataAiHint: z.string().optional(),
   onSale: z.boolean().default(false),
   colors: z.string().optional(),
+  scrapingUrl: z.string().url('URL de monitoramento inválida.').optional().or(z.literal('')),
 });
 
 interface ProductFormProps {
@@ -45,6 +46,7 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
       ? {
           ...product,
           colors: product.colors ? product.colors.join(', ') : '',
+          scrapingUrl: product.scrapingUrl || '',
         }
       : {
           name: '',
@@ -55,6 +57,7 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
           dataAiHint: '',
           onSale: false,
           colors: '',
+          scrapingUrl: '',
         },
   });
 
@@ -147,6 +150,19 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>URL da Imagem</FormLabel>
+              <FormControl>
+                <Input placeholder="https://..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="scrapingUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>URL de Monitoramento de Preço</FormLabel>
               <FormControl>
                 <Input placeholder="https://..." {...field} />
               </FormControl>
