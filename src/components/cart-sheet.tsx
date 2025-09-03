@@ -44,14 +44,15 @@ export function CartSheet({ children }: { children: ReactNode }) {
               <div className="space-y-4">
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-4">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      width={80}
-                      height={80}
-                      className="rounded-md object-cover"
-                      data-ai-hint={item.dataAiHint}
-                    />
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
+                        data-ai-hint={item.dataAiHint}
+                      />
+                    </div>
                     <div className="flex-grow space-y-1">
                       <h3 className="font-semibold">{item.name}</h3>
                       <p className="text-sm text-muted-foreground">{formatPrice(item.price)}</p>
