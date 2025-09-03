@@ -5,7 +5,8 @@ import {
   Package2,
   ShoppingCart,
   User,
-  History
+  History,
+  SearchCode
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { useCart } from '@/lib/cart';
@@ -63,6 +64,9 @@ export function Header() {
                       </DropdownMenuItem>
                        <DropdownMenuItem asChild>
                         <Link href="/admin/history">Histórico</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/admin/scraping">Monitorar Preço (Teste)</Link>
                       </DropdownMenuItem>
                     </>
                   )}
