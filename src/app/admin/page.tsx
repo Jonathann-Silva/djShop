@@ -21,8 +21,9 @@ import {
 } from '@/components/ui/dialog';
 import { ProductTable } from '@/components/product-table';
 import { getProducts } from '@/lib/products';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, History } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import Link from 'next/link';
 
 export default function AdminDashboard() {
   const products = getProducts();
@@ -69,12 +70,20 @@ export default function AdminDashboard() {
               gerenciados estaticamente.
             </CardDescription>
           </div>
-          <DialogTrigger asChild>
-            <Button size="sm" className="gap-1">
-              <PlusCircle />
-              Adicionar Produto
+          <div className="flex gap-2">
+            <Button asChild size="sm" variant="outline" className="gap-1">
+              <Link href="/admin/history">
+                <History />
+                Histórico
+              </Link>
             </Button>
-          </DialogTrigger>
+            <DialogTrigger asChild>
+              <Button size="sm" className="gap-1">
+                <PlusCircle />
+                Adicionar Produto
+              </Button>
+            </DialogTrigger>
+          </div>
         </CardHeader>
         <CardContent>
           <ProductTable products={products} />
