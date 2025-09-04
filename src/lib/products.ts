@@ -111,7 +111,7 @@ export const PRODUCTS: Product[] = [
     "onSale": false,
     "colors": [],
     "scrapingUrl": "https://www.lgimportados.com/produto/-dior-sauvage-men-100ml-edt",
-    "priceMargin": 25
+    "priceMargin": 50
   },
   {
     "id": 9,

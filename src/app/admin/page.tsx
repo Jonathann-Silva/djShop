@@ -113,7 +113,7 @@ export default function AdminDashboard() {
           <ProductTable products={filteredProducts} />
         </CardContent>
       </Card>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Adicionar Novo Produto</DialogTitle>
         </DialogHeader>
