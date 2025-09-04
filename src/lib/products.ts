@@ -44,7 +44,7 @@ export const PRODUCTS: Product[] = [
       "verde",
       "vermelho"
     ],
-    "scrapingUrl": "https://www.lgimportados.com/produto/apple-iphone-16-128gb-a-3287-black-hn-chip-codigo-781800",
+    "scrapingUrl": "",
     "priceMargin": 0
   },
   {
