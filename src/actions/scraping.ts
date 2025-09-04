@@ -34,6 +34,12 @@ export async function fetchProductPrice(
     }
 
     const html = await response.text();
+    
+    // Verifica se o produto está indisponível antes de procurar o preço
+    if (html.includes('<div class="h5 mb-3">PRODUTO INDISPONÍVEL</div>')) {
+        return { price: null, error: 'O produto está indisponível no site de origem.' };
+    }
+
     const pricePatterns = [
       // Padrão para R$ como: <div class="h4 ...">R$ 4.207,50</div>
       { pattern: /<div class="h4.*?">R\$\s*([\d.,]+)<\/div>/, isUsd: false },
