@@ -9,6 +9,7 @@ import { Skeleton } from './ui/skeleton';
 
 interface ProductGridProps {
   products: Product[];
+  groupByBrand?: boolean;
 }
 
 const getBrandFromProductName = (name: string, brands: string[]): string | null => {
@@ -23,7 +24,7 @@ const getBrandFromProductName = (name: string, brands: string[]): string | null 
   return null;
 }
 
-export function ProductGrid({ products }: ProductGridProps) {
+export function ProductGrid({ products, groupByBrand = true }: ProductGridProps) {
   const [brands, setBrands] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +38,7 @@ export function ProductGrid({ products }: ProductGridProps) {
   }, []);
 
   const groupedProducts = useMemo(() => {
-    if (isLoading || brands.length === 0) return {};
+    if (!groupByBrand || isLoading || brands.length === 0) return { 'all': products };
 
     const groups: Record<string, Product[]> = {};
     const unbranded: Product[] = [];
@@ -67,11 +68,11 @@ export function ProductGrid({ products }: ProductGridProps) {
     }
 
     return sortedGroups;
-  }, [products, brands, isLoading]);
+  }, [products, brands, isLoading, groupByBrand]);
 
   const hasContent = products.length > 0;
   
-  if (isLoading) {
+  if (isLoading && groupByBrand) {
     return (
         <div className="space-y-8">
             <div className="space-y-4">
@@ -103,13 +104,22 @@ export function ProductGrid({ products }: ProductGridProps) {
   }
   
   const visibleGroups = Object.entries(groupedProducts).filter(([, brandProducts]) => brandProducts.length > 0);
-  const hasMultipleGroups = visibleGroups.length > 1;
+  
+  if (!groupByBrand) {
+      return (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+        </div>
+      )
+  }
 
   return (
     <div className="space-y-8">
       {visibleGroups.map(([brand, brandProducts]) => (
         <section key={brand}>
-          { (hasMultipleGroups || brand !== 'Outros') && (
+          { (brand !== 'Outros' && brand !== 'all') && (
             <h2 className="text-2xl font-bold font-headline mb-4 pb-2 border-b-2 border-primary text-center">
               {brand}
             </h2>

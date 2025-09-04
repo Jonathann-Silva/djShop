@@ -25,7 +25,7 @@ export function ProductTabs({ products }: ProductTabsProps) {
         </TabsList>
       </div>
       <TabsContent value="Promoções">
-          <ProductGrid products={onSaleProducts} />
+          <ProductGrid products={onSaleProducts} groupByBrand={false} />
       </TabsContent>
       {categories.slice(1).map((category) => (
         <TabsContent key={category} value={category}>
