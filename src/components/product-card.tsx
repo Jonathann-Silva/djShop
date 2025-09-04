@@ -36,14 +36,17 @@ export function ProductCard({ product: initialProduct }: ProductCardProps) {
         setIsLoadingPrice(true);
         const result = await fetchProductPrice(product.scrapingUrl);
         if (result.price) {
-          // A action agora deve retornar um número
-           setProduct(prev => ({ ...prev, price: result.price as number }));
+          let finalPrice = result.price;
+          if (product.priceMargin && product.priceMargin > 0) {
+            finalPrice = finalPrice * (1 + product.priceMargin / 100);
+          }
+           setProduct(prev => ({ ...prev, price: finalPrice }));
         }
         setIsLoadingPrice(false);
       }
     };
     syncPrice();
-  }, [product.scrapingUrl, product.price]);
+  }, [product.scrapingUrl, product.price, product.priceMargin]);
 
 
   const handleAddToCart = () => {

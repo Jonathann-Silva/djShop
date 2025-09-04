@@ -24,6 +24,7 @@ const formSchema = z.object({
   name: z.string().min(2, 'O nome é obrigatório.'),
   description: z.string().min(10, 'A descrição é obrigatória.'),
   price: z.coerce.number().min(0, 'O preço deve ser positivo.'),
+  priceMargin: z.coerce.number().min(0, 'A margem deve ser positiva.').optional(),
   category: z.string().min(2, 'A categoria é obrigatória.'),
   image: z.string().url('URL da imagem inválida.'),
   dataAiHint: z.string().optional(),
@@ -47,11 +48,13 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
           ...product,
           colors: product.colors ? product.colors.join(', ') : '',
           scrapingUrl: product.scrapingUrl || '',
+          priceMargin: product.priceMargin || 0,
         }
       : {
           name: '',
           description: '',
           price: 0,
+          priceMargin: 0,
           category: '',
           image: '',
           dataAiHint: '',
@@ -122,7 +125,7 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Preço</FormLabel>
+                <FormLabel>Preço (Custo)</FormLabel>
                 <FormControl>
                   <Input type="number" step="0.01" {...field} />
                 </FormControl>
@@ -130,7 +133,21 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
               </FormItem>
             )}
           />
-          <FormField
+           <FormField
+            control={form.control}
+            name="priceMargin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Margem de Lucro (%)</FormLabel>
+                <FormControl>
+                  <Input type="number" step="0.1" placeholder="Ex: 20" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+         <FormField
             control={form.control}
             name="category"
             render={({ field }) => (
@@ -143,7 +160,6 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
               </FormItem>
             )}
           />
-        </div>
         <FormField
           control={form.control}
           name="image"

@@ -9,6 +9,7 @@ export type Product = {
   onSale?: boolean;
   colors?: string[];
   scrapingUrl?: string;
+  priceMargin?: number;
 };
 
 export const PRODUCTS: Product[] = [
@@ -109,7 +110,8 @@ export const PRODUCTS: Product[] = [
     "dataAiHint": "cologne scent",
     "onSale": false,
     "colors": [],
-    "scrapingUrl": "https://www.lgimportados.com/produto/-dior-sauvage-men-100ml-edt"
+    "scrapingUrl": "https://www.lgimportados.com/produto/-dior-sauvage-men-100ml-edt",
+    "priceMargin": 25
   },
   {
     "id": 9,
@@ -121,7 +123,8 @@ export const PRODUCTS: Product[] = [
     "dataAiHint": "luxury perfume",
     "onSale": false,
     "colors": [],
-    "scrapingUrl": "https://www.lgimportados.com/busca/1-million/?rc=1+Million"
+    "scrapingUrl": "https://www.lgimportados.com/produto/-paco-rabanne-1-million-men-200ml-parfum",
+    "priceMargin": 30
   },
   {
     "id": 10,

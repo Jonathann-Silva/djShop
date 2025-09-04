@@ -17,6 +17,7 @@ const ProductSchema = z.object({
   onSale: z.boolean().optional(),
   colors: z.array(z.string()).optional(),
   scrapingUrl: z.string().url().optional().or(z.literal('')),
+  priceMargin: z.number().min(0).optional(),
 });
 
 const productsFilePath = path.join(
@@ -45,6 +46,7 @@ async function writeProductsFile(products: Product[]) {
   onSale?: boolean;
   colors?: string[];
   scrapingUrl?: string;
+  priceMargin?: number;
 };
 
 export const PRODUCTS: Product[] = ${JSON.stringify(products, null, 2)};
@@ -75,6 +77,7 @@ export async function addProduct(
     dataAiHint: validatedData.dataAiHint || '',
     colors: validatedData.colors || [],
     scrapingUrl: validatedData.scrapingUrl || '',
+    priceMargin: validatedData.priceMargin || 0,
   };
 
   const updatedProducts = [...products, newProduct];
