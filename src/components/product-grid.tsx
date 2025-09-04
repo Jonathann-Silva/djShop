@@ -110,7 +110,7 @@ export function ProductGrid({ products }: ProductGridProps) {
       {visibleGroups.map(([brand, brandProducts]) => (
         <section key={brand}>
           { (hasMultipleGroups || brand !== 'Outros') && (
-            <h2 className="text-2xl font-bold font-headline mb-4 pb-2 border-b-2 border-primary">
+            <h2 className="text-2xl font-bold font-headline mb-4 pb-2 border-b-2 border-primary text-center">
               {brand}
             </h2>
           )}
