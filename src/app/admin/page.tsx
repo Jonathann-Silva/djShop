@@ -23,7 +23,7 @@ import {
 import { ProductTable } from '@/components/product-table';
 import { getProducts, getCategories } from '@/lib/products';
 import type { Product } from '@/lib/products';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Tags } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   Select,
@@ -32,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import Link from 'next/link';
 
 export default function AdminDashboard() {
   const products = getProducts();
@@ -89,7 +90,7 @@ export default function AdminDashboard() {
               gerenciados estaticamente.
             </CardDescription>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Filtrar por categoria" />
@@ -102,6 +103,12 @@ export default function AdminDashboard() {
                 ))}
               </SelectContent>
             </Select>
+            <Button asChild variant="outline" size="sm">
+                <Link href="/admin/brands" className="gap-1">
+                    <Tags />
+                    Gerenciar Marcas
+                </Link>
+            </Button>
             <DialogTrigger asChild>
               <Button size="sm" className="gap-1">
                 <PlusCircle />

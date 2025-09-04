@@ -65,9 +65,6 @@ export function Header() {
                         <Link href="/admin">Produtos</Link>
                       </DropdownMenuItem>
                        <DropdownMenuItem asChild>
-                        <Link href="/admin/brands">Gerenciar Marcas</Link>
-                      </DropdownMenuItem>
-                       <DropdownMenuItem asChild>
                         <Link href="/admin/history">Histórico</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
