@@ -35,6 +35,8 @@ export async function fetchProductPrice(
 
     const html = await response.text();
     const pricePatterns = [
+      // Padrão para R$ como: <div class="h4 ...">R$ 4.207,50</div>
+      { pattern: /<div class="h4.*?">R\$\s*([\d.,]+)<\/div>/, isUsd: false },
       // Padrão para R$ como: <div class="h1 ...">R$ 503,10</div>
       { pattern: /<div class="h1.*?">\s*R\$\s*(\d{1,3}(?:\.\d{3})*,\d{2})\s*<\/div>/, isUsd: false },
       // Padrão para US$ como: <div class="fs-sm ..."><b>US$ 90,00</b></div>
