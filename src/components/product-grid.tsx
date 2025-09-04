@@ -1,34 +1,49 @@
+
 'use client';
 
 import { ProductCard } from '@/components/product-card';
 import type { Product } from '@/lib/products';
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
+import { getBrands } from '@/actions/brands';
+import { Skeleton } from './ui/skeleton';
 
 interface ProductGridProps {
   products: Product[];
 }
 
-const BRANDS = ['Apple', 'Xiaomi', 'Samsung', 'Paco Rabanne', 'Dior'];
-
-const getBrandFromProductName = (name: string): string | null => {
+const getBrandFromProductName = (name: string, brands: string[]): string | null => {
   const lowerCaseName = name.toLowerCase();
-  for (const brand of BRANDS) {
+  for (const brand of brands) {
     if (lowerCaseName.includes(brand.toLowerCase())) {
       return brand;
     }
   }
-  // Fallback for iPhone specifically
-  if (lowerCaseName.includes('iphone')) return 'Apple';
+  // Fallback para iPhone especificamente, se "Apple" estiver nas marcas.
+  if (brands.includes('Apple') && lowerCaseName.includes('iphone')) return 'Apple';
   return null;
 }
 
 export function ProductGrid({ products }: ProductGridProps) {
+  const [brands, setBrands] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadBrands() {
+        const fetchedBrands = await getBrands();
+        setBrands(fetchedBrands);
+        setIsLoading(false);
+    }
+    loadBrands();
+  }, []);
+
   const groupedProducts = useMemo(() => {
+    if (isLoading || brands.length === 0) return {};
+
     const groups: Record<string, Product[]> = {};
     const unbranded: Product[] = [];
 
     products.forEach((product) => {
-      const brand = getBrandFromProductName(product.name);
+      const brand = getBrandFromProductName(product.name, brands);
       if (brand) {
         if (!groups[brand]) {
           groups[brand] = [];
@@ -39,10 +54,12 @@ export function ProductGrid({ products }: ProductGridProps) {
       }
     });
     
-    // Sort brands alphabetically, but keep "Outros" at the end
     const sortedGroups: Record<string, Product[]> = {};
-    Object.keys(groups).sort().forEach(brand => {
-        sortedGroups[brand] = groups[brand];
+    // Garante que a ordem das marcas definidas no admin seja respeitada
+    brands.forEach(brand => {
+        if (groups[brand]) {
+            sortedGroups[brand] = groups[brand];
+        }
     });
 
     if (unbranded.length > 0) {
@@ -50,10 +67,31 @@ export function ProductGrid({ products }: ProductGridProps) {
     }
 
     return sortedGroups;
-  }, [products]);
+  }, [products, brands, isLoading]);
 
   const hasContent = products.length > 0;
-  const hasMultipleGroups = Object.keys(groupedProducts).length > 1;
+  
+  if (isLoading) {
+    return (
+        <div className="space-y-8">
+            <div className="space-y-4">
+                <Skeleton className="h-8 w-1/4" />
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    <Skeleton className="h-64 w-full" />
+                    <Skeleton className="h-64 w-full" />
+                    <Skeleton className="h-64 w-full" />
+                </div>
+            </div>
+             <div className="space-y-4">
+                <Skeleton className="h-8 w-1/4" />
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    <Skeleton className="h-64 w-full" />
+                    <Skeleton className="h-64 w-full" />
+                </div>
+            </div>
+        </div>
+    )
+  }
 
   if (!hasContent) {
     return (
@@ -64,9 +102,12 @@ export function ProductGrid({ products }: ProductGridProps) {
     );
   }
   
+  const visibleGroups = Object.entries(groupedProducts).filter(([, brandProducts]) => brandProducts.length > 0);
+  const hasMultipleGroups = visibleGroups.length > 1;
+
   return (
     <div className="space-y-8">
-      {Object.entries(groupedProducts).map(([brand, brandProducts]) => (
+      {visibleGroups.map(([brand, brandProducts]) => (
         <section key={brand}>
           { (hasMultipleGroups || brand !== 'Outros') && (
             <h2 className="text-2xl font-bold font-headline mb-4 pb-2 border-b-2 border-primary">

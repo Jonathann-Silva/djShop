@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -6,7 +7,8 @@ import {
   ShoppingCart,
   User,
   History,
-  SearchCode
+  SearchCode,
+  Tags, // Importando novo ícone
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { useCart } from '@/lib/cart';
@@ -60,7 +62,10 @@ export function Header() {
                   {user.email === 'admin@gmail.com' && (
                     <>
                       <DropdownMenuItem asChild>
-                        <Link href="/admin">Configurações</Link>
+                        <Link href="/admin">Produtos</Link>
+                      </DropdownMenuItem>
+                       <DropdownMenuItem asChild>
+                        <Link href="/admin/brands">Gerenciar Marcas</Link>
                       </DropdownMenuItem>
                        <DropdownMenuItem asChild>
                         <Link href="/admin/history">Histórico</Link>
