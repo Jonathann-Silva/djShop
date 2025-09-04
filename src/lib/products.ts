@@ -15,11 +15,11 @@ export type Product = {
 export const PRODUCTS: Product[] = [
   {
     "id": 1,
-    "name": "Iphone 16 Pro max",
-    "price": 8800,
+    "name": "CELULAR APPLE IPHONE 16 PRO MAX 256GB A-3084 BLACK TITANIUM LL ESIM",
+    "price": 0,
     "description": " Apple iPhone 16 Pro Max é um smartphone iOS com características inovadoras que o tornam uma excelente opção para qualquer tipo de utilização, representando um dos melhores dispositivos móveis já feitos. A tela de 6.9 polegadas coloca esse Apple no topo de sua categoria. A resolução também é alta: 2868x1320 pixel. ",
-    "category": "Celulares",
-    "image": "https://www.iceloshop.com.br/image/cache/catalog/1-iphone16/16promax-fundo-800x800.png",
+    "category": "Apple",
+    "image": "https://www.lgimportados.com/img/m/IMG_747431_1.JPG?v=1756989116",
     "dataAiHint": "smartphone tech",
     "onSale": true,
     "colors": [
@@ -27,32 +27,38 @@ export const PRODUCTS: Product[] = [
       "#FFFFFF",
       "#0D47A1"
     ],
-    "scrapingUrl": ""
+    "scrapingUrl": "https://www.lgimportados.com/produto/celular-apple-iphone-16-pro-max-256gb-a-3084-black-titanium-ll-esim",
+    "priceMargin": 50
   },
   {
     "id": 2,
-    "name": "Iphone 15 Pro max",
-    "price": 5600,
-    "description": "64GB de armazenamento e bateria de longa duração. O companheiro ideal para o dia a dia, com design moderno e leve.",
-    "category": "Celulares",
-    "image": "https://horizonplay.fbitsstatic.net/img/p/apple-iphone-15-pro-max-256gb-5g-vitrine-tela-super-retina-xdr-display-6-7-titanio-azul-152591/339194-5.jpg?w=670&h=670&v=202501262008",
+    "name": "APPLE IPHONE 16 128GB",
+    "price": 0,
+    "description": "O Apple iPhone 16 128GB (Modelo A3287) na cor Black é um símbolo de sofisticação, desempenho e funcionalidade. Com o avançado HN Chip, este smartphone oferece uma experiência incomparável em velocidade, eficiência energética e recursos inovadores. Projetado para atender às mais altas expectativas, o iPhone 16 é a escolha ideal para quem busca tecnologia de ponta com um design atemporal.",
+    "category": "Apple",
+    "image": "https://www.lgimportados.com/img/m/IMG_781800_1.JPG?v=1757001163",
     "dataAiHint": "smartphone mobile",
+    "onSale": false,
     "colors": [
       "amarelo",
       "verde",
       "vermelho"
     ],
-    "scrapingUrl": ""
+    "scrapingUrl": "https://www.lgimportados.com/produto/apple-iphone-16-128gb-a-3287-black-hn-chip-codigo-781800",
+    "priceMargin": 0
   },
   {
     "id": 3,
-    "name": "Smartphone Z Fold",
-    "price": 9999.9,
-    "description": "256GB de armazenamento e a revolucionária tela dobrável. Um novo conceito de mobilidade e produtividade.",
+    "name": "XIAOMI REDMI A5 3+64GB MIDNIGHT BLACK",
+    "price": 0,
+    "description": "Xiaomi Redmi A5 4G 3GB+64GB – Midnight Black\n\n\nDesign moderno, desempenho confiável e excelente custo-benefício. O Redmi A5 é a escolha ideal para quem busca um smartphone acessível, bonito e funcional para o dia a dia. Com acabamento elegante na cor Sandy Gold, ele une simplicidade e eficiência em um corpo leve e confortável de usar.",
     "category": "Celulares",
-    "image": "https://i.zst.com.br/thumbs/12/3c/1c/-1115297546.jpg",
+    "image": "https://www.lgimportados.com/img/m/IMG_813549_1.JPG?v=1757001500",
     "dataAiHint": "foldable smartphone",
-    "scrapingUrl": ""
+    "onSale": false,
+    "colors": [],
+    "scrapingUrl": "https://www.lgimportados.com/produto/celular-xiaomi-redmi-a5-3-64gb-midnight-black-codigo-813549",
+    "priceMargin": 50
   },
   {
     "id": 4,
@@ -91,14 +97,16 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": 7,
-    "name": "Perfume Invictus",
-    "price": 459.9,
-    "description": "Eau de Toilette de 100ml. Uma fragrância amadeirada aquática que celebra a vitória e a força masculina.",
+    "name": "PACO RABANNE INVICTUS VICTORY ELIXIR INTENSE MEN 100ML EDT",
+    "price": 0,
+    "description": "PACO RABANNE INVICTUS VICTORY ELIXIR INTENSE MEN 100ML EDT é uma fragrância poderosa, intensa e extremamente sofisticada, criada para homens que vivem com determinação, confiança e espírito de conquista. Sua abertura combina notas frescas e picantes com especiarias marcantes como pimenta preta e lavanda, criando uma sensação vibrante e envolvente que desperta os sentidos com força e presença logo nos primeiros instantes.",
     "category": "Perfumes Masculino",
-    "image": "https://epocacosmeticos.vteximg.com.br/arquivos/ids/544346/invictus-victory-elixir-paco-rabanne-perfume-masculino-parfum--2-.jpg?v=638168120498430000",
+    "image": "https://www.lgimportados.com/img/m/IMG_592451_1.JPG?v=1756990805",
     "dataAiHint": "perfume bottle",
     "onSale": true,
-    "scrapingUrl": ""
+    "colors": [],
+    "scrapingUrl": "https://www.lgimportados.com/produto/paco-rabanne-invictus-victory-elixir-intense-men-100ml-edt",
+    "priceMargin": 50
   },
   {
     "id": 8,
