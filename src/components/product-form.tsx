@@ -14,11 +14,18 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Product } from '@/lib/products';
+import { Product, getCategories } from '@/lib/products';
 import { Switch } from './ui/switch';
 import { Textarea } from './ui/textarea';
 import { addProduct, updateProduct } from '@/actions/products';
 import { useRouter } from 'next/navigation';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select';
 
 const formSchema = z.object({
   name: z.string().min(2, 'O nome é obrigatório.'),
@@ -41,6 +48,8 @@ interface ProductFormProps {
 export function ProductForm({ product, onSave }: ProductFormProps) {
   const router = useRouter();
   const { toast } = useToast();
+  const categories = getCategories();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: product
@@ -153,9 +162,20 @@ export function ProductForm({ product, onSave }: ProductFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Categoria</FormLabel>
-                <FormControl>
-                  <Input placeholder="Ex: Celulares" {...field} />
-                </FormControl>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Selecione uma categoria" />
+                        </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                        {categories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                                {cat}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

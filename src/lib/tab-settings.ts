@@ -9,6 +9,10 @@ export const TAB_SETTINGS: { category: string; isActive: boolean }[] = [
     "isActive": true
   },
   {
+    "category": "perfumes femininos",
+    "isActive": true
+  },
+  {
     "category": "Perfumes Femininos",
     "isActive": true
   },

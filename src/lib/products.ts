@@ -149,23 +149,42 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": 11,
-    "name": "Perfume Good Girl",
-    "price": 649,
-    "description": "Eau de Parfum de 80ml. Audacioso e sofisticado, em um frasco icônico em formato de salto agulha.",
+    "name": "93 AL WATANIAH DURRAT AL AROOS FEM 85ML EDP",
+    "price": 0,
+    "description": "Al Wataniah Durrat Al Aroos é uma fragrância feminina exuberante e elegante, apresentada em um frasco de 85ml como Eau de Parfum. Com uma combinação harmoniosa de notas florais e frutadas, esta fragrância é uma celebração da feminilidade e da sofisticação. Ideal para uso em ocasiões especiais, sua essência única e envolvente deixa uma impressão memorável e encantadora.    ",
     "category": "Perfumes Femininos",
-    "image": "https://picsum.photos/600/400?random=11",
+    "image": "https://www.lgimportados.com/img/m/IMG_536493_1.JPG?v=1757087795",
     "dataAiHint": "elegant perfume",
-    "scrapingUrl": ""
+    "onSale": false,
+    "colors": [],
+    "scrapingUrl": "https://www.lgimportados.com/produto/93-al-wataniah-durrat-al-aroos-fem-85ml-edp-codigo-536493",
+    "priceMargin": 50
   },
   {
     "id": 12,
-    "name": "Perfume Coco Mademoiselle",
-    "price": 769,
-    "description": "Eau de Parfum de 50ml. A essência de uma mulher livre e audaciosa. Um oriental feminino de personalidade forte.",
+    "name": "ABERCROMBIE & FITCH AUTHENTIC 100ML",
+    "price": 0,
+    "description": "Abercrombie & Fitch Autêntico Eau de Parfum Feminino 100ml é uma fragrância fresca, vibrante e envolvente, que captura a essência da mulher moderna e confiante. Com uma composição olfativa sofisticada e leve, esse perfume exala elegância e naturalidade, tornando-se a escolha perfeita para quem deseja uma fragrância que combine frescor e feminilidade, ideal para o dia a dia ou para ocasiões especiais.",
     "category": "Perfumes Femininos",
-    "image": "https://picsum.photos/600/400?random=12",
+    "image": "https://www.lgimportados.com/img/m/IMG_587891_1.JPG?v=1757087848",
     "dataAiHint": "classic perfume",
-    "scrapingUrl": ""
+    "onSale": false,
+    "colors": [],
+    "scrapingUrl": "https://www.lgimportados.com/produto/-abercrombie-fitch-authentic-fem-100ml-edp",
+    "priceMargin": 50
+  },
+  {
+    "name": "ABERCROMBIE & FITCH AUTHENTIC NIGHTT 100ML",
+    "price": 0,
+    "description": "Abercrombie & Fitch Authentic Night Femme é uma fragrância envolvente e sofisticada, pensada para a mulher que adora viver a intensidade das noites inesquecíveis. Com uma combinação de notas florais e amadeiradas, essa Eau de Parfum oferece uma experiência olfativa cativante e cheia de mistério, perfeita para ocasiões especiais ou para quem deseja exalar confiança e sedução durante a noite.",
+    "category": "perfumes femininos",
+    "image": "https://www.lgimportados.com/img/m/IMG_734264_1.JPG?v=1757087906",
+    "dataAiHint": "",
+    "onSale": false,
+    "colors": [],
+    "scrapingUrl": "https://www.lgimportados.com/produto/abercrombie-fitch-authentic-nightt-fem-100ml-edp-codigo-734264",
+    "priceMargin": 50,
+    "id": 13
   }
 ];
 
