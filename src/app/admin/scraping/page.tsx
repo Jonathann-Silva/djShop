@@ -1,11 +1,9 @@
 
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { fetchProductPrice } from '@/actions/scraping';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -13,93 +11,123 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { getTabSettings, updateTabSettings, TabSetting } from '@/actions/tabs';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ArrowLeft } from 'lucide-react';
 
-const formSchema = z.object({
-  url: z.string().url('Por favor, insira uma URL válida.'),
-});
+export default function TabsSettingsPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+  const [tabSettings, setTabSettings] = useState<TabSetting[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-export default function ScrapingPage() {
-  const [result, setResult] = useState<{ price: string | null; error: string | null } | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    if (user === undefined) return;
+    if (!user || user.email !== 'admin@gmail.com') {
+      router.replace('/');
+    } else {
+      async function loadSettings() {
+        setIsLoading(true);
+        const settings = await getTabSettings();
+        setTabSettings(settings);
+        setIsLoading(false);
+      }
+      loadSettings();
+    }
+  }, [user, router]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      url: '',
-    },
-  });
+  const handleToggle = async (category: string, isActive: boolean) => {
+    const originalSettings = [...tabSettings];
+    // Update UI optimistically
+    setTabSettings(prev => 
+        prev.map(s => s.category === category ? {...s, isActive} : s)
+    );
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    setResult(null);
-    const scrapingResult = await fetchProductPrice(values.url);
-    setResult(scrapingResult);
-    setIsLoading(false);
+    try {
+        await updateTabSettings(category, isActive);
+        toast({
+            title: "Configuração salva!",
+            description: `A aba "${category}" foi ${isActive ? 'ativada' : 'desativada'}.`
+        });
+    } catch (error) {
+        // Revert on error
+        setTabSettings(originalSettings);
+        toast({
+            title: "Erro ao salvar",
+            description: "Não foi possível salvar a configuração. Tente novamente.",
+            variant: "destructive"
+        });
+    }
+  };
+
+  if (user === undefined || (user && isLoading)) {
+    return (
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-8 w-1/3" />
+          <Skeleton className="h-4 w-2/3 mt-2" />
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-6 w-1/4" />
+            <Skeleton className="h-6 w-12" />
+          </div>
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-6 w-1/4" />
+            <Skeleton className="h-6 w-12" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!user || user.email !== 'admin@gmail.com') {
+    return null;
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Monitoramento de Preço (Teste)</CardTitle>
-        <CardDescription>
-          Cole a URL de um produto de outro site para tentar extrair o preço.
-          Isso é uma prova de conceito e pode não funcionar para todos os sites.
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Gerenciar Visibilidade das Abas</CardTitle>
+            <CardDescription>
+              Ative ou desative as categorias de produtos que aparecem como abas na
+              página inicial para os clientes.
+            </CardDescription>
+          </div>
+          <Button asChild variant="outline">
+              <Link href="/admin">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar
+              </Link>
+            </Button>
+        </div>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>URL do Produto</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://www.exemplo.com/produto-xyz" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? 'Buscando...' : 'Buscar Preço'}
-            </Button>
-          </form>
-        </Form>
-
-        {result && (
-          <div className="mt-6">
-            {result.price && (
-              <Alert variant="default">
-                <AlertTitle>Preço Encontrado!</AlertTitle>
-                <AlertDescription className="text-2xl font-bold">
-                  {result.price}
-                </AlertDescription>
-              </Alert>
-            )}
-            {result.error && (
-              <Alert variant="destructive">
-                <AlertTitle>Erro ao Buscar</AlertTitle>
-                <AlertDescription>{result.error}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-        )}
+        <div className="space-y-4">
+          {tabSettings.map((setting) => (
+            <div key={setting.category} className="flex items-center justify-between p-3 border rounded-md bg-secondary/50">
+              <Label htmlFor={`switch-${setting.category}`} className="text-lg font-medium">
+                {setting.category}
+              </Label>
+              <Switch
+                id={`switch-${setting.category}`}
+                checked={setting.isActive}
+                onCheckedChange={(checked) => handleToggle(setting.category, checked)}
+                aria-label={`Ativar ou desativar a aba ${setting.category}`}
+              />
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
 }
+
