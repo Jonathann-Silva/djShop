@@ -174,17 +174,17 @@ export const PRODUCTS: Product[] = [
     "priceMargin": 50
   },
   {
+    "id": 13,
     "name": "ABERCROMBIE & FITCH AUTHENTIC NIGHTT 100ML",
     "price": 0,
     "description": "Abercrombie & Fitch Authentic Night Femme é uma fragrância envolvente e sofisticada, pensada para a mulher que adora viver a intensidade das noites inesquecíveis. Com uma combinação de notas florais e amadeiradas, essa Eau de Parfum oferece uma experiência olfativa cativante e cheia de mistério, perfeita para ocasiões especiais ou para quem deseja exalar confiança e sedução durante a noite.",
-    "category": "perfumes femininos",
+    "category": "Perfumes Femininos",
     "image": "https://www.lgimportados.com/img/m/IMG_734264_1.JPG?v=1757087906",
     "dataAiHint": "",
     "onSale": false,
     "colors": [],
     "scrapingUrl": "https://www.lgimportados.com/produto/abercrombie-fitch-authentic-nightt-fem-100ml-edp-codigo-734264",
-    "priceMargin": 50,
-    "id": 13
+    "priceMargin": 50
   }
 ];
 

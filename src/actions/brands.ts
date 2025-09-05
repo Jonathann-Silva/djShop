@@ -49,7 +49,7 @@ export async function addBrand(brandName: string): Promise<void> {
   await writeBrandsFile(updatedBrands);
 }
 
-// Ação para remover uma marca (a ser implementada futuramente).
+// Ação para remover uma marca.
 export async function removeBrand(brandName: string): Promise<void> {
   const validatedName = z.string().min(1).parse(brandName);
   let brands = await readBrandsFile();

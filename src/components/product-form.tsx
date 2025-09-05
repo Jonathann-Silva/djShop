@@ -14,7 +14,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Product, getCategories } from '@/lib/products';
+import { Product } from '@/lib/products';
+import { getCategories as fetchCategories } from '@/actions/categories';
 import { Switch } from './ui/switch';
 import { Textarea } from './ui/textarea';
 import { addProduct, updateProduct } from '@/actions/products';
@@ -26,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
+import { useEffect, useState } from 'react';
 
 const formSchema = z.object({
   name: z.string().min(2, 'O nome é obrigatório.'),
@@ -48,7 +50,15 @@ interface ProductFormProps {
 export function ProductForm({ product, onSave }: ProductFormProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const categories = getCategories();
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function loadCategories() {
+      const fetchedCategories = await fetchCategories();
+      setCategories(fetchedCategories);
+    }
+    loadCategories();
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

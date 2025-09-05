@@ -3,7 +3,7 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import { getCategories } from '@/lib/products';
+import { getCategories } from '@/actions/categories';
 import { revalidatePath } from 'next/cache';
 
 export type TabSetting = {
@@ -46,21 +46,34 @@ export const TAB_SETTINGS: { category: string; isActive: boolean }[] = ${JSON.st
  * Se uma categoria não tiver uma configuração salva, ela será criada como 'ativa' por padrão.
  */
 export async function getTabSettings(): Promise<TabSetting[]> {
-  const allCategories = getCategories();
+  const allCategories = await getCategories();
   let savedSettings = await readTabSettings();
 
   const currentSettingsMap = new Map(savedSettings.map(s => [s.category, s.isActive]));
   
+  let hasChanged = false;
   const finalSettings: TabSetting[] = allCategories.map(category => ({
     category,
-    // Se não houver configuração salva, define como ativa por padrão.
     isActive: currentSettingsMap.get(category) ?? true,
   }));
+  
+  // Verifica se novas categorias foram adicionadas ou se categorias foram removidas
+  const savedCategoryNames = new Set(savedSettings.map(s => s.category));
+  const allCategoryNames = new Set(allCategories);
 
-  // Se o número de categorias mudou (ex: uma nova foi adicionada),
-  // ressalva o arquivo para incluir a nova categoria.
-  if (finalSettings.length !== savedSettings.length) {
-    await writeTabSettings(finalSettings);
+  if (savedCategoryNames.size !== allCategoryNames.size || !allCategories.every(cat => savedCategoryNames.has(cat))) {
+      hasChanged = true;
+  }
+
+  // Se houve mudanças, ressalva o arquivo para refletir o estado atual.
+  if (hasChanged) {
+    // Cria um novo conjunto de configurações baseado nas categorias atuais, preservando o estado `isActive` das antigas.
+    const newSettings = allCategories.map(category => ({
+        category,
+        isActive: currentSettingsMap.get(category) ?? true
+    }));
+    await writeTabSettings(newSettings);
+    return newSettings.sort((a, b) => a.category.localeCompare(b.category));
   }
 
   return finalSettings.sort((a, b) => a.category.localeCompare(b.category));
@@ -79,13 +92,11 @@ export async function updateTabSettings(category: string, isActive: boolean): Pr
   if (settingIndex > -1) {
     settings[settingIndex].isActive = isActive;
   } else {
-    // Isso não deveria acontecer com a lógica atual, mas é uma salvaguarda.
     settings.push({ category, isActive });
   }
   
   await writeTabSettings(settings);
 
-  // Revalida o cache da página inicial para que as mudanças apareçam imediatamente.
   revalidatePath('/');
+  revalidatePath('/admin/scraping');
 }
-
