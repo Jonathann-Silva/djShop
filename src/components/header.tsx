@@ -68,7 +68,7 @@ export function Header() {
                         <Link href="/admin/history">Histórico</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link href="/admin/scraping">Monitorar Preço (Teste)</Link>
+                        <Link href="/admin/scraping">Abas</Link>
                       </DropdownMenuItem>
                     </>
                   )}

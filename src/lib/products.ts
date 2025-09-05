@@ -44,7 +44,7 @@ export const PRODUCTS: Product[] = [
       "verde",
       "vermelho"
     ],
-    "scrapingUrl": "https://www.lgimportados.com/produto/apple-iphone-16-128gb-a-3287-black-hn-chip-codigo-781800",
+    "scrapingUrl": "https://www.lgimportados.com/produto/celular-apple-iphone-16-128gb-a-3081-black-ll-esim-codigo-747318",
     "priceMargin": 0
   },
   {
@@ -136,15 +136,16 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": 10,
-    "name": "Perfume La Vie Est Belle",
-    "price": 450,
-    "description": "Eau de Parfum de 75ml. Uma declaração de felicidade e feminilidade vibrante, com notas de íris e jasmim.",
+    "name": "LANCOME LA VIE EST BELLE FEM 100ML",
+    "price": 0,
+    "description": "La Vie Est Belle é uma fragrância feminina icônica que celebra a liberdade, a felicidade e a beleza da vida. Lançado em 2012, esse perfume tornou-se um verdadeiro símbolo da mulher elegante, positiva e autêntica. Com uma assinatura olfativa marcante e envolvente, ele traduz sofisticação com um toque doce e acolhedor, ideal para quem quer deixar sua presença registrada com suavidade e intensidade.",
     "category": "Perfumes Femininos",
-    "image": "https://static.cestasmichelli.com.br/images/product/rs-2047-2515-0.jpg?ims=750x750",
+    "image": "https://www.lgimportados.com/img/m/IMG_286473_1.JPG?v=1757085731",
     "dataAiHint": "perfume fragrance",
     "onSale": true,
     "colors": [],
-    "scrapingUrl": ""
+    "scrapingUrl": "https://www.lgimportados.com/produto/-lancome-la-vie-est-belle-fem-100ml-edp-286555-",
+    "priceMargin": 50
   },
   {
     "id": 11,
