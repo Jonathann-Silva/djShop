@@ -2,15 +2,11 @@
 export const TAB_SETTINGS: { category: string; isActive: boolean }[] = [
   {
     "category": "Celulares",
-    "isActive": true
+    "isActive": false
   },
   {
     "category": "Computadores",
-    "isActive": true
-  },
-  {
-    "category": "perfumes femininos",
-    "isActive": true
+    "isActive": false
   },
   {
     "category": "Perfumes Femininos",
