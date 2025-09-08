@@ -84,10 +84,7 @@ export default function AdminDashboard() {
           <div>
             <CardTitle>Produtos</CardTitle>
             <CardDescription>
-              Gerencie seus produtos aqui. A gestão é feita pelo arquivo{' '}
-              <code className="font-mono text-sm bg-muted p-1 rounded-sm">
-                src/lib/products.ts
-              </code>
+              Gerencie seus produtos e veja o catálogo completo.
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
