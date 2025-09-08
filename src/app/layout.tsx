@@ -10,6 +10,9 @@ import { Toaster } from '@/components/ui/toaster';
 export const metadata: Metadata = {
   title: 'DJ Shop',
   description: 'Sua loja online rápida e moderna.',
+  icons: {
+    icon: [],
+  },
 };
 
 export default function RootLayout({
