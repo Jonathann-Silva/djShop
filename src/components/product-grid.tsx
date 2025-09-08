@@ -1,4 +1,3 @@
-
 'use client';
 
 import { ProductCard } from '@/components/product-card';
@@ -14,13 +13,15 @@ interface ProductGridProps {
 
 const getBrandFromProductName = (name: string, brands: string[]): string | null => {
   const lowerCaseName = name.toLowerCase();
-  for (const brand of brands) {
+  // Ordena as marcas por comprimento, da mais longa para a mais curta
+  // para evitar correspondências parciais (ex: "Rabanne" vs "Paco Rabanne")
+  const sortedBrands = [...brands].sort((a, b) => b.length - a.length);
+
+  for (const brand of sortedBrands) {
     if (lowerCaseName.includes(brand.toLowerCase())) {
       return brand;
     }
   }
-  // Fallback para iPhone especificamente, se "Apple" estiver nas marcas.
-  if (brands.includes('Apple') && lowerCaseName.includes('iphone')) return 'Apple';
   return null;
 }
 
@@ -64,7 +65,8 @@ export function ProductGrid({ products, groupByBrand = true }: ProductGridProps)
     });
 
     if (unbranded.length > 0) {
-      sortedGroups['Outros'] = unbranded;
+      // Não cria mais o grupo "Outros"
+      // sortedGroups['Outros'] = unbranded;
     }
 
     return sortedGroups;
@@ -119,7 +121,7 @@ export function ProductGrid({ products, groupByBrand = true }: ProductGridProps)
     <div className="space-y-8">
       {visibleGroups.map(([brand, brandProducts]) => (
         <section key={brand}>
-          { (brand !== 'Outros' && brand !== 'all') && (
+          { (brand !== 'all') && (
             <h2 className="text-2xl font-bold font-headline mb-4 pb-2 border-b-2 border-primary text-center">
               {brand}
             </h2>

@@ -1,15 +1,7 @@
-
 'use client';
 
 import Link from 'next/link';
-import {
-  Package2,
-  ShoppingCart,
-  User,
-  History,
-  SearchCode,
-  Tags, // Importando novo ícone
-} from 'lucide-react';
+import { Package2, ShoppingCart, User } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 import { useCart } from '@/lib/cart';
 import { Button } from '@/components/ui/button';
@@ -26,7 +18,7 @@ import {
 export function Header() {
   const { user, logout } = useAuth();
   const { getItemCount } = useCart();
-  
+
   const itemCount = getItemCount();
 
   return (
@@ -62,13 +54,7 @@ export function Header() {
                   {user.email === 'admin@gmail.com' && (
                     <>
                       <DropdownMenuItem asChild>
-                        <Link href="/admin">Produtos</Link>
-                      </DropdownMenuItem>
-                       <DropdownMenuItem asChild>
-                        <Link href="/admin/history">Histórico</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href="/admin/scraping">Abas</Link>
+                        <Link href="/admin">Painel do Administrador</Link>
                       </DropdownMenuItem>
                     </>
                   )}

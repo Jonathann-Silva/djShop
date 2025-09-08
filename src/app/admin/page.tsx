@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -23,7 +22,7 @@ import {
 import { ProductTable } from '@/components/product-table';
 import { getProducts, getCategories } from '@/lib/products';
 import type { Product } from '@/lib/products';
-import { PlusCircle, Tags } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   Select,
@@ -32,7 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import Link from 'next/link';
 
 export default function AdminDashboard() {
   const products = getProducts();
@@ -86,8 +84,10 @@ export default function AdminDashboard() {
           <div>
             <CardTitle>Produtos</CardTitle>
             <CardDescription>
-              Gerencie seus produtos aqui. Atualmente, os produtos são
-              gerenciados estaticamente.
+              Gerencie seus produtos aqui. A gestão é feita pelo arquivo{' '}
+              <code className="font-mono text-sm bg-muted p-1 rounded-sm">
+                src/lib/products.ts
+              </code>
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
@@ -103,12 +103,6 @@ export default function AdminDashboard() {
                 ))}
               </SelectContent>
             </Select>
-            <Button asChild variant="outline" size="sm">
-                <Link href="/admin/brands" className="gap-1">
-                    <Tags />
-                    Gerenciar Marcas
-                </Link>
-            </Button>
             <DialogTrigger asChild>
               <Button size="sm" className="gap-1">
                 <PlusCircle />

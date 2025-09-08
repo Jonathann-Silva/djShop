@@ -12,6 +12,35 @@ export type Product = {
   priceMargin?: number;
 };
 
+export type TabSetting = {
+  category: string;
+  isActive: boolean;
+};
+
+// --- PONTO CENTRAL DE CONFIGURAÇÃO ---
+// Para compatibilidade com a Vercel, todas as configurações dinâmicas
+// foram centralizadas aqui. Edite estas listas para gerenciar o site.
+
+const BRANDS_CONFIG: string[] = [
+  'Apple',
+  'Xiaomi',
+  'Paco Rabanne',
+  'Dior',
+  'Lancome',
+  'Al Wataniah',
+  'Abercrombie & Fitch',
+  'Adyan',
+];
+
+const TAB_SETTINGS_CONFIG: TabSetting[] = [
+  { category: 'Celulares', isActive: true },
+  { category: 'Computadores', isActive: true },
+  { category: 'Perfumes Masculino', isActive: true },
+  { category: 'Perfumes Femininos', isActive: true },
+];
+
+// --- LISTA DE PRODUTOS ---
+
 export const PRODUCTS: Product[] = [
   {
     "id": 1,
@@ -44,7 +73,7 @@ export const PRODUCTS: Product[] = [
       "verde",
       "vermelho"
     ],
-    "scrapingUrl": "https://www.lgimportados.com/produto/celular-apple-iphone-16-128gb-a-3081-black-ll-esim-codigo-747318",
+    "scrapingUrl": "",
     "priceMargin": 0
   },
   {
@@ -150,7 +179,6 @@ export const PRODUCTS: Product[] = [
   {
     "id": 11,
     "name": "93 AL WATANIAH DURRAT AL AROOS FEM 85ML EDP",
-    "price": 0,
     "description": "Al Wataniah Durrat Al Aroos é uma fragrância feminina exuberante e elegante, apresentada em um frasco de 85ml como Eau de Parfum. Com uma combinação harmoniosa de notas florais e frutadas, esta fragrância é uma celebração da feminilidade e da sofisticação. Ideal para uso em ocasiões especiais, sua essência única e envolvente deixa uma impressão memorável e encantadora.    ",
     "category": "Perfumes Femininos",
     "image": "https://www.lgimportados.com/img/m/IMG_536493_1.JPG?v=1757087795",
@@ -158,7 +186,8 @@ export const PRODUCTS: Product[] = [
     "onSale": false,
     "colors": [],
     "scrapingUrl": "https://www.lgimportados.com/produto/93-al-wataniah-durrat-al-aroos-fem-85ml-edp-codigo-536493",
-    "priceMargin": 50
+    "priceMargin": 50,
+    "price": 0
   },
   {
     "id": 12,
@@ -487,12 +516,36 @@ export const PRODUCTS: Product[] = [
   }
 ];
 
+// --- FUNÇÕES DE ACESSO ---
+
+// Retorna todos os produtos
 export const getProducts = (): Product[] => PRODUCTS;
 
+// Retorna um produto pelo ID
 export const getProductById = (id: number): Product | undefined =>
   PRODUCTS.find((p) => p.id === id);
 
+// Retorna todas as categorias únicas dos produtos
 export const getCategories = (): string[] => {
-  const categories = PRODUCTS.map(p => p.category);
-  return [...new Set(categories)];
-}
+  const categories = PRODUCTS.map((p) => p.category);
+  return [...new Set(categories)].sort();
+};
+
+// Retorna todas as marcas configuradas
+export const getBrands = (): string[] => BRANDS_CONFIG.sort();
+
+// Retorna a configuração de visibilidade das abas
+export const getTabSettings = (): TabSetting[] => {
+  const allCategories = getCategories();
+  const settingsMap = new Map(
+    TAB_SETTINGS_CONFIG.map((s) => [s.category, s.isActive])
+  );
+
+  // Garante que todas as categorias existentes tenham uma configuração
+  const finalSettings = allCategories.map((category) => ({
+    category,
+    isActive: settingsMap.get(category) ?? true, // Padrão é ativo
+  }));
+
+  return finalSettings;
+};
