@@ -6,6 +6,8 @@ import { ProductGrid } from './product-grid';
 import type { Product } from '@/lib/products';
 import { getTabSettings } from '@/actions/tabs';
 import { Skeleton } from './ui/skeleton';
+import { Input } from './ui/input';
+import { Search } from 'lucide-react';
 
 interface ProductTabsProps {
   products: Product[];
@@ -14,34 +16,59 @@ interface ProductTabsProps {
 export function ProductTabs({ products }: ProductTabsProps) {
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const showSearchBar = ['Perfumes Masculino', 'Perfumes Femininos'].includes(
+    activeTab
+  );
 
   useEffect(() => {
     async function loadSettings() {
+      setIsLoading(true);
       const settings = await getTabSettings();
       const enabledCategories = settings
         .filter((s) => s.isActive)
         .map((s) => s.category);
-      
-      const onSaleProducts = products.filter(p => p.onSale);
+
+      const onSaleProducts = products.filter((p) => p.onSale);
       const categoriesToShow = [];
 
-      // Adiciona 'Promoções' apenas se houver produtos em promoção
       if (onSaleProducts.length > 0) {
         categoriesToShow.push('Promoções');
       }
 
-      // Adiciona as outras categorias ativas
       categoriesToShow.push(...enabledCategories);
-      
+
       setActiveCategories(categoriesToShow);
+      if (categoriesToShow.length > 0) {
+        setActiveTab(categoriesToShow[0]);
+      }
       setIsLoading(false);
     }
     loadSettings();
   }, [products]);
 
-  const onSaleProducts = useMemo(() => products.filter((p) => p.onSale), [
-    products,
-  ]);
+  const onSaleProducts = useMemo(
+    () => products.filter((p) => p.onSale),
+    [products]
+  );
+
+  const filteredProducts = (category: string) => {
+    let baseProducts = [];
+    if (category === 'Promoções') {
+      baseProducts = onSaleProducts;
+    } else {
+      baseProducts = products.filter((p) => p.category === category);
+    }
+
+    if (showSearchBar && searchTerm) {
+      return baseProducts.filter((p) =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    return baseProducts;
+  };
 
   if (isLoading) {
     return (
@@ -61,16 +88,18 @@ export function ProductTabs({ products }: ProductTabsProps) {
     );
   }
 
-  // Define a primeira aba ativa como padrão
-  const defaultValue = activeCategories.length > 0 ? activeCategories[0] : '';
-  
   if (activeCategories.length === 0) {
     return null; // Não renderiza nada se não houver abas ativas
   }
 
   return (
-    <Tabs defaultValue={defaultValue} className="w-full">
-      <div className="flex justify-center mb-8">
+    <Tabs
+      defaultValue={activeTab}
+      value={activeTab}
+      onValueChange={setActiveTab}
+      className="w-full"
+    >
+      <div className="flex justify-center mb-6">
         <TabsList>
           {activeCategories.map((category) => (
             <TabsTrigger key={category} value={category}>
@@ -79,20 +108,27 @@ export function ProductTabs({ products }: ProductTabsProps) {
           ))}
         </TabsList>
       </div>
-      {activeCategories.includes('Promoções') && (
-        <TabsContent value="Promoções">
-          <ProductGrid products={onSaleProducts} />
-        </TabsContent>
-      )}
-      {activeCategories
-        .filter((c) => c !== 'Promoções')
-        .map((category) => (
-          <TabsContent key={category} value={category}>
-            <ProductGrid
-              products={products.filter((p) => p.category === category)}
+
+      {showSearchBar && (
+        <div className="mb-8 max-w-md mx-auto">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Buscar por nome do perfume..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
             />
-          </TabsContent>
-        ))}
+          </div>
+        </div>
+      )}
+
+      {activeCategories.map((category) => (
+        <TabsContent key={category} value={category}>
+          <ProductGrid products={filteredProducts(category)} />
+        </TabsContent>
+      ))}
     </Tabs>
   );
 }
