@@ -33,8 +33,8 @@ const BRANDS_CONFIG: string[] = [
 ];
 
 const TAB_SETTINGS_CONFIG: TabSetting[] = [
-  { category: 'Celulares', isActive: true },
-  { category: 'Computadores', isActive: true },
+  { category: 'Celulares', isActive: false },
+  { category: 'Computadores', isActive: false },
   { category: 'Perfumes Masculino', isActive: true },
   { category: 'Perfumes Femininos', isActive: true },
 ];

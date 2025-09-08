@@ -81,7 +81,7 @@ export function ProductTabs({ products }: ProductTabsProps) {
       </div>
       {activeCategories.includes('Promoções') && (
         <TabsContent value="Promoções">
-          <ProductGrid products={onSaleProducts} groupByBrand={false} />
+          <ProductGrid products={onSaleProducts} />
         </TabsContent>
       )}
       {activeCategories
