@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { ProductForm } from '@/components/product-form';
@@ -33,34 +33,30 @@ import {
 } from '@/components/ui/select';
 
 export default function AdminDashboard() {
-  const products = getProducts();
-  const categories = ['Todas as Categorias', ...getCategories()];
+  const allProducts = useMemo(() => getProducts(), []);
+  const categories = useMemo(() => ['Todas as Categorias', ...getCategories()], []);
   const { user } = useAuth();
   const router = useRouter();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('Todas as Categorias');
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
 
-  useEffect(() => {
+  const filteredProducts = useMemo(() => {
     if (selectedCategory === 'Todas as Categorias') {
-      setFilteredProducts(products);
+      return allProducts;
     } else {
-      setFilteredProducts(products.filter((p) => p.category === selectedCategory));
+      return allProducts.filter((p) => p.category === selectedCategory);
     }
-  }, [selectedCategory, products]);
+  }, [selectedCategory, allProducts]);
 
   useEffect(() => {
-    // Se o estado de autenticação ainda está carregando, não faz nada
     if (user === undefined) {
       return;
     }
-    // Se não há usuário ou o usuário não é o admin, redireciona
     if (!user || user.email !== 'admin@gmail.com') {
       router.replace('/');
     }
   }, [user, router]);
 
-  // Mostra um estado de carregamento enquanto verifica o usuário
   if (user === undefined) {
     return (
       <div className="space-y-4">
@@ -71,12 +67,10 @@ export default function AdminDashboard() {
     );
   }
 
-  // Se o usuário não for o admin, não renderiza nada (será redirecionado)
   if (!user || user.email !== 'admin@gmail.com') {
     return null;
   }
 
-  // Se o usuário é o admin, mostra a página
   return (
     <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
       <Card>

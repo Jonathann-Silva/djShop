@@ -62,38 +62,46 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": 4,
-    "name": "Notebook Gamer Fire",
-    "price": 8999,
-    "description": "16GB de RAM, placa de vídeo RTX 4060 e processador de última geração. Domine seus jogos com o máximo de performance.",
-    "category": "Computadores",
-    "image": "https://picsum.photos/600/400?random=4",
+    "name": "ADYAN RIVIERA 100ML",
+    "price": 0,
+    "description": "Adyan Riviera Fem 100ml EDP é uma fragrância feminina sofisticada e vibrante, que evoca o frescor e o charme da Riviera Francesa. Com uma mistura elegante de notas cítricas, florais e amadeiradas, esse perfume é ideal para mulheres que buscam uma fragrância leve, energizante e sensual. Perfeito para o dia a dia ou ocasiões especiais, o Adyan Riviera Fem proporciona uma experiência olfativa refrescante e envolvente, com excelente fixação.",
+    "category": "Perfumes Femininos",
+    "image": "https://www.lgimportados.com/img/m/IMG_775618_4.JPG?v=1757545283",
     "dataAiHint": "gaming laptop",
+    "onSale": false,
     "colors": [
       "#FF0000",
       "#00FF00",
       "#0000FF"
     ],
-    "scrapingUrl": ""
+    "scrapingUrl": "https://www.lgimportados.com/produto/adyan-riviera-fem-100ml-edp",
+    "priceMargin": 65
   },
   {
     "id": 5,
-    "name": "Ultrabook Air",
-    "price": 6499,
-    "description": "Design leve e fino com 8GB de RAM e 512GB de SSD. Perfeito para quem busca portabilidade sem abrir mão da potência.",
-    "category": "Computadores",
-    "image": "https://picsum.photos/600/400?random=5",
+    "name": "ADYAN SAMARA 100ML",
+    "price": 0,
+    "description": "Adyan Samara é uma fragrância feminina doce, envolvente e sedutora, feita para mulheres que amam perfumes que marcam presença com delicadeza e intensidade ao mesmo tempo. Um encontro entre o floral sofisticado e o gourmand cremoso, essa fragrância transmite charme, elegância e uma feminilidade encantadora desde o primeiro acorde.",
+    "category": "Perfumes Femininos",
+    "image": "https://www.lgimportados.com/img/m/IMG_710329_1.JPG?v=1757545286",
     "dataAiHint": "ultrabook laptop",
-    "scrapingUrl": ""
+    "onSale": false,
+    "colors": [],
+    "scrapingUrl": "https://www.lgimportados.com/produto/adyan-samara-100ml-fem-edp-codigo-710329",
+    "priceMargin": 65
   },
   {
     "id": 6,
-    "name": "PC All-in-One Home",
-    "price": 3899,
-    "description": "Tela de 24 polegadas, 8GB de RAM e 1TB de HD. A solução completa para trabalho e entretenimento em casa.",
-    "category": "Computadores",
-    "image": "https://picsum.photos/600/400?random=6",
+    "name": "ADYAN TAJALI EXTRAIT DE PARFUM 100ML",
+    "price": 0,
+    "description": "O Adyan Tajali Extrait de Parfum é uma fragrância feminina intensa, sofisticada e envolvente, criada para mulheres que desejam expressar presença, elegância e confiança em cada momento. Sua composição única combina notas orientais e amadeiradas, criando um perfume marcante, duradouro e capaz de deixar uma assinatura olfativa inesquecível.",
+    "category": "Perfumes Femininos",
+    "image": "https://www.lgimportados.com/img/m/IMG_871556_1.JPG?v=1757545287",
     "dataAiHint": "all-in-one computer",
-    "scrapingUrl": ""
+    "onSale": false,
+    "colors": [],
+    "scrapingUrl": "https://www.lgimportados.com/produto/adyan-tajali-extrait-de-parfum-fem-100ml-300215-codigo-871556",
+    "priceMargin": 65
   },
   {
     "id": 7,
@@ -484,6 +492,19 @@ export const PRODUCTS: Product[] = [
     "scrapingUrl": "https://www.lgimportados.com/produto/adyan-oud-saffron-100ml-fem-edp-codigo-710282",
     "priceMargin": 50,
     "id": 36
+  },
+  {
+    "name": "ADYAN THAMNIYAT FLORA 100ML",
+    "price": 0,
+    "description": "Adyan Thamniyat Flora 100ml Fem EDP é uma fragrância floral sofisticada e envolvente, criada especialmente para mulheres que buscam exalar elegância e frescor. Com uma mistura delicada de notas florais, amadeiradas e um toque sutil de frutas, essa fragrância proporciona uma experiência olfativa marcante e única. Ideal para o uso diário ou para ocasiões especiais, o Thamniyat Flora é uma escolha perfeita para mulheres que desejam uma fragrância fresca, mas com uma base de sofisticação que se mantém ao longo do dia.",
+    "category": "Perfumes Femininos",
+    "image": "https://www.lgimportados.com/img/m/IMG_775632_2.JPG?v=1757545289",
+    "dataAiHint": "",
+    "onSale": false,
+    "colors": [],
+    "scrapingUrl": "https://www.lgimportados.com/produto/-adyan-thamniyat-flora-100ml-fem-edp-codigo-775632",
+    "priceMargin": 65,
+    "id": 37
   }
 ];
 
