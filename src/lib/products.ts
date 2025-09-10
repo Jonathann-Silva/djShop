@@ -12,35 +12,6 @@ export type Product = {
   priceMargin?: number;
 };
 
-export type TabSetting = {
-  category: string;
-  isActive: boolean;
-};
-
-// --- PONTO CENTRAL DE CONFIGURAÇÃO ---
-// Para compatibilidade com a Vercel, todas as configurações dinâmicas
-// foram centralizadas aqui. Edite estas listas para gerenciar o site.
-
-const BRANDS_CONFIG: string[] = [
-  'Apple',
-  'Xiaomi',
-  'Paco Rabanne',
-  'Dior',
-  'Lancome',
-  'Al Wataniah',
-  'Abercrombie & Fitch',
-  'Adyan',
-];
-
-const TAB_SETTINGS_CONFIG: TabSetting[] = [
-  { category: 'Celulares', isActive: false },
-  { category: 'Computadores', isActive: false },
-  { category: 'Perfumes Masculino', isActive: true },
-  { category: 'Perfumes Femininos', isActive: true },
-];
-
-// --- LISTA DE PRODUTOS ---
-
 export const PRODUCTS: Product[] = [
   {
     "id": 1,
@@ -50,7 +21,7 @@ export const PRODUCTS: Product[] = [
     "category": "Celulares",
     "image": "https://www.lgimportados.com/img/m/IMG_747431_1.JPG?v=1756989116",
     "dataAiHint": "smartphone tech",
-    "onSale": true,
+    "onSale": false,
     "colors": [
       "#000000",
       "#FFFFFF",
@@ -132,7 +103,7 @@ export const PRODUCTS: Product[] = [
     "category": "Perfumes Masculino",
     "image": "https://www.lgimportados.com/img/m/IMG_592451_1.JPG?v=1756990805",
     "dataAiHint": "perfume bottle",
-    "onSale": true,
+    "onSale": false,
     "colors": [],
     "scrapingUrl": "https://www.lgimportados.com/produto/paco-rabanne-invictus-victory-elixir-intense-men-100ml-edt",
     "priceMargin": 50
@@ -171,10 +142,10 @@ export const PRODUCTS: Product[] = [
     "category": "Perfumes Femininos",
     "image": "https://www.lgimportados.com/img/m/IMG_286473_1.JPG?v=1757085731",
     "dataAiHint": "perfume fragrance",
-    "onSale": true,
+    "onSale": false,
     "colors": [],
     "scrapingUrl": "https://www.lgimportados.com/produto/-lancome-la-vie-est-belle-fem-100ml-edp-286555-",
-    "priceMargin": 50
+    "priceMargin": 65
   },
   {
     "id": 11,
@@ -516,36 +487,12 @@ export const PRODUCTS: Product[] = [
   }
 ];
 
-// --- FUNÇÕES DE ACESSO ---
-
-// Retorna todos os produtos
 export const getProducts = (): Product[] => PRODUCTS;
 
-// Retorna um produto pelo ID
 export const getProductById = (id: number): Product | undefined =>
   PRODUCTS.find((p) => p.id === id);
 
-// Retorna todas as categorias únicas dos produtos
 export const getCategories = (): string[] => {
-  const categories = PRODUCTS.map((p) => p.category);
-  return [...new Set(categories)].sort();
-};
-
-// Retorna todas as marcas configuradas
-export const getBrands = (): string[] => BRANDS_CONFIG.sort();
-
-// Retorna a configuração de visibilidade das abas
-export const getTabSettings = (): TabSetting[] => {
-  const allCategories = getCategories();
-  const settingsMap = new Map(
-    TAB_SETTINGS_CONFIG.map((s) => [s.category, s.isActive])
-  );
-
-  // Garante que todas as categorias existentes tenham uma configuração
-  const finalSettings = allCategories.map((category) => ({
-    category,
-    isActive: settingsMap.get(category) ?? true, // Padrão é ativo
-  }));
-
-  return finalSettings;
-};
+  const categories = PRODUCTS.map(p => p.category);
+  return [...new Set(categories)];
+}

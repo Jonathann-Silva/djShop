@@ -1,14 +1,25 @@
 'use server';
 
-import { getTabSettings as getTabSettingsFromProducts } from '@/lib/products';
-import type { TabSetting } from '@/lib/products';
+import { getCategories } from '@/lib/products';
+
+export type TabSetting = {
+  category: string;
+  isActive: boolean;
+};
 
 /**
  * Retorna as configurações de visibilidade para todas as categorias de produtos.
- * Os dados agora vêm de uma constante para garantir a compatibilidade com a Vercel.
+ * A lógica foi simplificada para retornar todas as categorias como ativas,
+ * para compatibilidade com a Vercel.
  */
 export async function getTabSettings(): Promise<TabSetting[]> {
-  return Promise.resolve(getTabSettingsFromProducts());
+  const categories = getCategories();
+  // Assume all categories from products are active
+  const tabSettings: TabSetting[] = categories.map(category => ({
+    category,
+    isActive: true,
+  }));
+  return Promise.resolve(tabSettings);
 }
 
 /**

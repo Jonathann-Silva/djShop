@@ -100,15 +100,13 @@ export function ProductCard({ product: initialProduct }: ProductCardProps) {
         <CardDescription className="mt-1 text-xs line-clamp-2">{product.description}</CardDescription>
       </CardContent>
       <CardFooter className="p-3 pt-0 flex justify-between items-center">
+        {renderPrice()}
         {user ? (
-          <>
-            {renderPrice()}
-            <Button onClick={handleAddToCart} size="sm" aria-label={`Adicionar ${product.name} ao carrinho`} disabled={isLoadingPrice || product.price === 0}>
-              <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar
-            </Button>
-          </>
+          <Button onClick={handleAddToCart} size="sm" aria-label={`Adicionar ${product.name} ao carrinho`} disabled={isLoadingPrice || product.price === 0}>
+            <ShoppingCart className="mr-2 h-4 w-4" /> Adicionar
+          </Button>
         ) : (
-          <p className="text-xs text-muted-foreground">Faça login para ver o preço</p>
+          <p className="text-xs text-muted-foreground">Faça login para comprar</p>
         )}
       </CardFooter>
     </Card>
