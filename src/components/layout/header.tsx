@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { Flame, User, ShoppingCart, Search, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
@@ -20,6 +21,7 @@ import { getImageUrl } from "@/lib/products";
 export function Header() {
   const { cartItems, totalItems, totalPrice, removeFromCart } = useCart();
   const { user } = useAuth();
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -62,7 +64,7 @@ export function Header() {
               <User className="h-5 w-5" />
             </Button>
           </Link>
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="relative">
                 <ShoppingCart className="h-5 w-5" />
@@ -119,12 +121,12 @@ export function Header() {
                         <span>Total</span>
                         <span>R$ {totalPrice.toFixed(2)}</span>
                       </div>
-                      <Link href="/cart" className="block">
+                      <Link href="/cart" className="block" onClick={() => setIsSheetOpen(false)}>
                         <Button className="w-full bg-primary hover:bg-primary/90">
                            Ir para o Carrinho
                         </Button>
                       </Link>
-                      <Link href="/checkout" className="block">
+                      <Link href="/checkout" className="block" onClick={() => setIsSheetOpen(false)}>
                          <Button variant="accent" className="w-full bg-accent hover:bg-accent/90">
                            Finalizar Compra
                         </Button>
