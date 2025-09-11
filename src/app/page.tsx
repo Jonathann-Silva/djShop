@@ -89,7 +89,7 @@ export default function Home() {
               <div className="hidden md:block">
                 <Image
                   src="https://picsum.photos/seed/ai-advisor/600/600"
-                  alt="AI Perfume Advisor"
+                  alt="Consultor de Perfumes AI"
                   width={600}
                   height={600}
                   data-ai-hint="futuristic abstract"
