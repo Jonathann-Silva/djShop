@@ -24,7 +24,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <Flame className="h-6 w-6 text-primary" />
           <span className="font-bold font-headline text-lg">
-            Essenza Gallery
+            Galeria Essenza
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -38,7 +38,7 @@ export function Header() {
             href="/advisor"
             className="transition-colors hover:text-primary"
           >
-            AI Advisor
+            Consultor AI
           </Link>
         </nav>
         <div className="flex items-center gap-4">
@@ -63,12 +63,12 @@ export function Header() {
             </SheetTrigger>
             <SheetContent>
               <SheetHeader>
-                <SheetTitle>Shopping Cart</SheetTitle>
+                <SheetTitle>Carrinho de Compras</SheetTitle>
               </SheetHeader>
               <div className="mt-4">
                 {cartItems.length === 0 ? (
                   <p className="text-center text-muted-foreground">
-                    Your cart is empty.
+                    O seu carrinho está vazio.
                   </p>
                 ) : (
                   <>
@@ -85,7 +85,7 @@ export function Header() {
                           <div className="flex-grow">
                             <p className="font-semibold">{item.product.name}</p>
                             <p className="text-sm text-muted-foreground">
-                              Quantity: {item.quantity}
+                              Quantidade: {item.quantity}
                             </p>
                             <p className="text-sm font-medium">
                               ${(item.product.price * item.quantity).toFixed(2)}
@@ -96,7 +96,7 @@ export function Header() {
                             size="sm"
                             onClick={() => removeFromCart(item.product.id)}
                           >
-                            Remove
+                            Remover
                           </Button>
                         </div>
                       ))}
@@ -109,12 +109,12 @@ export function Header() {
                       </div>
                       <Link href="/cart" className="block">
                         <Button className="w-full bg-primary hover:bg-primary/90">
-                           Go to Cart
+                           Ir para o Carrinho
                         </Button>
                       </Link>
                       <Link href="/checkout" className="block">
                          <Button variant="accent" className="w-full bg-accent hover:bg-accent/90">
-                           Checkout
+                           Finalizar Compra
                         </Button>
                       </Link>
                     </div>

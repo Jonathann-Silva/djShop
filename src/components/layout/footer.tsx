@@ -11,68 +11,68 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-2 mb-4">
               <Flame className="h-7 w-7 text-primary" />
               <span className="font-bold font-headline text-xl">
-                Essenza Gallery
+                Galeria Essenza
               </span>
             </Link>
             <p className="text-sm text-muted-foreground">
-              Discover your signature scent with our exclusive collection of
-              fine perfumes.
+              Descubra a sua fragrância de assinatura com a nossa coleção exclusiva de
+              perfumes finos.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold uppercase tracking-wider">Shop</h3>
+            <h3 className="font-semibold uppercase tracking-wider">Loja</h3>
             <div className="mt-4 flex flex-col space-y-2">
               <Link
                 href="/products"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
-                All Perfumes
+                Todos os Perfumes
               </Link>
               <Link
                 href="/products?gender=Masculine"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
-                For Him
+                Para Ele
               </Link>
               <Link
                 href="/products?gender=Feminine"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
-                For Her
+                Para Ela
               </Link>
               <Link
                 href="/products?gender=Unisex"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
-                Unisex
+                Unissexo
               </Link>
             </div>
           </div>
           <div>
-            <h3 className="font-semibold uppercase tracking-wider">About</h3>
+            <h3 className="font-semibold uppercase tracking-wider">Sobre</h3>
             <div className="mt-4 flex flex-col space-y-2">
               <Link
                 href="#"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
-                Our Story
+                A Nossa História
               </Link>
               <Link
                 href="/advisor"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
-                AI Advisor
+                Consultor AI
               </Link>
               <Link
                 href="#"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
-                Contact Us
+                Contacte-nos
               </Link>
             </div>
           </div>
           <div>
-            <h3 className="font-semibold uppercase tracking-wider">Follow Us</h3>
+            <h3 className="font-semibold uppercase tracking-wider">Siga-nos</h3>
             <div className="mt-4 flex space-x-4">
               <Button variant="ghost" size="icon" asChild>
                 <a href="#" aria-label="Twitter">
@@ -93,7 +93,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Essenza Gallery. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Galeria Essenza. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>

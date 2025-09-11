@@ -23,7 +23,7 @@ export default function Home() {
       <section className="relative w-full h-[60vh] md:h-[80vh]">
         <Image
           src={heroImageUrl}
-          alt="Luxury perfume collection"
+          alt="Coleção de perfumes de luxo"
           fill
           priority
           data-ai-hint={heroImageHint}
@@ -33,15 +33,15 @@ export default function Home() {
         <div className="relative z-10 flex flex-col items-center justify-end h-full text-center p-8 md:p-12">
           <div className="bg-background/80 backdrop-blur-sm p-8 rounded-lg">
             <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tighter">
-              Essenza Gallery
+              Galeria Essenza
             </h1>
             <p className="mt-4 max-w-2xl text-lg md:text-xl text-foreground/80">
-              Unveil your essence. Discover a curated world of fine fragrances
-              that tell your unique story.
+              Revele a sua essência. Descubra um mundo curado de fragrâncias finas
+              que contam a sua história única.
             </p>
             <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground">
               <Link href="/products">
-                Explore The Collection <ArrowRight className="ml-2 h-5 w-5" />
+                Explorar A Coleção <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </div>
@@ -51,7 +51,7 @@ export default function Home() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto max-w-7xl px-6">
           <h2 className="text-3xl md:text-4xl font-headline font-bold text-center mb-12">
-            Featured Collection
+            Coleção em Destaque
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {featuredProducts.map((product) => (
@@ -69,18 +69,18 @@ export default function Home() {
                 <CardHeader>
                   <Bot className="h-12 w-12 text-primary mb-4" />
                   <CardTitle className="text-3xl font-headline">
-                    Meet Your Personal Scent Advisor
+                    Conheça o seu Consultor de Perfumes Pessoal
                   </CardTitle>
                   <CardDescription className="text-base mt-2">
-                    Can&apos;t decide? Let our AI-powered advisor guide you.
-                    Answer a few simple questions and receive personalized perfume
-                    recommendations tailored just for you.
+                    Não consegue decidir? Deixe o nosso consultor alimentado por IA guiá-lo.
+                    Responda a algumas perguntas simples e receba recomendações personalizadas de perfumes
+                    feitas à medida para si.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Button asChild size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                     <Link href="/advisor">
-                      Find My Scent
+                      Encontrar o Meu Perfume
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
