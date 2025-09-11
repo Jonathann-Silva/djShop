@@ -31,8 +31,7 @@ export default function CheckoutPage() {
   const { cartItems, totalPrice, totalItems, clearCart } = useCart();
   const { toast } = useToast();
 
-  const shippingCost = totalItems > 0 ? 10 : 0;
-  const grandTotal = totalPrice + shippingCost;
+  const grandTotal = totalPrice;
 
   if (totalItems === 0) {
     return (
@@ -156,10 +155,6 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>R$ {totalPrice.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Envio</span>
-                  <span>R$ {shippingCost.toFixed(2)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-bold text-lg">

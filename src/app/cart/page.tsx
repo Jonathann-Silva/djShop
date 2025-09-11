@@ -33,8 +33,7 @@ export default function CartPage() {
     totalItems,
   } = useCart();
 
-  const shippingCost = totalItems > 0 ? 10 : 0;
-  const grandTotal = totalPrice + shippingCost;
+  const grandTotal = totalPrice;
 
   if (totalItems === 0) {
     return (
@@ -152,10 +151,6 @@ export default function CartPage() {
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
                 <span>R$ {totalPrice.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Envio</span>
-                <span>R$ {shippingCost.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold text-lg">
                 <span>Total Geral</span>
