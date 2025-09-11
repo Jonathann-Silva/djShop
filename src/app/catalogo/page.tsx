@@ -30,8 +30,8 @@ function FiltersSkeleton() {
 
 function ProductsSkeleton() {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-            {Array.from({ length: 6 }).map((_, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="space-y-2">
                     <Skeleton className="h-[250px] w-full" />
                     <Skeleton className="h-6 w-3/4" />
@@ -119,7 +119,7 @@ export default function ProductsPage() {
         <main className="lg:col-span-3">
           {loading ? <ProductsSkeleton /> : 
             filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

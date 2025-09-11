@@ -87,20 +87,20 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </CardHeader>
       </Link>
-      <CardContent className="p-3 bg-card flex-grow">
+      <CardContent className="p-2 bg-card flex-grow">
         <Link href={`/products/${product.id}`}>
-            <CardTitle className="text-base font-headline tracking-tight">{product.name}</CardTitle>
-            <p className="text-sm text-muted-foreground">{product.brand}</p>
+            <CardTitle className="text-sm font-headline tracking-tight">{product.name}</CardTitle>
+            <p className="text-xs text-muted-foreground">{product.brand}</p>
         </Link>
       </CardContent>
-      <CardFooter className="p-3 flex justify-between items-center bg-card flex-shrink-0">
-        <div className="text-lg font-semibold text-primary h-8 flex items-center">
+      <CardFooter className="p-2 flex justify-between items-center bg-card flex-shrink-0">
+        <div className="text-base font-semibold text-primary h-8 flex items-center">
          {isFetchingPrice ? (
-             <Loader2 className="h-5 w-5 animate-spin" />
+             <Loader2 className="h-4 w-4 animate-spin" />
          ) : displayPrice !== null ? (
             `R$ ${displayPrice.toFixed(2)}`
          ) : (
-            <span className="text-sm text-muted-foreground">Preço indisponível</span>
+            <span className="text-xs text-muted-foreground">Preço indisponível</span>
          )}
         </div>
         <Button
