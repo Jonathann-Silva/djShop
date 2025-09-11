@@ -73,9 +73,14 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card className="group overflow-hidden rounded-lg shadow-lg transition-all hover:shadow-xl w-full flex flex-col">
-       <Link href={`/products/${product.id}`} className="flex-shrink-0">
+       <Link href={`/products/${product.id}`} className="flex-shrink-0 relative">
         <CardHeader className="p-0">
           <div className="overflow-hidden">
+             {product.onSale && (
+              <div className="absolute top-2 right-2 z-10 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
+                Promoção
+              </div>
+            )}
             <Image
               src={imageUrl}
               alt={product.name}
