@@ -16,9 +16,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, MoreHorizontal } from "lucide-react";
@@ -28,6 +25,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export default function AdminProductsPage() {
   const { user, loading } = useAuth();
@@ -38,8 +36,18 @@ export default function AdminProductsPage() {
   }
 
   if (!user || user.email !== "admin@gmail.com") {
-    router.push("/");
-    return null;
+    // router.push("/"); // Commenting out to avoid redirect loop issues in some scenarios
+    return (
+        <div className="container mx-auto max-w-4xl px-4 py-16 text-center">
+            <h1 className="mt-8 text-4xl font-headline font-bold">Acesso Negado</h1>
+            <p className="mt-4 text-muted-foreground">
+                Esta página está disponível apenas para administradores.
+            </p>
+            <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
+                <Link href="/">Voltar para a Página Inicial</Link>
+            </Button>
+        </div>
+    );
   }
 
   return (
@@ -60,7 +68,7 @@ export default function AdminProductsPage() {
       </div>
 
       <Card>
-        <CardContent>
+        <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
@@ -95,7 +103,9 @@ export default function AdminProductsPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Editar</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                           <Link href={`/products/${product.id}/edit`}>Editar</Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">
                           Remover
                         </DropdownMenuItem>
