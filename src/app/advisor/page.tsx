@@ -309,9 +309,11 @@ export default function AiAdvisorPage() {
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                   <p>{rec.description}</p>
-                  <p>
-                    <span className="font-semibold">Notes:</span> {rec.notes}
-                  </p>
+                  <div>
+                    {rec.topNotes && <p><span className="font-semibold">Topo:</span> {rec.topNotes}</p>}
+                    {rec.heartNotes && <p><span className="font-semibold">Coração:</span> {rec.heartNotes}</p>}
+                    {rec.baseNotes && <p><span className="font-semibold">Base:</span> {rec.baseNotes}</p>}
+                  </div>
                   <p>
                     <span className="font-semibold">Price:</span> {rec.price}
                   </p>

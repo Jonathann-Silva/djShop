@@ -161,14 +161,28 @@ export function EditProductForm({ product, brands, genders }: EditProductFormPro
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="notes">Notas Principais</Label>
-            <Input
-              id="notes"
-              {...register("notes", { required: "Notas são obrigatórias" })}
+            <Label htmlFor="topNotes">Notas de Topo</Label>
+            <Textarea
+              id="topNotes"
+              {...register("topNotes")}
+               placeholder="Ex: Bergamota, Limão, Lavanda"
             />
-            {errors.notes && (
-              <p className="text-sm text-destructive">{errors.notes.message}</p>
-            )}
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="heartNotes">Notas de Coração</Label>
+            <Textarea
+              id="heartNotes"
+              {...register("heartNotes")}
+               placeholder="Ex: Jasmim, Rosa, Pimenta Preta"
+            />
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="baseNotes">Notas de Base</Label>
+            <Textarea
+              id="baseNotes"
+              {...register("baseNotes")}
+              placeholder="Ex: Sândalo, Patchouli, Baunilha"
+            />
           </div>
           
           <div className="space-y-2">

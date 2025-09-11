@@ -9,7 +9,9 @@ export type Perfume = {
   gender: 'Masculine' | 'Feminine';
   profitMargin: number;
   description: string;
-  notes: string;
+  topNotes: string;
+  heartNotes: string;
+  baseNotes: string;
   imageId: string;
   priceUrl?: string;
   imageUrl?: string;

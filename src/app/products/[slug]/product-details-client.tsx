@@ -86,10 +86,13 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
           <span className="font-semibold">Tamanho:</span>
           <span className="text-muted-foreground">{product.sizeMl}ml</span>
         </div>
-        <div className="flex items-center gap-3">
-          <Droplet className="h-5 w-5 text-muted-foreground" />
-          <span className="font-semibold">Notas Principais:</span>
-          <span className="text-muted-foreground">{product.notes}</span>
+        <div className="flex items-start gap-3">
+          <Droplet className="h-5 w-5 text-muted-foreground mt-1" />
+          <div>
+            {product.topNotes && <p><span className="font-semibold">Topo:</span> <span className="text-muted-foreground">{product.topNotes}</span></p>}
+            {product.heartNotes && <p><span className="font-semibold">Coração:</span> <span className="text-muted-foreground">{product.heartNotes}</span></p>}
+            {product.baseNotes && <p><span className="font-semibold">Base:</span> <span className="text-muted-foreground">{product.baseNotes}</span></p>}
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <Sparkles className="h-5 w-5 text-muted-foreground" />

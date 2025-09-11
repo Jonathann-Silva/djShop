@@ -8,7 +8,9 @@
       "gender": "Masculine",
       "profitMargin": 65,
       "description": "Um perfume profundo e misterioso que combina a riqueza do oud com notas picantes de açafrão e pimenta preta.",
-      "notes": "Oud, Açafrão, Pimenta Preta, Couro",
+      "topNotes": "Açafrão, Pimenta Preta",
+      "heartNotes": "Oud, Couro",
+      "baseNotes": "Âmbar, Patchouli",
       "imageId": "perfume-1",
       "priceUrl": "https://www.lgimportados.com/produto/93-al-wataniah-durrat-al-aroos-fem-85ml-edp-codigo-536493",
       "imageUrl": "https://www.lgimportados.com/img/m/IMG_536493_1.JPG?v=1757559441"
@@ -21,7 +23,9 @@
       "gender": "Feminine",
       "profitMargin": 40,
       "description": "Um buquê explosivo de rosa turca, peônia e lírio-do-vale, criando uma aura vibrante e romântica.",
-      "notes": "Rosa Turca, Peônia, Lírio-do-vale, Lichia",
+      "topNotes": "Lichia, Ruibarbo, Bergamota",
+      "heartNotes": "Rosa Turca, Peônia, Lírio-do-vale",
+      "baseNotes": "Baunilha, Almíscar Branco, Cashmeran",
       "imageId": "perfume-2",
       "priceUrl": "",
       "imageUrl": ""
@@ -34,7 +38,9 @@
       "gender": "Feminine",
       "profitMargin": 45,
       "description": "Uma mistura luxuosa e sensual de orquídea negra, ylang-ylang e trufa negra.",
-      "notes": "Orquídea Negra, Ylang-Ylang, Trufa, Sândalo",
+      "topNotes": "Bergamota, Mandarina, Rum",
+      "heartNotes": "Orquídea Negra, Ylang-Ylang, Jasmim",
+      "baseNotes": "Sândalo, Baunilha, Mirra",
       "imageId": "perfume-5",
       "priceUrl": "",
       "imageUrl": ""
@@ -47,7 +53,9 @@
       "gender": "Masculine",
       "profitMargin": 40,
       "description": "Um perfume brilhante e energético repleto de laranja mandarina, limão e um toque de gengibre.",
-      "notes": "Laranja Mandarina, Limão, Gengibre, Néroli",
+      "topNotes": "Laranja Mandarina, Limão, Bergamota",
+      "heartNotes": "Gengibre, Néroli, Pimenta",
+      "baseNotes": "Vetiver, Almíscar, Âmbar",
       "imageId": "perfume-6",
       "priceUrl": "",
       "imageUrl": ""
