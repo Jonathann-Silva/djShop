@@ -1,66 +1,95 @@
 "use client";
 
 import React, { createContext, useState, useEffect, ReactNode } from "react";
+import {
+  User,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, pass: string) => void;
+  loading: boolean;
+  login: (email: string, pass: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-// Mock users database
-const mockUsers = {
-  "admin@gmail.com": { id: "1", name: "Admin User" },
-  "user@gmail.com": { id: "2", name: "Regular User" },
-};
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const login = (email: string, pass: string) => {
-    // This is a mock login. In a real app, you'd verify password against a backend.
-    const foundUser = mockUsers[email as keyof typeof mockUsers];
-    if (foundUser) {
-      const userData = { ...foundUser, email };
-      localStorage.setItem("user", JSON.stringify(userData));
-      setUser(userData);
+  const login = async (email: string, pass: string) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, pass);
       toast({
-        title: "Login Successful",
-        description: `Welcome back, ${foundUser.name}!`,
+        title: "Login bem-sucedido",
+        description: `Bem-vindo de volta, ${userCredential.user.displayName || userCredential.user.email}!`,
       });
-    } else {
-      throw new Error("Invalid credentials. Please try again.");
+    } catch (error: any) {
+      console.error("Erro no login:", error);
+      throw new Error( "Credenciais inválidas. Por favor, tente novamente.");
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    toast({
-      title: "Logged Out",
-      description: "You have been successfully logged out.",
-    });
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      setUser(result.user);
+      toast({
+        title: "Login bem-sucedido",
+        description: `Bem-vindo, ${result.user.displayName}!`,
+      });
+    } catch (error) {
+      console.error("Google login error:", error);
+      toast({
+        variant: "destructive",
+        title: "Falha no Login com o Google",
+        description: "Não foi possível fazer login com o Google. Tente novamente.",
+      });
+    }
+  };
+
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      toast({
+        title: "Sessão terminada",
+        description: "Você foi desconectado com sucesso.",
+      });
+    } catch (error) {
+       console.error("Logout error:", error);
+        toast({
+            variant: "destructive",
+            title: "Erro ao sair",
+            description: "Ocorreu um problema ao terminar a sessão.",
+        });
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );

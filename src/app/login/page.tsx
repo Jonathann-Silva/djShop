@@ -20,14 +20,14 @@ import { useToast } from "@/hooks/use-toast";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      login(email, password);
+      await login(email, password);
       router.push("/account");
     } catch (error) {
       if (error instanceof Error) {
@@ -37,6 +37,15 @@ export default function LoginPage() {
           description: error.message,
         });
       }
+    }
+  };
+  
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      router.push("/account");
+    } catch (error) {
+      // Toast is already handled in the auth context
     }
   };
 
@@ -86,7 +95,7 @@ export default function LoginPage() {
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
               Login
             </Button>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={handleGoogleLogin} type="button">
               Login com o Google
             </Button>
           </form>
