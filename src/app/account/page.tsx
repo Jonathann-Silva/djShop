@@ -14,6 +14,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import React from "react";
 
 // Mock data for demonstration
 const addresses = [
@@ -195,8 +196,8 @@ export default function AccountPage() {
           <CardContent>
             <div className="space-y-4">
               {orders.map((order, index) => (
-                <>
-                  <div key={order.id} className="flex justify-between items-center">
+                <React.Fragment key={order.id}>
+                  <div className="flex justify-between items-center">
                     <div>
                       <p className="font-semibold">Encomenda #{order.id}</p>
                       <p className="text-sm text-muted-foreground">
@@ -209,7 +210,7 @@ export default function AccountPage() {
                     </div>
                   </div>
                   {index < orders.length -1 && <Separator />}
-                </>
+                </React.Fragment>
               ))}
             </div>
           </CardContent>
