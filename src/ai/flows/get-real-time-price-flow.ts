@@ -44,16 +44,43 @@ const getRealTimePriceFromUrl = ai.defineTool(
       const html = await response.text();
       const $ = load(html);
 
-      // Find the div with the specified classes and extract the text
-      const priceText = $('div.h4.fw-normal.text-accent').text();
+      // Try a few common selectors to find the price
+      const selectors = [
+          'div.h4.fw-normal.text-accent', // Original selector
+          'span.price',
+          '[itemprop="price"]',
+          '.product-price',
+          '#price',
+          '#product-price'
+      ];
       
+      let priceText = '';
+      for (const selector of selectors) {
+          const element = $(selector).first();
+          if (element.length) {
+            priceText = element.text();
+            if(priceText) break;
+            
+            // Sometimes price is in a 'content' attribute for meta tags
+            if (element.attr('content')) {
+                priceText = element.attr('content')!;
+                if(priceText) break;
+            }
+          }
+      }
+
       if (!priceText) {
         throw new Error('Price element not found on the page.');
       }
 
       // Clean the text and parse it into a number
-      // Removes 'R$', trims whitespace, replaces ',' with '.', and parses to float
-      const cleanedPrice = priceText.replace('R$', '').trim().replace('.', '').replace(',', '.');
+      // Removes currency symbols, trims whitespace, handles different decimal separators
+      const cleanedPrice = priceText
+        .replace(/[^0-9,.]/g, '') // Remove everything except numbers, commas, and dots
+        .trim()
+        .replace('.', '') // Remove thousand separators (like in 1.234,56)
+        .replace(',', '.'); // Replace comma decimal separator with a dot
+        
       const price = parseFloat(cleanedPrice);
 
       if (isNaN(price)) {

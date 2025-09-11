@@ -63,6 +63,22 @@
       "priceUrl": "https://www.lgimportados.com/produto/abercrombie-fitch-first-instinct-together-fem-100ml-edp-codigo-734288",
       "imageUrl": "https://www.lgimportados.com/img/m/IMG_734288_1.JPG?v=1757605949",
       "onSale": true
+    },
+    {
+      "id": "7",
+      "name": "ADYAN AL MUSK AL AHMAR RED FEM 100ML",
+      "brand": "Adyan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 65,
+      "description": "O Adyan Al Musk Al Ahmar Red Eau de Parfum 100ml é uma fragrância feminina marcante e sensual, inspirada na elegância árabe e na intensidade do almíscar vermelho. Ideal para mulheres que desejam destacar sua presença com sofisticação, esta fragrância exótica é envolvente, cativante e duradoura.",
+      "topNotes": "maçã, lichia, rosa",
+      "heartNotes": "ameixa, jasmim",
+      "baseNotes": "musgo, baunilha, patchouli",
+      "imageId": "perfume-14",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/categoria/perfumes-femininos/or-name_asc",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_845588_1.JPG?v=1757621303"
     }
   ]
 }
