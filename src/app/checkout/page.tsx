@@ -13,6 +13,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/products";
@@ -94,21 +101,20 @@ export default function CheckoutPage() {
                 <CreditCard className="h-5 w-5" /> Formas de pagamento
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="cardNumber">Número do Cartão</Label>
-                <Input id="cardNumber" placeholder="**** **** **** 1234" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="expiry">Data de Validade</Label>
-                  <Input id="expiry" placeholder="MM/YY" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="cvc">CVC</Label>
-                  <Input id="cvc" placeholder="123" />
-                </div>
-              </div>
+            <CardContent>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione um método de pagamento" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="dinheiro">Dinheiro</SelectItem>
+                  <SelectItem value="pix">Pix</SelectItem>
+                  <SelectItem value="debito">Debito</SelectItem>
+                  <SelectItem value="credito-vista">Credito a vista</SelectItem>
+                  <SelectItem value="credito-2x">Credito parcelado 2x</SelectItem>
+                  <SelectItem value="credito-3x">Credito parcelado 3X</SelectItem>
+                </SelectContent>
+              </Select>
             </CardContent>
           </Card>
         </div>
