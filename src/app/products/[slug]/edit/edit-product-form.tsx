@@ -20,10 +20,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { updateProduct } from "@/lib/actions";
 
 export function EditProductForm({ product }: { product: Perfume }) {
   const router = useRouter();
   const { toast } = useToast();
+  const [isSaving, setIsSaving] = React.useState(false);
+
 
   const {
     register,
@@ -34,15 +37,25 @@ export function EditProductForm({ product }: { product: Perfume }) {
     defaultValues: product,
   });
 
-  const onSubmit = (data: Perfume) => {
-    // In a real application, you would send this data to your API to update the product.
-    // For this prototype, we'll just show a success message and navigate back.
-    console.log("Updated product data:", data);
-    toast({
-      title: "Produto Atualizado!",
-      description: `O perfume "${data.name}" foi atualizado com sucesso.`,
-    });
-    router.push("/products");
+  const onSubmit = async (data: Perfume) => {
+    setIsSaving(true);
+    const result = await updateProduct(data);
+    setIsSaving(false);
+
+    if (result.success) {
+      toast({
+        title: "Produto Atualizado!",
+        description: result.message,
+      });
+      router.push("/products");
+      router.refresh(); // Force a refresh to show updated data
+    } else {
+       toast({
+        variant: "destructive",
+        title: "Erro ao Salvar",
+        description: result.message,
+      });
+    }
   };
 
   return (
@@ -154,8 +167,8 @@ export function EditProductForm({ product }: { product: Perfume }) {
 
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button type="button" variant="outline" onClick={() => router.back()}>Cancelar</Button>
-        <Button type="submit">Salvar Alterações</Button>
+        <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSaving}>Cancelar</Button>
+        <Button type="submit" disabled={isSaving}>{isSaving ? 'Salvando...' : 'Salvar Alterações'}</Button>
       </CardFooter>
     </form>
   );
