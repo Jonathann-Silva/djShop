@@ -45,17 +45,17 @@ import { getProducts } from "@/lib/actions";
 
 const formSchema = z.object({
   genderPreference: z
-    .string({ required_error: "Please select a gender preference." })
-    .min(1, "Please select a gender preference."),
+    .string({ required_error: "Por favor, selecione uma preferência de gênero." })
+    .min(1, "Por favor, selecione uma preferência de gênero."),
   scentProfile: z
-    .string({ required_error: "Please select a scent profile." })
-    .min(1, "Please select a scent profile."),
+    .string({ required_error: "Por favor, selecione um perfil olfativo." })
+    .min(1, "Por favor, selecione um perfil olfativo."),
   occasion: z
-    .string({ required_error: "Please select an occasion." })
-    .min(1, "Please select an occasion."),
+    .string({ required_error: "Por favor, selecione uma ocasião." })
+    .min(1, "Por favor, selecione uma ocasião."),
   budget: z
-    .string({ required_error: "Please select a budget." })
-    .min(1, "Please select a budget."),
+    .string({ required_error: "Por favor, selecione um orçamento." })
+    .min(1, "Por favor, selecione um orçamento."),
   additionalNotes: z.string().optional(),
 });
 
@@ -96,9 +96,9 @@ export default function AiAdvisorPage() {
       console.error("AI Advisor Error:", error);
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
+        title: "Oh não! Algo correu mal.",
         description:
-          "There was a problem with our AI Advisor. Please try again later.",
+          "Houve um problema com o nosso Consultor de IA. Por favor, tente novamente mais tarde.",
       });
     } finally {
       setIsLoading(false);
@@ -114,20 +114,19 @@ export default function AiAdvisorPage() {
       <div className="text-center mb-12">
         <Bot className="mx-auto h-12 w-12 text-primary" />
         <h1 className="text-4xl font-headline font-bold mt-4">
-          Your Personal Scent Advisor
+          O seu Consultor Pessoal de Perfumes
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
-          Answer a few questions and let our AI find the perfect fragrance for
-          you.
+          Responda a algumas perguntas e deixe a nossa IA encontrar a fragrância perfeita para si.
         </p>
       </div>
 
       {!recommendations && (
         <Card>
           <CardHeader>
-            <CardTitle>Tell us what you like</CardTitle>
+            <CardTitle>Diga-nos do que gosta</CardTitle>
             <CardDescription>
-              The more details you provide, the better the recommendations.
+              Quanto mais detalhes fornecer, melhores serão as recomendações.
             </CardDescription>
           </CardHeader>
           <Form {...form}>
@@ -139,19 +138,19 @@ export default function AiAdvisorPage() {
                     name="genderPreference"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Gender Preference</FormLabel>
+                        <FormLabel>Preferência de Gênero</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a preference" />
+                              <SelectValue placeholder="Selecione uma preferência" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="feminine">Feminine</SelectItem>
-                            <SelectItem value="masculine">Masculine</SelectItem>
+                            <SelectItem value="feminine">Feminino</SelectItem>
+                            <SelectItem value="masculine">Masculino</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -163,22 +162,22 @@ export default function AiAdvisorPage() {
                     name="scentProfile"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Scent Profile</FormLabel>
+                        <FormLabel>Perfil Olfativo</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a scent profile" />
+                              <SelectValue placeholder="Selecione um perfil olfativo" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="floral">Floral</SelectItem>
-                            <SelectItem value="woody">Woody</SelectItem>
+                            <SelectItem value="woody">Amadeirado</SelectItem>
                             <SelectItem value="oriental">Oriental</SelectItem>
-                            <SelectItem value="fresh">Fresh</SelectItem>
-                             <SelectItem value="spicy">Spicy</SelectItem>
+                            <SelectItem value="fresh">Fresco</SelectItem>
+                             <SelectItem value="spicy">Especiado</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -190,21 +189,21 @@ export default function AiAdvisorPage() {
                     name="occasion"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Occasion</FormLabel>
+                        <FormLabel>Ocasião</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select an occasion" />
+                              <SelectValue placeholder="Selecione uma ocasião" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="casual">Casual / Everyday</SelectItem>
-                            <SelectItem value="formal">Formal / Evening</SelectItem>
-                            <SelectItem value="romantic">Romantic</SelectItem>
-                            <SelectItem value="office">Office / Work</SelectItem>
+                            <SelectItem value="casual">Casual / Dia a dia</SelectItem>
+                            <SelectItem value="formal">Formal / Noite</SelectItem>
+                            <SelectItem value="romantic">Romântico</SelectItem>
+                            <SelectItem value="office">Escritório / Trabalho</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -216,20 +215,20 @@ export default function AiAdvisorPage() {
                     name="budget"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Budget</FormLabel>
+                        <FormLabel>Orçamento</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select a budget" />
+                              <SelectValue placeholder="Selecione um orçamento" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="low">Under $100</SelectItem>
-                            <SelectItem value="medium">$100 - $200</SelectItem>
-                            <SelectItem value="high">Over $200</SelectItem>
+                            <SelectItem value="low">Menos de R$100</SelectItem>
+                            <SelectItem value="medium">R$100 - R$200</SelectItem>
+                            <SelectItem value="high">Mais de R$200</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -242,10 +241,10 @@ export default function AiAdvisorPage() {
                   name="additionalNotes"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Additional Notes (optional)</FormLabel>
+                      <FormLabel>Notas Adicionais (opcional)</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="e.g., 'I love vanilla scents', 'Not too overpowering', 'Something for warm weather'"
+                          placeholder="Ex: 'Adoro aromas de baunilha', 'Não muito forte', 'Algo para clima quente'"
                           {...field}
                         />
                       </FormControl>
@@ -263,12 +262,12 @@ export default function AiAdvisorPage() {
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Finding your scent...
+                      A encontrar o seu perfume...
                     </>
                   ) : (
                     <>
                       <Sparkles className="mr-2 h-4 w-4" />
-                      Get Recommendations
+                      Obter Recomendações
                     </>
                   )}
                 </Button>
@@ -281,7 +280,7 @@ export default function AiAdvisorPage() {
       {isLoading && !recommendations && (
         <div className="text-center mt-8">
             <Loader2 className="mx-auto h-12 w-12 animate-spin text-primary" />
-            <p className="mt-4 text-muted-foreground">Our AI is working its magic...</p>
+            <p className="mt-4 text-muted-foreground">A nossa IA está a fazer a sua magia...</p>
         </div>
       )}
 
@@ -289,10 +288,10 @@ export default function AiAdvisorPage() {
         <div className="mt-12">
           <div className="text-center">
             <h2 className="text-3xl font-headline font-bold">
-              Your Personal Recommendations
+              As suas Recomendações Pessoais
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Based on your preferences, here are some scents you might love.
+              Com base nas suas preferências, aqui estão alguns aromas que pode adorar.
             </p>
           </div>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -315,14 +314,14 @@ export default function AiAdvisorPage() {
                     {rec.baseNotes && <p><span className="font-semibold">Base:</span> {rec.baseNotes}</p>}
                   </div>
                   <p>
-                    <span className="font-semibold">Price:</span> {rec.price}
+                    <span className="font-semibold">Preço:</span> {rec.price}
                   </p>
                 </CardContent>
                 <CardFooter>
                   {product ? (
-                     <Button className="w-full" onClick={() => addToCart(product)}>Add to Cart</Button>
+                     <Button className="w-full" onClick={() => addToCart(product)}>Adicionar ao Carrinho</Button>
                   ) : (
-                    <Button className="w-full" variant="secondary" disabled>Unavailable</Button>
+                    <Button className="w-full" variant="secondary" disabled>Indisponível</Button>
                   )}
                 </CardFooter>
               </Card>
@@ -336,7 +335,7 @@ export default function AiAdvisorPage() {
                 form.reset();
               }}
             >
-              Start Over
+              Começar de Novo
             </Button>
           </div>
         </div>
@@ -344,3 +343,5 @@ export default function AiAdvisorPage() {
     </div>
   );
 }
+
+    
