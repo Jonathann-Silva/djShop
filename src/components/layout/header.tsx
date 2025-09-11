@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Flame, User, ShoppingCart, Search, Wrench } from "lucide-react";
+import { Flame, User, ShoppingCart, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/hooks/use-auth";
@@ -17,6 +17,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/products";
+import { SearchDialog } from "@/components/search-dialog";
 
 export function Header() {
   const { cartItems, totalItems, totalPrice, removeFromCart } = useCart();
@@ -56,9 +57,7 @@ export function Header() {
           )}
         </nav>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="hidden md:inline-flex">
-            <Search className="h-5 w-5" />
-          </Button>
+          <SearchDialog />
           <Link href={user ? "/account" : "/login"}>
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
@@ -127,7 +126,7 @@ export function Header() {
                         </Button>
                       </Link>
                       <Link href="/checkout" className="block" onClick={() => setIsSheetOpen(false)}>
-                         <Button variant="accent" className="w-full bg-accent hover:bg-accent/90">
+                         <Button variant="outline" className="w-full bg-accent hover:bg-accent/90">
                            Finalizar Compra
                         </Button>
                       </Link>
