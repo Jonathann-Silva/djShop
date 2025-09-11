@@ -47,7 +47,12 @@ export function EditProductForm({ product, brands, scentProfiles, genders }: Edi
 
   const onSubmit = async (data: Perfume) => {
     setIsSaving(true);
-    const result = await updateProduct(data);
+    // Ensure profitMargin is a number
+    const dataToSubmit = {
+      ...data,
+      profitMargin: Number(data.profitMargin) || 0,
+    };
+    const result = await updateProduct(dataToSubmit);
     setIsSaving(false);
 
     if (result.success) {
@@ -115,15 +120,15 @@ export function EditProductForm({ product, brands, scentProfiles, genders }: Edi
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="price">Preço</Label>
+                <Label htmlFor="profitMargin">Margem de Lucro (%)</Label>
                 <Input
-                    id="price"
+                    id="profitMargin"
                     type="number"
-                    step="0.01"
-                    {...register("price", { required: "Preço é obrigatório", valueAsNumber: true })}
+                    step="1"
+                    {...register("profitMargin", { required: "Margem de lucro é obrigatória", valueAsNumber: true })}
                 />
-                {errors.price && (
-                    <p className="text-sm text-destructive">{errors.price.message}</p>
+                {errors.profitMargin && (
+                    <p className="text-sm text-destructive">{errors.profitMargin.message}</p>
                 )}
             </div>
               <div className="space-y-2">

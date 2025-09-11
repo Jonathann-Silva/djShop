@@ -1,17 +1,19 @@
+
 "use client";
 
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { Perfume } from "@/lib/products";
 import { useToast } from "@/hooks/use-toast";
 
+// Add price to the product in the cart item
 export interface CartItem {
-  product: Perfume;
+  product: Perfume & { price: number };
   quantity: number;
 }
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (product: Perfume, quantity?: number) => void;
+  addToCart: (product: Perfume & { price: number }, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -36,15 +38,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product: Perfume, quantity = 1) => {
+  const addToCart = (product: Perfume & { price: number }, quantity = 1) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
         (item) => item.product.id === product.id
       );
       if (existingItem) {
+        // When adding again, update the price to the latest one, in case it changed.
         return prevItems.map((item) =>
           item.product.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, quantity: item.quantity + quantity, product: { ...item.product, price: product.price } }
             : item
         );
       }

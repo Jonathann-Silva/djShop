@@ -43,11 +43,7 @@ function FiltersSkeleton() {
           <Skeleton className="h-4 w-16" />
           <Skeleton className="h-10 w-full" />
         </div>
-        <div className="space-y-4">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-5 w-full" />
-        </div>
-        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full mt-4" />
       </CardContent>
     </Card>
   );
@@ -83,8 +79,7 @@ export default function ProductsPage() {
   const [selectedBrand, setSelectedBrand] = useState("all");
   const [selectedGender, setSelectedGender] = useState(searchParams.get('gender') || "all");
   const [selectedScent, setSelectedScent] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 300]);
-
+  
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -114,25 +109,21 @@ export default function ProductsPage() {
         selectedGender === "all" || product.gender === selectedGender;
       const matchesScent =
         selectedScent === "all" || product.scentProfile === selectedScent;
-      const matchesPrice =
-        product.price >= priceRange[0] && product.price <= priceRange[1];
-
+      
       return (
         matchesSearch &&
         matchesBrand &&
         matchesGender &&
-        matchesScent &&
-        matchesPrice
+        matchesScent
       );
     });
-  }, [products, searchTerm, selectedBrand, selectedGender, selectedScent, priceRange]);
+  }, [products, searchTerm, selectedBrand, selectedGender, selectedScent]);
 
   const resetFilters = () => {
     setSearchTerm('');
     setSelectedBrand('all');
     setSelectedGender('all');
     setSelectedScent('all');
-    setPriceRange([0, 300]);
   }
   
   const genderDisplay: { [key: string]: string } = {
@@ -230,22 +221,6 @@ export default function ProductsPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <Label>Price Range</Label>
-                    <span className="text-sm font-medium text-primary">
-                      ${priceRange[0]} - ${priceRange[1]}
-                    </span>
-                  </div>
-                  <Slider
-                    min={0}
-                    max={300}
-                    step={10}
-                    value={priceRange}
-                    onValueChange={(value) => setPriceRange(value)}
-                  />
                 </div>
 
                 <Button variant="ghost" onClick={resetFilters} className="w-full">

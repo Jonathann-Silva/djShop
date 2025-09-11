@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
@@ -12,36 +12,51 @@ import { getRealTimePrice } from "@/ai/flows/get-real-time-price-flow";
 export function ProductDetailsClient({ product }: { product: Perfume }) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
-  const [realTimePrice, setRealTimePrice] = useState<number | null>(null);
+  const [costPrice, setCostPrice] = useState<number | null>(null);
   const [isFetchingPrice, setIsFetchingPrice] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
     async function fetchPrice() {
       if (product.priceUrl) {
         setIsFetchingPrice(true);
+        setFetchError(false);
         try {
           const result = await getRealTimePrice({ url: product.priceUrl });
           if (result && result.price) {
-            setRealTimePrice(result.price);
+            setCostPrice(result.price);
+          } else {
+            setFetchError(true);
           }
         } catch (error) {
           console.error("Failed to fetch real-time price:", error);
-          // Fallback to static price if AI fetch fails
-          setRealTimePrice(product.price);
+          setFetchError(true);
         } finally {
           setIsFetchingPrice(false);
         }
       }
     }
     fetchPrice();
-  }, [product.priceUrl, product.price]);
+  }, [product.priceUrl]);
 
+  const displayPrice = useMemo(() => {
+    if (!product.priceUrl || fetchError || costPrice === null) {
+      return null; // Don't show a price if it can't be calculated
+    }
+    const margin = 1 + product.profitMargin / 100;
+    return costPrice * margin;
+  }, [costPrice, product.profitMargin, product.priceUrl, fetchError]);
 
   const handleQuantityChange = (amount: number) => {
     setQuantity((prev) => Math.max(1, prev + amount));
   };
-  
-  const displayPrice = realTimePrice ?? product.price;
+
+  const handleAddToCart = () => {
+    if (displayPrice !== null) {
+      const productWithPrice = { ...product, price: displayPrice };
+      addToCart(productWithPrice, quantity);
+    }
+  };
 
   return (
     <div>
@@ -51,14 +66,16 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
       </h1>
       <div className="mt-4 h-10 flex items-center">
         {isFetchingPrice ? (
-            <div className="flex items-center gap-2">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                <span className="text-lg text-muted-foreground">A obter o preço atual...</span>
-            </div>
+          <div className="flex items-center gap-2">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <span className="text-lg text-muted-foreground">A obter o preço atual...</span>
+          </div>
+        ) : displayPrice !== null ? (
+          <p className="text-3xl font-light text-primary">
+            ${displayPrice.toFixed(2)}
+          </p>
         ) : (
-             <p className="text-3xl font-light text-primary">
-                ${displayPrice.toFixed(2)}
-             </p>
+          <p className="text-lg text-muted-foreground">Preço indisponível</p>
         )}
       </div>
       <p className="mt-6 text-lg text-foreground/80">{product.description}</p>
@@ -111,8 +128,8 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
         <Button
           size="lg"
           className="flex-grow bg-accent hover:bg-accent/90 text-accent-foreground"
-          onClick={() => addToCart({ ...product, price: displayPrice }, quantity)}
-          disabled={isFetchingPrice}
+          onClick={handleAddToCart}
+          disabled={isFetchingPrice || displayPrice === null}
         >
           <ShoppingCart className="mr-2 h-5 w-5" />
           Adicionar ao Carrinho

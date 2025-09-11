@@ -71,7 +71,7 @@ export default function AdminProductsPage() {
                                 <TableHead className="w-[80px]">Imagem</TableHead>
                                 <TableHead>Nome</TableHead>
                                 <TableHead>Marca</TableHead>
-                                <TableHead>Preço</TableHead>
+                                <TableHead>Margem de Lucro</TableHead>
                                 <TableHead>Ações</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -133,7 +133,7 @@ export default function AdminProductsPage() {
                 <TableHead className="w-[80px]">Imagem</TableHead>
                 <TableHead>Nome</TableHead>
                 <TableHead>Marca</TableHead>
-                <TableHead>Preço</TableHead>
+                <TableHead>Margem de Lucro</TableHead>
                 <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -151,7 +151,7 @@ export default function AdminProductsPage() {
                   </TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>{product.brand}</TableCell>
-                  <TableCell>${product.price.toFixed(2)}</TableCell>
+                  <TableCell>{product.profitMargin}%</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

@@ -41,7 +41,7 @@ const UpdateProductInputSchema = z.object({
   brand: z.string(),
   scentProfile: z.enum(['Floral', 'Woody', 'Oriental', 'Fresh', 'Spicy']),
   gender: z.enum(['Masculine', 'Feminine']),
-  price: z.number(),
+  profitMargin: z.number(),
   description: z.string(),
   notes: z.string(),
   imageId: z.string(),
