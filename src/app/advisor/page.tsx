@@ -141,7 +141,6 @@ export default function AiAdvisorPage() {
                           <SelectContent>
                             <SelectItem value="feminine">Feminine</SelectItem>
                             <SelectItem value="masculine">Masculine</SelectItem>
-                            <SelectItem value="unisex">Unisex</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -182,7 +181,7 @@ export default function AiAdvisorPage() {
                       <FormItem>
                         <FormLabel>Occasion</FormLabel>
                         <Select
-                          onValueChange={field.onChange}
+                          onValuechange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>

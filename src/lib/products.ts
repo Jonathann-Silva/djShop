@@ -6,7 +6,7 @@ export type Perfume = {
   name: string;
   brand: string;
   scentProfile: 'Floral' | 'Woody' | 'Oriental' | 'Fresh' | 'Spicy';
-  gender: 'Masculine' | 'Feminine' | 'Unisex';
+  gender: 'Masculine' | 'Feminine';
   price: number;
   description: string;
   notes: string;

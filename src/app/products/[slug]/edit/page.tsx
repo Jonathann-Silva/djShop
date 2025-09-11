@@ -133,7 +133,6 @@ export default function EditProductPage({
                                 <SelectContent>
                                     <SelectItem value="Masculine">Masculino</SelectItem>
                                     <SelectItem value="Feminine">Feminino</SelectItem>
-                                    <SelectItem value="Unisex">Unissexo</SelectItem>
                                 </SelectContent>
                             </Select>
                         )}

@@ -23,28 +23,6 @@
       "imageId": "perfume-2"
     },
     {
-      "id": "3",
-      "name": "Aqua Celestia",
-      "brand": "Orion",
-      "scentProfile": "Fresh",
-      "gender": "Unisex",
-      "price": 150,
-      "description": "Uma onda refrescante de bergamota italiana, menta e cassis, evocando um céu claro de verão.",
-      "notes": "Bergamota, Menta, Cassis, Almíscar",
-      "imageId": "perfume-3"
-    },
-    {
-      "id": "4",
-      "name": "Terra Firma",
-      "brand": "Aethelred",
-      "scentProfile": "Woody",
-      "gender": "Unisex",
-      "price": 195,
-      "description": "Uma fragrância terrosa e reconfortante com notas de vetiver, patchouli e cedro.",
-      "notes": "Vetiver, Patchouli, Cedro, Toranja",
-      "imageId": "perfume-4"
-    },
-    {
       "id": "5",
       "name": "Velvet Orchid",
       "brand": "Elysian",
@@ -65,28 +43,6 @@
       "description": "Um perfume brilhante e energético repleto de laranja mandarina, limão e um toque de gengibre.",
       "notes": "Laranja Mandarina, Limão, Gengibre, Néroli",
       "imageId": "perfume-6"
-    },
-    {
-      "id": "7",
-      "name": "Ember Musk",
-      "brand": "Aethelred",
-      "scentProfile": "Spicy",
-      "gender": "Unisex",
-      "price": 210,
-      "description": "Um aroma quente e convidativo de canela, âmbar e almíscar, perfeito para uma noite aconchegante.",
-      "notes": "Canela, Âmbar, Almíscar, Folha de Tabaco",
-      "imageId": "perfume-7"
-    },
-    {
-      "id": "8",
-      "name": "Ocean Breeze",
-      "brand": "Orion",
-      "scentProfile": "Fresh",
-      "gender": "Unisex",
-      "price": 145,
-      "description": "Um perfume fresco e revigorante que captura a essência de uma brisa do mar com notas de sal marinho, sálvia e madeira flutuante.",
-      "notes": "Sal Marinho, Sálvia, Ambreta, Madeira Flutuante",
-      "imageId": "perfume-8"
     }
   ]
 }

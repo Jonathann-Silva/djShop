@@ -40,12 +40,6 @@ export function Footer() {
               >
                 Para Ela
               </Link>
-              <Link
-                href="/catalogo?gender=Unisex"
-                className="text-sm text-muted-foreground hover:text-primary"
-              >
-                Unissexo
-              </Link>
             </div>
           </div>
           <div>
