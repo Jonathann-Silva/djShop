@@ -8,6 +8,7 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  AuthError,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
@@ -38,6 +39,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
+  const handleAuthError = (error: AuthError) => {
+    console.error("Firebase Auth Error:", error);
+    switch (error.code) {
+      case "auth/configuration-not-found":
+        return "O método de autenticação não está habilitado. Por favor, ative-o no Console do Firebase.";
+      case "auth/invalid-credential":
+        return "Credenciais inválidas. Por favor, verifique seu e-mail e senha.";
+      case "auth/user-not-found":
+        return "Nenhum usuário encontrado com este e-mail.";
+      case "auth/wrong-password":
+        return "Senha incorreta. Por favor, tente novamente.";
+      default:
+        return "Ocorreu um erro durante a autenticação. Tente novamente.";
+    }
+  }
+
   const login = async (email: string, pass: string) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, pass);
@@ -46,8 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         description: `Bem-vindo de volta, ${userCredential.user.displayName || userCredential.user.email}!`,
       });
     } catch (error: any) {
-      console.error("Erro no login:", error);
-      throw new Error( "Credenciais inválidas. Por favor, tente novamente.");
+      throw new Error(handleAuthError(error));
     }
   };
 
@@ -60,12 +76,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         title: "Login bem-sucedido",
         description: `Bem-vindo, ${result.user.displayName}!`,
       });
-    } catch (error) {
-      console.error("Google login error:", error);
+    } catch (error: any) {
+      const errorMessage = handleAuthError(error);
       toast({
         variant: "destructive",
         title: "Falha no Login com o Google",
-        description: "Não foi possível fazer login com o Google. Tente novamente.",
+        description: errorMessage,
       });
     }
   };
