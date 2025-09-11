@@ -1,10 +1,12 @@
+
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { products } from "@/lib/products";
+import { useState, useEffect } from "react";
+import type { Perfume } from "@/lib/products";
+import { getProducts, getImageUrl } from "@/lib/products";
 import Image from "next/image";
-import { getImageUrl } from "@/lib/products";
 import {
   Table,
   TableBody,
@@ -26,17 +28,72 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AdminProductsPage() {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const [products, setProducts] = useState<Perfume[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  if (loading) {
-    return <div>Carregando...</div>;
+  useEffect(() => {
+    async function fetchProducts() {
+      const fetchedProducts = await getProducts();
+      setProducts(fetchedProducts);
+      setLoading(false);
+    }
+
+    if (!authLoading) {
+      if (!user || user.email !== "admin@gmail.com") {
+        router.push("/");
+      } else {
+        fetchProducts();
+      }
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading || loading) {
+    return (
+        <div className="container mx-auto max-w-7xl px-4 py-12">
+            <div className="flex justify-between items-center mb-8">
+                <div>
+                    <Skeleton className="h-10 w-72 mb-2" />
+                    <Skeleton className="h-6 w-96" />
+                </div>
+                <Skeleton className="h-10 w-36" />
+            </div>
+            <Card>
+                <CardContent className="p-0">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[80px]">Imagem</TableHead>
+                                <TableHead>Nome</TableHead>
+                                <TableHead>Marca</TableHead>
+                                <TableHead>Preço</TableHead>
+                                <TableHead>Ações</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {Array.from({ length: 5 }).map((_, i) => (
+                                <TableRow key={i}>
+                                    <TableCell><Skeleton className="h-[50px] w-[50px] rounded-md" /></TableCell>
+                                    <TableCell><Skeleton className="h-5 w-48" /></TableCell>
+                                    <TableCell><Skeleton className="h-5 w-32" /></TableCell>
+                                    <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+                                    <TableCell><Skeleton className="h-8 w-8 rounded-full" /></TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+        </div>
+    );
   }
 
   if (!user || user.email !== "admin@gmail.com") {
-    // router.push("/"); // Commenting out to avoid redirect loop issues in some scenarios
+    // This part is mostly for safety, the useEffect should handle the redirect.
     return (
         <div className="container mx-auto max-w-4xl px-4 py-16 text-center">
             <h1 className="mt-8 text-4xl font-headline font-bold">Acesso Negado</h1>

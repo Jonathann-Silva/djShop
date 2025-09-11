@@ -4,7 +4,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
-import { Perfume, brands, scentProfiles, genders } from "@/lib/products";
+import { Perfume } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,7 +23,14 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { updateProduct } from "@/lib/actions";
 
-export function EditProductForm({ product }: { product: Perfume }) {
+interface EditProductFormProps {
+    product: Perfume;
+    brands: string[];
+    scentProfiles: string[];
+    genders: string[];
+}
+
+export function EditProductForm({ product, brands, scentProfiles, genders }: EditProductFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = React.useState(false);
@@ -48,8 +55,9 @@ export function EditProductForm({ product }: { product: Perfume }) {
         title: "Produto Atualizado!",
         description: result.message,
       });
-      router.push("/products");
-      router.refresh(); // Force a refresh to show updated data
+      // This will now redirect to the new catalog page
+      router.push("/catalogo");
+      router.refresh(); 
     } else {
        toast({
         variant: "destructive",

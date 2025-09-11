@@ -1,9 +1,10 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { products, brands, genders, scentProfiles } from "@/lib/products";
+import type { Perfume } from "@/lib/products";
+import { getProducts, getBrands, getGenders, getScentProfiles } from "@/lib/products.ts";
 import { ProductCard } from "@/components/product-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,14 +19,89 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+
+function FiltersSkeleton() {
+  return (
+    <Card>
+      <CardContent className="p-6 space-y-6">
+        <h3 className="text-xl font-headline font-semibold">Filters</h3>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+        <div className="space-y-4">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-5 w-full" />
+        </div>
+        <Skeleton className="h-10 w-full" />
+      </CardContent>
+    </Card>
+  );
+}
+
+function ProductsSkeleton() {
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="space-y-2">
+                    <Skeleton className="h-[400px] w-full" />
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-1/4" />
+                    <div className="flex justify-between">
+                      <Skeleton className="h-6 w-1/3" />
+                      <Skeleton className="h-10 w-28" />
+                    </div>
+                </div>
+            ))}
+        </div>
+    )
+}
 
 export default function ProductsPage() {
   const searchParams = useSearchParams();
+  const [products, setProducts] = useState<Perfume[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
+  const [genders, setGenders] = useState<string[]>([]);
+  const [scentProfiles, setScentProfiles] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("all");
   const [selectedGender, setSelectedGender] = useState(searchParams.get('gender') || "all");
   const [selectedScent, setSelectedScent] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 300]);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const [productsData, brandsData, gendersData, scentProfilesData] = await Promise.all([
+        getProducts(),
+        getBrands(),
+        getGenders(),
+        getScentProfiles()
+      ]);
+      setProducts(productsData);
+      setBrands(brandsData);
+      setGenders(gendersData);
+      setScentProfiles(scentProfilesData);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
@@ -49,7 +125,7 @@ export default function ProductsPage() {
         matchesPrice
       );
     });
-  }, [searchTerm, selectedBrand, selectedGender, selectedScent, priceRange]);
+  }, [products, searchTerm, selectedBrand, selectedGender, selectedScent, priceRange]);
 
   const resetFilters = () => {
     setSearchTerm('');
@@ -62,7 +138,6 @@ export default function ProductsPage() {
   const genderDisplay: { [key: string]: string } = {
     Masculine: "Masculino",
     Feminine: "Feminino",
-    Unisex: "Unissexo",
   };
 
   return (
@@ -79,120 +154,124 @@ export default function ProductsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <aside className="lg:col-span-1">
-          <Card>
-            <CardContent className="p-6 space-y-6">
-              <h3 className="text-xl font-headline font-semibold">Filters</h3>
-              <div className="space-y-2">
-                <Label htmlFor="search">Search</Label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="search"
-                    placeholder="Perfume name..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+          {loading ? <FiltersSkeleton /> : (
+            <Card>
+              <CardContent className="p-6 space-y-6">
+                <h3 className="text-xl font-headline font-semibold">Filters</h3>
+                <div className="space-y-2">
+                  <Label htmlFor="search">Search</Label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="search"
+                      placeholder="Perfume name..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Brand</Label>
+                  <Select
+                    value={selectedBrand}
+                    onValueChange={setSelectedBrand}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All Brands" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Brands</SelectItem>
+                      {brands.map((brand) => (
+                        <SelectItem key={brand} value={brand}>
+                          {brand}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Gender</Label>
+                  <Select
+                    value={selectedGender}
+                    onValueChange={setSelectedGender}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All Genders" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Genders</SelectItem>
+                      {genders.map((gender) => (
+                        <SelectItem key={gender} value={gender}>
+                          {genderDisplay[gender]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Scent Profile</Label>
+                  <Select
+                    value={selectedScent}
+                    onValueChange={setSelectedScent}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All Scents" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Scents</SelectItem>
+                      {scentProfiles.map((scent) => (
+                        <SelectItem key={scent} value={scent}>
+                          {scent}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <Label>Price Range</Label>
+                    <span className="text-sm font-medium text-primary">
+                      ${priceRange[0]} - ${priceRange[1]}
+                    </span>
+                  </div>
+                  <Slider
+                    min={0}
+                    max={300}
+                    step={10}
+                    value={priceRange}
+                    onValueChange={(value) => setPriceRange(value)}
                   />
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label>Brand</Label>
-                <Select
-                  value={selectedBrand}
-                  onValueChange={setSelectedBrand}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Brands" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Brands</SelectItem>
-                    {brands.map((brand) => (
-                      <SelectItem key={brand} value={brand}>
-                        {brand}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Gender</Label>
-                <Select
-                  value={selectedGender}
-                  onValueChange={setSelectedGender}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Genders" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Genders</SelectItem>
-                    {genders.map((gender) => (
-                      <SelectItem key={gender} value={gender}>
-                        {genderDisplay[gender]}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Scent Profile</Label>
-                <Select
-                  value={selectedScent}
-                  onValueChange={setSelectedScent}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Scents" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Scents</SelectItem>
-                    {scentProfiles.map((scent) => (
-                      <SelectItem key={scent} value={scent}>
-                        {scent}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <Label>Price Range</Label>
-                  <span className="text-sm font-medium text-primary">
-                    ${priceRange[0]} - ${priceRange[1]}
-                  </span>
-                </div>
-                <Slider
-                  min={0}
-                  max={300}
-                  step={10}
-                  value={priceRange}
-                  onValueChange={(value) => setPriceRange(value)}
-                />
-              </div>
-
-              <Button variant="ghost" onClick={resetFilters} className="w-full">
-                Reset Filters
-              </Button>
-            </CardContent>
-          </Card>
+                <Button variant="ghost" onClick={resetFilters} className="w-full">
+                  Reset Filters
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </aside>
 
         <main className="lg:col-span-3">
-          {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-full bg-muted/40 rounded-lg p-12 text-center">
-                 <h3 className="text-2xl font-headline font-semibold">No Perfumes Found</h3>
-                 <p className="mt-2 text-muted-foreground">Try adjusting your filters to find what you're looking for.</p>
-                 <Button onClick={resetFilters} className="mt-6">Clear Filters</Button>
-            </div>
-          )}
+          {loading ? <ProductsSkeleton /> : 
+            filteredProducts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full bg-muted/40 rounded-lg p-12 text-center">
+                   <h3 className="text-2xl font-headline font-semibold">No Perfumes Found</h3>
+                   <p className="mt-2 text-muted-foreground">Try adjusting your filters to find what you're looking for.</p>
+                   <Button onClick={resetFilters} className="mt-6">Clear Filters</Button>
+              </div>
+            )
+          }
         </main>
       </div>
     </div>

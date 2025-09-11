@@ -1,14 +1,16 @@
+
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { products, getImageUrl, getImageHint } from "@/lib/products";
+import { getProducts, getImageUrl, getImageHint } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { ProductDetailsClient } from "./product-details-client";
 
-export default function ProductDetailPage({
+export default async function ProductDetailPage({
   params,
 }: {
   params: { slug: string };
 }) {
+  const products = await getProducts();
   const product = products.find((p) => p.id === params.slug);
 
   if (!product) {

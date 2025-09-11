@@ -1,9 +1,10 @@
+
 'use server';
 
 import fs from 'fs/promises';
 import path from 'path';
 import {z} from 'genkit';
-import {Perfume, products} from './products';
+import {Perfume, getProducts} from './products';
 import {revalidatePath} from 'next/cache';
 
 const productsFilePath = path.join(process.cwd(), 'src', 'lib', 'products.db.json');
@@ -32,8 +33,9 @@ export async function updateProduct(
   }
 
   try {
-    const productsData = await fs.readFile(productsFilePath, 'utf-8');
-    const productsJson = JSON.parse(productsData);
+    const products = await getProducts();
+    const productsJson = { products };
+
 
     const productIndex = productsJson.products.findIndex(
       (p: Perfume) => p.id === data.id

@@ -1,8 +1,9 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import { Bot, ArrowRight } from "lucide-react";
 
-import { products, getHeroImageUrl, getHeroImageHint } from "@/lib/products";
+import { getProducts, getHeroImageUrl, getHeroImageHint } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
 import {
@@ -13,7 +14,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function Home() {
+export default async function Home() {
+  const products = await getProducts();
   const featuredProducts = products.slice(0, 4);
   const heroImageUrl = getHeroImageUrl();
   const heroImageHint = getHeroImageHint();

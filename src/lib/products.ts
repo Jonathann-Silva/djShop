@@ -1,5 +1,7 @@
+
 import placeholderData from './placeholder-images.json';
-import productsData from './products.db.json';
+import fs from 'fs/promises';
+import path from 'path';
 
 export type Perfume = {
   id: string;
@@ -15,11 +17,34 @@ export type Perfume = {
   imageUrl?: string;
 };
 
-export const products: Perfume[] = productsData.products;
+const productsFilePath = path.join(process.cwd(), 'src', 'lib', 'products.db.json');
 
-export const brands = [...new Set(products.map(p => p.brand))];
-export const scentProfiles = [...new Set(products.map(p => p.scentProfile))];
-export const genders = [...new Set(products.map(p => p.gender))];
+export async function getProducts(): Promise<Perfume[]> {
+    try {
+        const productsData = await fs.readFile(productsFilePath, 'utf-8');
+        const productsJson = JSON.parse(productsData);
+        return productsJson.products;
+    } catch (error) {
+        console.error('Failed to read products:', error);
+        return [];
+    }
+}
+
+export async function getBrands(): Promise<string[]> {
+    const products = await getProducts();
+    return [...new Set(products.map(p => p.brand))];
+}
+
+export async function getScentProfiles(): Promise<string[]> {
+    const products = await getProducts();
+    return [...new Set(products.map(p => p.scentProfile))];
+}
+
+export async function getGenders(): Promise<string[]> {
+    const products = await getProducts();
+    return [...new Set(products.map(p => p.gender))];
+}
+
 
 export function getImageUrl(imageId: string, product?: Perfume) {
     if (product?.imageUrl) {
