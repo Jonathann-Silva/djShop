@@ -44,14 +44,6 @@ const getRealTimePriceFromUrl = ai.defineTool(
   }
 );
 
-const prompt = ai.definePrompt({
-  name: 'getRealTimePricePrompt',
-  input: {schema: GetRealTimePriceInputSchema},
-  output: {schema: GetRealTimePriceOutputSchema},
-  tools: [getRealTimePriceFromUrl],
-  prompt: `Use the getRealTimePriceFromUrl tool to extract the price from the provided URL: {{{url}}}`,
-});
-
 const getRealTimePriceFlow = ai.defineFlow(
   {
     name: 'getRealTimePriceFlow',
@@ -59,7 +51,7 @@ const getRealTimePriceFlow = ai.defineFlow(
     outputSchema: GetRealTimePriceOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    // Directly call the tool instead of using a prompt
+    return await getRealTimePriceFromUrl(input);
   }
 );
