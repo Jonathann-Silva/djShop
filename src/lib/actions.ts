@@ -18,6 +18,7 @@ const UpdateProductInputSchema = z.object({
   description: z.string(),
   notes: z.string(),
   imageId: z.string(),
+  priceUrl: z.string().optional(),
 });
 
 export async function updateProduct(

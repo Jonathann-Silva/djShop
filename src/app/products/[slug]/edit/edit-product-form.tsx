@@ -165,6 +165,15 @@ export function EditProductForm({ product }: { product: Perfume }) {
               <p className="text-sm text-destructive">{errors.notes.message}</p>
             )}
           </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="priceUrl">URL de Preço</Label>
+            <Input
+              id="priceUrl"
+              {...register("priceUrl")}
+              placeholder="https://example.com/product/perfume"
+            />
+          </div>
 
       </CardContent>
       <CardFooter className="flex justify-end gap-2">

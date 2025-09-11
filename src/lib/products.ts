@@ -11,6 +11,7 @@ export type Perfume = {
   description: string;
   notes: string;
   imageId: string;
+  priceUrl?: string;
 };
 
 export const products: Perfume[] = productsData.products;
