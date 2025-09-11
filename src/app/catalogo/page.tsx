@@ -2,20 +2,12 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import type { Perfume } from "@/lib/products";
-import { getProducts, getBrands } from "@/lib/actions";
+import { getProducts } from "@/lib/actions";
 import { ProductCard } from "@/components/product-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -25,15 +17,7 @@ function FiltersSkeleton() {
   return (
     <Card>
       <CardContent className="p-6 space-y-6">
-        <h3 className="text-xl font-headline font-semibold">Filters</h3>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-10 w-full" />
-        </div>
+        <h3 className="text-xl font-headline font-semibold">Filtros</h3>
         <div className="space-y-2">
           <Skeleton className="h-4 w-16" />
           <Skeleton className="h-10 w-full" />
@@ -49,7 +33,7 @@ function ProductsSkeleton() {
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
             {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="space-y-2">
-                    <Skeleton className="h-[400px] w-full" />
+                    <Skeleton className="h-[250px] w-full" />
                     <Skeleton className="h-6 w-3/4" />
                     <Skeleton className="h-4 w-1/4" />
                     <div className="flex justify-between">
@@ -63,23 +47,16 @@ function ProductsSkeleton() {
 }
 
 export default function ProductsPage() {
-  const searchParams = useSearchParams();
   const [products, setProducts] = useState<Perfume[]>([]);
-  const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("all");
   
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const [productsData, brandsData] = await Promise.all([
-        getProducts(),
-        getBrands(),
-      ]);
+      const productsData = await getProducts();
       setProducts(productsData);
-      setBrands(brandsData);
       setLoading(false);
     }
     fetchData();
@@ -90,19 +67,13 @@ export default function ProductsPage() {
       const matchesSearch = product.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
-      const matchesBrand =
-        selectedBrand === "all" || product.brand === selectedBrand;
       
-      return (
-        matchesSearch &&
-        matchesBrand
-      );
+      return matchesSearch;
     });
-  }, [products, searchTerm, selectedBrand]);
+  }, [products, searchTerm]);
 
   const resetFilters = () => {
     setSearchTerm('');
-    setSelectedBrand('all');
   }
 
   return (
@@ -122,14 +93,14 @@ export default function ProductsPage() {
           {loading ? <FiltersSkeleton /> : (
             <Card>
               <CardContent className="p-6 space-y-6">
-                <h3 className="text-xl font-headline font-semibold">Filters</h3>
+                <h3 className="text-xl font-headline font-semibold">Filtros</h3>
                 <div className="space-y-2">
-                  <Label htmlFor="search">Search</Label>
+                  <Label htmlFor="search">Procurar</Label>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="search"
-                      placeholder="Perfume name..."
+                      placeholder="Nome do perfume..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
@@ -137,28 +108,8 @@ export default function ProductsPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Brand</Label>
-                  <Select
-                    value={selectedBrand}
-                    onValueChange={setSelectedBrand}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="All Brands" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Brands</SelectItem>
-                      {brands.map((brand) => (
-                        <SelectItem key={brand} value={brand}>
-                          {brand}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
                 <Button variant="ghost" onClick={resetFilters} className="w-full">
-                  Reset Filters
+                  Limpar Filtros
                 </Button>
               </CardContent>
             </Card>
@@ -175,9 +126,9 @@ export default function ProductsPage() {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full bg-muted/40 rounded-lg p-12 text-center">
-                   <h3 className="text-2xl font-headline font-semibold">No Perfumes Found</h3>
-                   <p className="mt-2 text-muted-foreground">Try adjusting your filters to find what you're looking for.</p>
-                   <Button onClick={resetFilters} className="mt-6">Clear Filters</Button>
+                   <h3 className="text-2xl font-headline font-semibold">Nenhum perfume encontrado</h3>
+                   <p className="mt-2 text-muted-foreground">Tente ajustar seus filtros para encontrar o que procura.</p>
+                   <Button onClick={resetFilters} className="mt-6">Limpar Filtros</Button>
               </div>
             )
           }
