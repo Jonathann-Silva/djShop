@@ -1,6 +1,6 @@
 
 import { notFound } from "next/navigation";
-import { getProducts, getBrands, getScentProfiles, getGenders } from "@/lib/actions";
+import { getProducts, getBrands, getGenders } from "@/lib/actions";
 import {
   Card,
   CardHeader,
@@ -21,9 +21,8 @@ export default async function EditProductPage({
     notFound();
   }
   
-  const [brands, scentProfiles, genders] = await Promise.all([
+  const [brands, genders] = await Promise.all([
     getBrands(),
-    getScentProfiles(),
     getGenders()
   ]);
 
@@ -33,7 +32,7 @@ export default async function EditProductPage({
         <CardHeader>
           <CardTitle>Editar Produto: {product.name}</CardTitle>
         </CardHeader>
-        <EditProductForm product={product} brands={brands} scentProfiles={scentProfiles} genders={genders} />
+        <EditProductForm product={product} brands={brands} genders={genders} />
       </Card>
     </div>
   );

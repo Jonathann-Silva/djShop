@@ -25,11 +25,6 @@ export async function getBrands(): Promise<string[]> {
     return [...new Set(products.map(p => p.brand))];
 }
 
-export async function getScentProfiles(): Promise<string[]> {
-    const products = await getProducts();
-    return [...new Set(products.map(p => p.scentProfile))];
-}
-
 export async function getGenders(): Promise<string[]> {
     const products = await getProducts();
     return [...new Set(products.map(p => p.gender))];
@@ -39,7 +34,7 @@ const UpdateProductInputSchema = z.object({
   id: z.string(),
   name: z.string(),
   brand: z.string(),
-  scentProfile: z.enum(['Floral', 'Woody', 'Oriental', 'Fresh', 'Spicy']),
+  sizeMl: z.number(),
   gender: z.enum(['Masculine', 'Feminine']),
   profitMargin: z.number(),
   description: z.string(),
@@ -55,6 +50,7 @@ export async function updateProduct(
   const validation = UpdateProductInputSchema.safeParse(data);
 
   if (!validation.success) {
+    console.error("Zod validation failed:", validation.error.errors);
     return {success: false, message: 'Dados inválidos.'};
   }
 

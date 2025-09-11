@@ -26,11 +26,10 @@ import { updateProduct } from "@/lib/actions";
 interface EditProductFormProps {
     product: Perfume;
     brands: string[];
-    scentProfiles: string[];
     genders: string[];
 }
 
-export function EditProductForm({ product, brands, scentProfiles, genders }: EditProductFormProps) {
+export function EditProductForm({ product, brands, genders }: EditProductFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = React.useState(false);
@@ -47,10 +46,11 @@ export function EditProductForm({ product, brands, scentProfiles, genders }: Edi
 
   const onSubmit = async (data: Perfume) => {
     setIsSaving(true);
-    // Ensure profitMargin is a number
+    // Ensure numbers are correctly formatted
     const dataToSubmit = {
       ...data,
       profitMargin: Number(data.profitMargin) || 0,
+      sizeMl: Number(data.sizeMl) || 0,
     };
     const result = await updateProduct(dataToSubmit);
     setIsSaving(false);
@@ -150,21 +150,13 @@ export function EditProductForm({ product, brands, scentProfiles, genders }: Edi
                 {errors.gender && <p className="text-sm text-destructive">{errors.gender.message}</p>}
             </div>
               <div className="space-y-2">
-                <Label>ml</Label>
-                <Controller
-                    name="scentProfile"
-                    control={control}
-                    rules={{ required: "Perfil olfativo é obrigatório" }}
-                    render={({ field }) => (
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                                  {scentProfiles.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                    )}
+                <Label htmlFor="sizeMl">ml</Label>
+                 <Input
+                    id="sizeMl"
+                    type="number"
+                    {...register("sizeMl", { required: "Tamanho (ml) é obrigatório", valueAsNumber: true })}
                 />
-                {errors.scentProfile && <p className="text-sm text-destructive">{errors.scentProfile.message}</p>}
+                {errors.sizeMl && <p className="text-sm text-destructive">{errors.sizeMl.message}</p>}
             </div>
           </div>
           

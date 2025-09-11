@@ -5,9 +5,9 @@ export type Perfume = {
   id: string;
   name: string;
   brand: string;
-  scentProfile: 'Floral' | 'Woody' | 'Oriental' | 'Fresh' | 'Spicy';
+  sizeMl: number;
   gender: 'Masculine' | 'Feminine';
-  profitMargin: number; // Changed from price
+  profitMargin: number;
   description: string;
   notes: string;
   imageId: string;

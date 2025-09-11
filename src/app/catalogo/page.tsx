@@ -4,7 +4,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Perfume } from "@/lib/products";
-import { getProducts, getBrands, getGenders, getScentProfiles } from "@/lib/actions";
+import { getProducts, getBrands, getGenders } from "@/lib/actions";
 import { ProductCard } from "@/components/product-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -27,10 +26,6 @@ function FiltersSkeleton() {
     <Card>
       <CardContent className="p-6 space-y-6">
         <h3 className="text-xl font-headline font-semibold">Filters</h3>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-10 w-full" />
-        </div>
         <div className="space-y-2">
           <Skeleton className="h-4 w-16" />
           <Skeleton className="h-10 w-full" />
@@ -72,27 +67,23 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Perfume[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [genders, setGenders] = useState<string[]>([]);
-  const [scentProfiles, setScentProfiles] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("all");
   const [selectedGender, setSelectedGender] = useState(searchParams.get('gender') || "all");
-  const [selectedScent, setSelectedScent] = useState("all");
   
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const [productsData, brandsData, gendersData, scentProfilesData] = await Promise.all([
+      const [productsData, brandsData, gendersData] = await Promise.all([
         getProducts(),
         getBrands(),
         getGenders(),
-        getScentProfiles()
       ]);
       setProducts(productsData);
       setBrands(brandsData);
       setGenders(gendersData);
-      setScentProfiles(scentProfilesData);
       setLoading(false);
     }
     fetchData();
@@ -107,23 +98,19 @@ export default function ProductsPage() {
         selectedBrand === "all" || product.brand === selectedBrand;
       const matchesGender =
         selectedGender === "all" || product.gender === selectedGender;
-      const matchesScent =
-        selectedScent === "all" || product.scentProfile === selectedScent;
       
       return (
         matchesSearch &&
         matchesBrand &&
-        matchesGender &&
-        matchesScent
+        matchesGender
       );
     });
-  }, [products, searchTerm, selectedBrand, selectedGender, selectedScent]);
+  }, [products, searchTerm, selectedBrand, selectedGender]);
 
   const resetFilters = () => {
     setSearchTerm('');
     setSelectedBrand('all');
     setSelectedGender('all');
-    setSelectedScent('all');
   }
   
   const genderDisplay: { [key: string]: string } = {
@@ -197,26 +184,6 @@ export default function ProductsPage() {
                       {genders.map((gender) => (
                         <SelectItem key={gender} value={gender}>
                           {genderDisplay[gender]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Scent Profile</Label>
-                  <Select
-                    value={selectedScent}
-                    onValueChange={setSelectedScent}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="All Scents" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Scents</SelectItem>
-                      {scentProfiles.map((scent) => (
-                        <SelectItem key={scent} value={scent}>
-                          {scent}
                         </SelectItem>
                       ))}
                     </SelectContent>

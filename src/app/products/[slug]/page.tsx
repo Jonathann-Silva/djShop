@@ -18,9 +18,10 @@ export default async function ProductDetailPage({
     notFound();
   }
 
+  // Find related products by brand, excluding the current one
   const relatedProducts = products
     .filter(
-      (p) => p.scentProfile === product.scentProfile && p.id !== product.id
+      (p) => p.brand === product.brand && p.id !== product.id
     )
     .slice(0, 4);
 

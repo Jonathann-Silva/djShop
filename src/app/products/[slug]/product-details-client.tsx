@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/use-cart";
 import { Perfume } from "@/lib/products";
-import { Minus, Plus, ShoppingCart, Sparkles, Droplet, Tag, Loader2 } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Sparkles, Droplet, Tag, Ruler, Loader2 } from "lucide-react";
 import { getRealTimePrice } from "@/ai/flows/get-real-time-price-flow";
 
 export function ProductDetailsClient({ product }: { product: Perfume }) {
@@ -81,10 +81,10 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
       <p className="mt-6 text-lg text-foreground/80">{product.description}</p>
 
       <div className="mt-8 space-y-4">
-        <div className="flex items-center gap-3">
-          <Tag className="h-5 w-5 text-muted-foreground" />
-          <span className="font-semibold">Perfil Olfativo:</span>
-          <span className="text-muted-foreground">{product.scentProfile}</span>
+         <div className="flex items-center gap-3">
+          <Ruler className="h-5 w-5 text-muted-foreground" />
+          <span className="font-semibold">Tamanho:</span>
+          <span className="text-muted-foreground">{product.sizeMl}ml</span>
         </div>
         <div className="flex items-center gap-3">
           <Droplet className="h-5 w-5 text-muted-foreground" />
