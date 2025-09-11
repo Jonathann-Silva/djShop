@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,13 +10,11 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Package, MapPin, User, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Mock data for demonstration
-const user = {
-  name: "Alex Doe",
-  email: "alex.doe@example.com",
-};
-
 const addresses = [
   {
     id: 1,
@@ -48,16 +48,40 @@ const orders = [
 ];
 
 export default function AccountPage() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+
+  if (!user) {
+     // Or a loading spinner
+    return (
+      <div className="container mx-auto max-w-4xl px-4 py-16 text-center">
+        <h1 className="mt-8 text-4xl font-headline font-bold">Please log in</h1>
+        <p className="mt-4 text-muted-foreground">
+          You need to be logged in to view this page.
+        </p>
+        <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
+          <Link href="/login">Go to Login</Link>
+        </Button>
+      </div>
+    )
+  }
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
+
+
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-4xl font-headline font-bold">My Account</h1>
+          <h1 className="text-4xl font-headline font-bold">Minha Conta</h1>
           <p className="text-muted-foreground">
-            Manage your information, addresses, and orders.
+            Gerir as suas informações, moradas e encomendas.
           </p>
         </div>
-         <Button variant="outline">
+         <Button variant="outline" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           Logout
         </Button>
@@ -67,7 +91,7 @@ export default function AccountPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              Profile Information
+              Informações do Perfil
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -75,7 +99,7 @@ export default function AccountPage() {
               <p className="font-semibold">{user.name}</p>
               <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
-            <Button variant="secondary">Edit Profile</Button>
+            <Button variant="secondary">Editar Perfil</Button>
           </CardContent>
         </Card>
 
@@ -83,7 +107,7 @@ export default function AccountPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <MapPin className="h-5 w-5" />
-              Saved Addresses
+              Moradas Guardadas
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -95,7 +119,7 @@ export default function AccountPage() {
                       {address.type}{" "}
                       {address.isDefault && (
                         <span className="text-xs bg-primary/20 text-primary-dark font-medium px-2 py-0.5 rounded-full ml-2">
-                          Default
+                          Padrão
                         </span>
                       )}
                     </p>
@@ -107,12 +131,12 @@ export default function AccountPage() {
                     </p>
                   </div>
                   <Button variant="ghost" size="sm">
-                    Edit
+                    Editar
                   </Button>
                 </div>
               </div>
             ))}
-             <Button variant="secondary">Add New Address</Button>
+             <Button variant="secondary">Adicionar Nova Morada</Button>
           </CardContent>
         </Card>
 
@@ -120,7 +144,7 @@ export default function AccountPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Package className="h-5 w-5" />
-              Order History
+              Histórico de Encomendas
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -129,14 +153,14 @@ export default function AccountPage() {
                 <>
                   <div key={order.id} className="flex justify-between items-center">
                     <div>
-                      <p className="font-semibold">Order #{order.id}</p>
+                      <p className="font-semibold">Encomenda #{order.id}</p>
                       <p className="text-sm text-muted-foreground">
-                        Date: {order.date}
+                        Data: {order.date}
                       </p>
                     </div>
                     <div className="text-right">
                        <p className="font-semibold">${order.total.toFixed(2)}</p>
-                       <p className={`text-sm font-medium ${order.status === 'Delivered' ? 'text-green-600' : 'text-amber-600'}`}>{order.status}</p>
+                       <p className={`text-sm font-medium ${order.status === 'Delivered' ? 'text-green-600' : 'text-amber-600'}`}>{order.status === 'Delivered' ? 'Entregue' : 'Enviado'}</p>
                     </div>
                   </div>
                   {index < orders.length -1 && <Separator />}

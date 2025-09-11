@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Flame, User, ShoppingCart, Search } from "lucide-react";
+import { Flame, User, ShoppingCart, Search, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
+import { useAuth } from "@/hooks/use-auth";
 import {
   Sheet,
   SheetContent,
@@ -17,6 +18,7 @@ import { getImageUrl } from "@/lib/products";
 
 export function Header() {
   const { cartItems, totalItems, totalPrice, removeFromCart } = useCart();
+  const { user } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -40,12 +42,21 @@ export function Header() {
           >
             Consultor AI
           </Link>
+          {user?.email === 'admin@gmail.com' && (
+            <Link
+              href="#" // You can change this to an admin products page
+              className="transition-colors hover:text-primary flex items-center gap-1"
+            >
+              <Wrench className="h-4 w-4" />
+              Produtos
+            </Link>
+          )}
         </nav>
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" className="hidden md:inline-flex">
             <Search className="h-5 w-5" />
           </Button>
-          <Link href="/login">
+          <Link href={user ? "/account" : "/login"}>
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
             </Button>
