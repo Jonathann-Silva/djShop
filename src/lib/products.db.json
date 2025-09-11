@@ -13,7 +13,8 @@
       "baseNotes": "Musk, baunilha, âmbar e madeiras nobres – um fundo quente e envolvente, que garante fixação prolongada e um rastro irresistível.Com excelente projeção e longa duração, Al Wataniah Durrat Al Aroos é ideal para mulheres que desejam um perfume elegante, sedutor e inesquecível. Seu aroma sofisticado combina perfeitamente com eventos especiais, jantares românticos e momentos em que a feminilidade e o luxo precisam estar.",
       "imageId": "perfume-1",
       "priceUrl": "https://www.lgimportados.com/produto/93-al-wataniah-durrat-al-aroos-fem-85ml-edp-codigo-536493",
-      "imageUrl": "https://www.lgimportados.com/img/m/IMG_536493_1.JPG?v=1757559441"
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_536493_1.JPG?v=1757559441",
+      "onSale": true
     },
     {
       "id": "2",
@@ -28,7 +29,8 @@
       "baseNotes": "patchouli, sândalo, cedro",
       "imageId": "perfume-2",
       "priceUrl": "https://www.lgimportados.com/produto/abercrombie-fitch-authentic-nightt-fem-100ml-edp",
-      "imageUrl": "https://www.lgimportados.com/img/m/IMG_734264_1.JPG?v=1757604370"
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_734264_1.JPG?v=1757604370",
+      "onSale": true
     },
     {
       "id": "5",
@@ -43,7 +45,8 @@
       "baseNotes": "patchouli, baunilha, sândalo",
       "imageId": "perfume-5",
       "priceUrl": "https://www.lgimportados.com/produto/abercrombie-fitch-first-instinct-blue-fem-100ml-edp",
-      "imageUrl": "https://www.lgimportados.com/img/m/IMG_734240_1.JPG?v=1757604375"
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_734240_1.JPG?v=1757604375",
+      "onSale": false
     },
     {
       "id": "6",
@@ -58,7 +61,8 @@
       "baseNotes": "âmbar, almíscar (musk), sândalo",
       "imageId": "perfume-6",
       "priceUrl": "https://www.lgimportados.com/produto/abercrombie-fitch-first-instinct-together-fem-100ml-edp-codigo-734288",
-      "imageUrl": "https://www.lgimportados.com/img/m/IMG_734288_1.JPG?v=1757605949"
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_734288_1.JPG?v=1757605949",
+      "onSale": true
     }
   ]
 }

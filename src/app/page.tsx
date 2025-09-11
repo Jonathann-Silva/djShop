@@ -17,7 +17,7 @@ import {
 
 export default async function Home() {
   const products = await getProducts();
-  const featuredProducts = products.slice(0, 4);
+  const featuredProducts = products.filter(p => p.onSale).slice(0, 4);
   const heroImageUrl = getHeroImageUrl();
   const heroImageHint = getHeroImageHint();
 

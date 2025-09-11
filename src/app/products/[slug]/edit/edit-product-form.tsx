@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { updateProduct } from "@/lib/actions";
 
@@ -192,6 +193,22 @@ export function EditProductForm({ product, genders }: EditProductFormProps) {
               placeholder="https://example.com/image.jpg"
             />
           </div>
+
+        <div className="flex items-center space-x-2">
+            <Controller
+                name="onSale"
+                control={control}
+                render={({ field }) => (
+                     <Switch
+                        id="onSale"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                )}
+            />
+            <Label htmlFor="onSale">Produto em promoção</Label>
+        </div>
+
 
       </CardContent>
       <CardFooter className="flex justify-end gap-2">

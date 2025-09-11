@@ -13,6 +13,7 @@ export type Perfume = {
   heartNotes: string;
   baseNotes: string;
   imageId: string;
+  onSale?: boolean;
   priceUrl?: string;
   imageUrl?: string;
 };

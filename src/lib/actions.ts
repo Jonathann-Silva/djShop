@@ -42,6 +42,7 @@ const UpdateProductInputSchema = z.object({
   heartNotes: z.string(),
   baseNotes: z.string(),
   imageId: z.string(),
+  onSale: z.boolean().optional(),
   priceUrl: z.string().optional(),
   imageUrl: z.string().optional(),
 });
