@@ -131,7 +131,9 @@ export default function EditProductPage({
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <SelectTrigger><SelectValue /></SelectTrigger>
                                 <SelectContent>
-                                    {genders.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
+                                    <SelectItem value="Masculine">Masculino</SelectItem>
+                                    <SelectItem value="Feminine">Feminino</SelectItem>
+                                    <SelectItem value="Unisex">Unissexo</SelectItem>
                                 </SelectContent>
                             </Select>
                         )}

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from "react";
@@ -57,6 +58,12 @@ export default function ProductsPage() {
     setSelectedScent('all');
     setPriceRange([0, 300]);
   }
+  
+  const genderDisplay: { [key: string]: string } = {
+    Masculine: "Masculino",
+    Feminine: "Feminino",
+    Unisex: "Unissexo",
+  };
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
@@ -122,7 +129,7 @@ export default function ProductsPage() {
                     <SelectItem value="all">All Genders</SelectItem>
                     {genders.map((gender) => (
                       <SelectItem key={gender} value={gender}>
-                        {gender}
+                        {genderDisplay[gender]}
                       </SelectItem>
                     ))}
                   </SelectContent>
