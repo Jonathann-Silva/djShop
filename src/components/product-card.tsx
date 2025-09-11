@@ -98,7 +98,7 @@ export function ProductCard({ product }: ProductCardProps) {
          {isFetchingPrice ? (
              <Loader2 className="h-5 w-5 animate-spin" />
          ) : displayPrice !== null ? (
-            `$${displayPrice.toFixed(2)}`
+            `R$ ${displayPrice.toFixed(2)}`
          ) : (
             <span className="text-sm text-muted-foreground">Preço indisponível</span>
          )}

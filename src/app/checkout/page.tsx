@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useCart } from "@/hooks/use-cart";
@@ -139,7 +140,7 @@ export default function CheckoutPage() {
                       </p>
                     </div>
                     <p className="text-sm">
-                      ${(item.product.price * item.quantity).toFixed(2)}
+                      R$ {(item.product.price * item.quantity).toFixed(2)}
                     </p>
                   </div>
                 ))}
@@ -148,16 +149,16 @@ export default function CheckoutPage() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>${totalPrice.toFixed(2)}</span>
+                  <span>R$ {totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Envio</span>
-                  <span>${shippingCost.toFixed(2)}</span>
+                  <span>R$ {shippingCost.toFixed(2)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
-                  <span>${grandTotal.toFixed(2)}</span>
+                  <span>R$ {grandTotal.toFixed(2)}</span>
                 </div>
               </div>
             </CardContent>

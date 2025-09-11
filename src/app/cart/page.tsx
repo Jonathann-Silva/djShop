@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -87,7 +88,7 @@ export default function CartPage() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>${item.product.price.toFixed(2)}</TableCell>
+                      <TableCell>R$ {item.product.price.toFixed(2)}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Button
@@ -124,7 +125,7 @@ export default function CartPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        ${(item.product.price * item.quantity).toFixed(2)}
+                        R$ {(item.product.price * item.quantity).toFixed(2)}
                       </TableCell>
                       <TableCell>
                         <Button
@@ -150,15 +151,15 @@ export default function CartPage() {
             <CardContent className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span>${totalPrice.toFixed(2)}</span>
+                <span>R$ {totalPrice.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Envio</span>
-                <span>${shippingCost.toFixed(2)}</span>
+                <span>R$ {shippingCost.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold text-lg">
                 <span>Total Geral</span>
-                <span>${grandTotal.toFixed(2)}</span>
+                <span>R$ {grandTotal.toFixed(2)}</span>
               </div>
             </CardContent>
             <CardFooter>

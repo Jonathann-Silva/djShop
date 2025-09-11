@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -205,7 +206,7 @@ export default function AccountPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                       <p className="font-semibold">${order.total.toFixed(2)}</p>
+                       <p className="font-semibold">R$ {order.total.toFixed(2)}</p>
                        <p className={`text-sm font-medium ${order.status === 'Delivered' ? 'text-green-600' : 'text-amber-600'}`}>{order.status === 'Delivered' ? 'Entregue' : 'Enviado'}</p>
                     </div>
                   </div>

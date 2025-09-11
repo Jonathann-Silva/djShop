@@ -72,7 +72,7 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
           </div>
         ) : displayPrice !== null ? (
           <p className="text-3xl font-light text-primary">
-            ${displayPrice.toFixed(2)}
+            R$ {displayPrice.toFixed(2)}
           </p>
         ) : (
           <p className="text-lg text-muted-foreground">Preço indisponível</p>

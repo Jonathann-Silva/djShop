@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -99,7 +100,7 @@ export function Header() {
                               Quantidade: {item.quantity}
                             </p>
                             <p className="text-sm font-medium">
-                              ${(item.product.price * item.quantity).toFixed(2)}
+                              R$ {(item.product.price * item.quantity).toFixed(2)}
                             </p>
                           </div>
                           <Button
@@ -116,7 +117,7 @@ export function Header() {
                     <div className="space-y-2">
                       <div className="flex justify-between font-semibold">
                         <span>Total</span>
-                        <span>${totalPrice.toFixed(2)}</span>
+                        <span>R$ {totalPrice.toFixed(2)}</span>
                       </div>
                       <Link href="/cart" className="block">
                         <Button className="w-full bg-primary hover:bg-primary/90">
