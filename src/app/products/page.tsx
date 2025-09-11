@@ -119,9 +119,11 @@ export default function AdminProductsPage() {
             Adicione, edite ou remova produtos do seu catálogo.
           </p>
         </div>
-        <Button>
-          <PlusCircle className="mr-2" />
-          Adicionar Produto
+        <Button asChild>
+          <Link href="/products/new">
+            <PlusCircle className="mr-2" />
+            Adicionar Produto
+          </Link>
         </Button>
       </div>
 
@@ -179,3 +181,4 @@ export default function AdminProductsPage() {
     </div>
   );
 }
+

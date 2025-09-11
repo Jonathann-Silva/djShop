@@ -30,30 +30,31 @@ export async function getGenders(): Promise<string[]> {
     return [...new Set(products.map(p => p.gender))];
 }
 
-const UpdateProductInputSchema = z.object({
+const ProductSchema = z.object({
   id: z.string(),
-  name: z.string(),
-  brand: z.string(),
-  sizeMl: z.number(),
-  gender: z.enum(['Masculine', 'Feminine']),
+  name: z.string().min(1, 'Nome é obrigatório'),
+  brand: z.string().min(1, 'Marca é obrigatória'),
+  sizeMl: z.number().min(1, 'Tamanho (ml) é obrigatório'),
+  gender: z.enum(['Masculine', 'Feminine'], { required_error: 'Gênero é obrigatório' }),
   profitMargin: z.number(),
-  description: z.string(),
-  topNotes: z.string(),
-  heartNotes: z.string(),
-  baseNotes: z.string(),
-  imageId: z.string(),
+  description: z.string().min(1, 'Descrição é obrigatória'),
+  topNotes: z.string().optional(),
+  heartNotes: z.string().optional(),
+  baseNotes: z.string().optional(),
+  imageId: z.string().min(1, 'ID da Imagem é obrigatório'),
   onSale: z.boolean().optional(),
-  priceUrl: z.string().optional(),
-  imageUrl: z.string().optional(),
+  priceUrl: z.string().url('URL de preço inválida').optional().or(z.literal('')),
+  imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
 });
+
 
 export async function updateProduct(
   data: Perfume
 ): Promise<{success: boolean; message: string}> {
-  const validation = UpdateProductInputSchema.safeParse(data);
+  const validation = ProductSchema.safeParse(data);
 
   if (!validation.success) {
-    console.error("Zod validation failed:", validation.error.errors);
+    console.error("Zod validation failed:", validation.error.formErrors.fieldErrors);
     return {success: false, message: 'Dados inválidos.'};
   }
 
@@ -78,12 +79,7 @@ export async function updateProduct(
       'utf-8'
     );
     
-    // Invalidate caches for paths that show product info
-    revalidatePath('/products');
-    revalidatePath(`/products/${data.id}`);
-    revalidatePath(`/products/${data.id}/edit`);
-    revalidatePath('/catalogo');
-    revalidatePath('/');
+    revalidatePath('/products', 'layout');
 
 
     return {success: true, message: 'Produto atualizado com sucesso!'};
@@ -95,3 +91,41 @@ export async function updateProduct(
     };
   }
 }
+
+export async function addProduct(
+  data: Omit<Perfume, 'id'>
+): Promise<{success: boolean; message: string}> {
+   const validation = ProductSchema.omit({ id: true }).safeParse(data);
+
+   if (!validation.success) {
+    console.error("Zod validation failed:", validation.error.formErrors.fieldErrors);
+    return {success: false, message: 'Dados inválidos.'};
+  }
+
+  try {
+    const products = await getProducts();
+    const productsJson = { products };
+
+    const newId = (Math.max(...productsJson.products.map(p => parseInt(p.id, 10))) + 1).toString();
+    const newProduct: Perfume = { id: newId, ...data };
+
+    productsJson.products.push(newProduct);
+    
+    await fs.writeFile(
+      productsFilePath,
+      JSON.stringify(productsJson, null, 2),
+      'utf-8'
+    );
+
+    revalidatePath('/products', 'layout');
+
+    return { success: true, message: 'Produto adicionado com sucesso!' };
+  } catch (error) {
+    console.error('Falha ao adicionar o produto:', error);
+    return {
+      success: false,
+      message: 'Ocorreu um erro ao salvar o produto.',
+    };
+  }
+}
+

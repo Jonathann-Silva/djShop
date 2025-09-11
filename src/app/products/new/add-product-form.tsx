@@ -22,44 +22,55 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { updateProduct } from "@/lib/actions";
+import { addProduct } from "@/lib/actions";
 
-interface EditProductFormProps {
-    product: Perfume;
-}
+// Using Omit to create a type for the form, which doesn't include the 'id'
+type ProductFormValues = Omit<Perfume, 'id'>;
 
-export function EditProductForm({ product }: EditProductFormProps) {
+export function AddProductForm() {
   const router = useRouter();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = React.useState(false);
-
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<Perfume>({
-    defaultValues: product,
+  } = useForm<ProductFormValues>({
+    defaultValues: {
+      name: "",
+      brand: "",
+      sizeMl: 0,
+      gender: "Feminine",
+      profitMargin: 0,
+      description: "",
+      topNotes: "",
+      heartNotes: "",
+      baseNotes: "",
+      imageId: `perfume-${Math.floor(Math.random() * 100)}`,
+      onSale: false,
+      priceUrl: "",
+      imageUrl: "",
+    },
   });
 
-  const onSubmit = async (data: Perfume) => {
+  const onSubmit = async (data: ProductFormValues) => {
     setIsSaving(true);
-    // Ensure numbers are correctly formatted
     const dataToSubmit = {
       ...data,
       profitMargin: Number(data.profitMargin) || 0,
       sizeMl: Number(data.sizeMl) || 0,
     };
-    const result = await updateProduct(dataToSubmit);
+
+    const result = await addProduct(dataToSubmit);
     setIsSaving(false);
 
     if (result.success) {
       toast({
-        title: "Produto Atualizado!",
+        title: "Produto Adicionado!",
         description: result.message,
       });
-      // This will now redirect to the new catalog page
       router.push("/products");
       router.refresh(); 
     } else {
@@ -108,7 +119,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
             )}
         </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="profitMargin">Margem de Lucro (%)</Label>
                 <Input
@@ -121,26 +132,26 @@ export function EditProductForm({ product }: EditProductFormProps) {
                     <p className="text-sm text-destructive">{errors.profitMargin.message}</p>
                 )}
             </div>
-              <div className="space-y-2">
-                <Label>Gênero</Label>
-                <Controller
-                    name="gender"
-                    control={control}
-                    rules={{ required: "Gênero é obrigatório" }}
-                    render={({ field }) => (
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Masculine">Masculino</SelectItem>
-                                <SelectItem value="Feminine">Feminino</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    )}
-                />
-                {errors.gender && <p className="text-sm text-destructive">{errors.gender.message}</p>}
+            <div className="space-y-2">
+              <Label>Gênero</Label>
+              <Controller
+                  name="gender"
+                  control={control}
+                  rules={{ required: "Gênero é obrigatório" }}
+                  render={({ field }) => (
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <SelectTrigger><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                              <SelectItem value="Masculine">Masculino</SelectItem>
+                              <SelectItem value="Feminine">Feminino</SelectItem>
+                          </SelectContent>
+                      </Select>
+                  )}
+              />
+              {errors.gender && <p className="text-sm text-destructive">{errors.gender.message}</p>}
             </div>
-              <div className="space-y-2">
-                <Label htmlFor="sizeMl">ml</Label>
+            <div className="space-y-2">
+              <Label htmlFor="sizeMl">ml</Label>
                  <Input
                     id="sizeMl"
                     type="number"
@@ -174,7 +185,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
               placeholder="Ex: Sândalo, Patchouli, Baunilha"
             />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
                 <Label htmlFor="priceUrl">URL de Preço</Label>
@@ -214,9 +225,8 @@ export function EditProductForm({ product }: EditProductFormProps) {
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSaving}>Cancelar</Button>
-        <Button type="submit" disabled={isSaving}>{isSaving ? 'Salvando...' : 'Salvar Alterações'}</Button>
+        <Button type="submit" disabled={isSaving}>{isSaving ? 'Salvando...' : 'Adicionar Produto'}</Button>
       </CardFooter>
     </form>
   );
 }
-

@@ -1,6 +1,6 @@
 
 import { notFound } from "next/navigation";
-import { getProducts, getGenders } from "@/lib/actions";
+import { getProducts } from "@/lib/actions";
 import {
   Card,
   CardHeader,
@@ -20,8 +20,6 @@ export default async function EditProductPage({
   if (!product) {
     notFound();
   }
-  
-  const genders = await getGenders();
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-12">
@@ -29,7 +27,7 @@ export default async function EditProductPage({
         <CardHeader>
           <CardTitle>Editar Produto: {product.name}</CardTitle>
         </CardHeader>
-        <EditProductForm product={product} genders={genders} />
+        <EditProductForm product={product} />
       </Card>
     </div>
   );
