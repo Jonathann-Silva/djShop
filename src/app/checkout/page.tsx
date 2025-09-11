@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +32,14 @@ export default function CheckoutPage() {
   const { cartItems, totalPrice, totalItems, clearCart } = useCart();
   const { toast } = useToast();
 
+  // State for form fields
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [zip, setZip] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+
   const grandTotal = totalPrice;
 
   if (totalItems === 0) {
@@ -46,16 +55,42 @@ export default function CheckoutPage() {
       </div>
     );
   }
-
+  
   const handlePlaceOrder = () => {
-    // In a real app, this would process the payment.
-    toast({
-      title: "Order Placed!",
-      description: "Thank you for your purchase. Your order is being processed.",
-    });
+    // Basic validation
+    if (!firstName || !lastName || !address || !paymentMethod) {
+      toast({
+        variant: "destructive",
+        title: "Campos em falta",
+        description: "Por favor, preencha todas as informações de envio e pagamento.",
+      });
+      return;
+    }
+    
+    // --- Substitua pelo seu número de WhatsApp com o código do país (ex: 5511999999999) ---
+    const yourWhatsAppNumber = "5511999999999"; 
+    // ---------------------------------------------------------------------------------
+
+    const productsSummary = cartItems.map(item => 
+        `- ${item.product.name} (x${item.quantity}) - R$ ${(item.product.price * item.quantity).toFixed(2)}`
+    ).join('\n');
+
+    let message = `Olá! Gostaria de fazer um novo pedido:\n\n`;
+    message += `*Cliente:* ${firstName} ${lastName}\n`;
+    message += `*Endereço de Entrega:* ${address}, ${city} - ${zip}\n\n`;
+    message += `*Itens do Pedido:*\n`;
+    message += `${productsSummary}\n\n`;
+    message += `*Forma de Pagamento:* ${paymentMethod}\n`;
+    message += `*Valor Total:* R$ ${grandTotal.toFixed(2)}\n\n`;
+    message += `Aguardando confirmação. Obrigado!`;
+
+    const whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+    
+    // Clear cart and redirect
     clearCart();
-    // Redirect to a confirmation page or homepage.
+    window.open(whatsappUrl, '_blank');
   };
+
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
@@ -73,23 +108,23 @@ export default function CheckoutPage() {
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">Primeiro Nome</Label>
-                <Input id="firstName" placeholder="John" />
+                <Input id="firstName" placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">Último Nome</Label>
-                <Input id="lastName" placeholder="Doe" />
+                <Input id="lastName" placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
               </div>
               <div className="md:col-span-2 space-y-2">
                 <Label htmlFor="address">Endereço</Label>
-                <Input id="address" placeholder="123 Perfume Lane" />
+                <Input id="address" placeholder="Rua das Flores, 123" value={address} onChange={(e) => setAddress(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="city">Cidade</Label>
-                <Input id="city" placeholder="Scent City" />
+                <Input id="city" placeholder="Cidade das Essências" value={city} onChange={(e) => setCity(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="zip">Código Postal</Label>
-                <Input id="zip" placeholder="12345" />
+                <Input id="zip" placeholder="12345-678" value={zip} onChange={(e) => setZip(e.target.value)} />
               </div>
             </CardContent>
           </Card>
@@ -101,17 +136,17 @@ export default function CheckoutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Select>
+              <Select onValueChange={setPaymentMethod} value={paymentMethod}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione um método de pagamento" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="dinheiro">Dinheiro</SelectItem>
-                  <SelectItem value="pix">Pix</SelectItem>
-                  <SelectItem value="debito">Debito</SelectItem>
-                  <SelectItem value="credito-vista">Credito a vista</SelectItem>
-                  <SelectItem value="credito-2x">Credito parcelado 2x</SelectItem>
-                  <SelectItem value="credito-3x">Credito parcelado 3X</SelectItem>
+                  <SelectItem value="Dinheiro">Dinheiro</SelectItem>
+                  <SelectItem value="Pix">Pix</SelectItem>
+                  <SelectItem value="Débito">Débito</SelectItem>
+                  <SelectItem value="Crédito à vista">Crédito à vista</SelectItem>
+                  <SelectItem value="Crédito 2x">Crédito parcelado 2x</SelectItem>
+                  <SelectItem value="Crédito 3x">Crédito parcelado 3x</SelectItem>
                 </SelectContent>
               </Select>
             </CardContent>
