@@ -29,7 +29,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <Flame className="h-6 w-6 text-primary" />
           <span className="font-bold font-headline text-lg">
-            Galeria Essenza
+            DJ Shop
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">

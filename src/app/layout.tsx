@@ -7,7 +7,7 @@ import { CartProvider } from '@/context/cart-context';
 import { AuthProvider } from '@/context/auth-context';
 
 export const metadata: Metadata = {
-  title: 'Galeria Essenza',
+  title: 'DJ Shop',
   description: 'Descubra a sua fragrância de assinatura.',
 };
 

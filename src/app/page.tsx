@@ -36,7 +36,7 @@ export default async function Home() {
         <div className="relative z-10 flex flex-col items-center justify-end h-full text-center p-8 md:p-12">
           <div className="bg-background/80 backdrop-blur-sm p-8 rounded-lg">
             <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary tracking-tighter">
-              Galeria Essenza
+              DJ Shop
             </h1>
             <p className="mt-4 max-w-2xl text-lg md:text-xl text-foreground/80">
               Revele a sua essência. Descubra um mundo curado de fragrâncias finas

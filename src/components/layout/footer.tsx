@@ -11,7 +11,7 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-2 mb-4">
               <Flame className="h-7 w-7 text-primary" />
               <span className="font-bold font-headline text-xl">
-                Galeria Essenza
+                DJ Shop
               </span>
             </Link>
             <p className="text-sm text-muted-foreground">
@@ -87,7 +87,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Galeria Essenza. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} DJ Shop. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>
