@@ -150,7 +150,7 @@ export function EditProductForm({ product, brands, scentProfiles, genders }: Edi
                 {errors.gender && <p className="text-sm text-destructive">{errors.gender.message}</p>}
             </div>
               <div className="space-y-2">
-                <Label>(ml)</Label>
+                <Label>ml</Label>
                 <Controller
                     name="scentProfile"
                     control={control}
