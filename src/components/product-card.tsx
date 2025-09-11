@@ -82,7 +82,7 @@ export function ProductCard({ product }: ProductCardProps) {
               width={400}
               height={600}
               data-ai-hint={imageHint}
-              className="object-cover w-full h-[300px] md:h-[400px] transition-transform duration-300 ease-in-out group-hover:scale-105"
+              className="object-cover w-full h-[250px] md:h-[300px] transition-transform duration-300 ease-in-out group-hover:scale-105"
             />
           </div>
         </CardHeader>
