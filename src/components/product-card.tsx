@@ -87,13 +87,13 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </CardHeader>
       </Link>
-      <CardContent className="p-4 bg-card flex-grow">
+      <CardContent className="p-3 bg-card flex-grow">
         <Link href={`/products/${product.id}`}>
-            <CardTitle className="text-lg font-headline tracking-tight">{product.name}</CardTitle>
+            <CardTitle className="text-base font-headline tracking-tight">{product.name}</CardTitle>
             <p className="text-sm text-muted-foreground">{product.brand}</p>
         </Link>
       </CardContent>
-      <CardFooter className="p-4 flex justify-between items-center bg-card flex-shrink-0">
+      <CardFooter className="p-3 flex justify-between items-center bg-card flex-shrink-0">
         <div className="text-lg font-semibold text-primary h-8 flex items-center">
          {isFetchingPrice ? (
              <Loader2 className="h-5 w-5 animate-spin" />
@@ -108,9 +108,9 @@ export function ProductCard({ product }: ProductCardProps) {
           variant="outline"
           onClick={handleAddToCart}
           disabled={isFetchingPrice || displayPrice === null}
-          className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+          className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors text-xs px-2 h-8"
         >
-          <ShoppingCart className="mr-2 h-4 w-4" />
+          <ShoppingCart className="mr-1 h-4 w-4" />
           Adicionar
         </Button>
       </CardFooter>
