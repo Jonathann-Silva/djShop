@@ -4,7 +4,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Perfume } from "@/lib/products";
-import { getProducts, getBrands, getGenders } from "@/lib/actions";
+import { getProducts, getBrands } from "@/lib/actions";
 import { ProductCard } from "@/components/product-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -66,24 +66,20 @@ export default function ProductsPage() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Perfume[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
-  const [genders, setGenders] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("all");
-  const [selectedGender, setSelectedGender] = useState(searchParams.get('gender') || "all");
   
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const [productsData, brandsData, gendersData] = await Promise.all([
+      const [productsData, brandsData] = await Promise.all([
         getProducts(),
         getBrands(),
-        getGenders(),
       ]);
       setProducts(productsData);
       setBrands(brandsData);
-      setGenders(gendersData);
       setLoading(false);
     }
     fetchData();
@@ -96,27 +92,18 @@ export default function ProductsPage() {
         .includes(searchTerm.toLowerCase());
       const matchesBrand =
         selectedBrand === "all" || product.brand === selectedBrand;
-      const matchesGender =
-        selectedGender === "all" || product.gender === selectedGender;
       
       return (
         matchesSearch &&
-        matchesBrand &&
-        matchesGender
+        matchesBrand
       );
     });
-  }, [products, searchTerm, selectedBrand, selectedGender]);
+  }, [products, searchTerm, selectedBrand]);
 
   const resetFilters = () => {
     setSearchTerm('');
     setSelectedBrand('all');
-    setSelectedGender('all');
   }
-  
-  const genderDisplay: { [key: string]: string } = {
-    Masculine: "Masculino",
-    Feminine: "Feminino",
-  };
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
@@ -164,26 +151,6 @@ export default function ProductsPage() {
                       {brands.map((brand) => (
                         <SelectItem key={brand} value={brand}>
                           {brand}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Gender</Label>
-                  <Select
-                    value={selectedGender}
-                    onValueChange={setSelectedGender}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="All Genders" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Genders</SelectItem>
-                      {genders.map((gender) => (
-                        <SelectItem key={gender} value={gender}>
-                          {genderDisplay[gender]}
                         </SelectItem>
                       ))}
                     </SelectContent>
