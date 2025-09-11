@@ -12,6 +12,7 @@ export type Perfume = {
   notes: string;
   imageId: string;
   priceUrl?: string;
+  imageUrl?: string;
 };
 
 export const products: Perfume[] = productsData.products;
@@ -20,7 +21,10 @@ export const brands = [...new Set(products.map(p => p.brand))];
 export const scentProfiles = [...new Set(products.map(p => p.scentProfile))];
 export const genders = [...new Set(products.map(p => p.gender))];
 
-export function getImageUrl(imageId: string) {
+export function getImageUrl(imageId: string, product?: Perfume) {
+    if (product?.imageUrl) {
+        return product.imageUrl;
+    }
     const image = placeholderData.placeholderImages.find(img => img.id === imageId);
     return image ? image.imageUrl : 'https://picsum.photos/seed/default/400/600';
 }

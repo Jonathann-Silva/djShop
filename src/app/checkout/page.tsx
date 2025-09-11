@@ -123,7 +123,7 @@ export default function CheckoutPage() {
                   <div key={item.product.id} className="flex items-center gap-4">
                     <div className="relative">
                       <Image
-                        src={getImageUrl(item.product.imageId)}
+                        src={getImageUrl(item.product.imageId, item.product)}
                         alt={item.product.name}
                         width={60}
                         height={60}

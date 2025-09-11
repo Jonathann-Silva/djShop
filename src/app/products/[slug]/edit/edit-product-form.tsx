@@ -175,6 +175,15 @@ export function EditProductForm({ product }: { product: Perfume }) {
             />
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="imageUrl">URL da Imagem</Label>
+            <Input
+              id="imageUrl"
+              {...register("imageUrl")}
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSaving}>Cancelar</Button>

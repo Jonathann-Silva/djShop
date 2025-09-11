@@ -84,7 +84,7 @@ export default function AdminProductsPage() {
                 <TableRow key={product.id}>
                   <TableCell>
                     <Image
-                      src={getImageUrl(product.imageId)}
+                      src={getImageUrl(product.imageId, product)}
                       alt={product.name}
                       width={50}
                       height={50}

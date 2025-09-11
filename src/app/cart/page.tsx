@@ -73,7 +73,7 @@ export default function CartPage() {
                       <TableCell>
                         <div className="flex items-center gap-4">
                           <Image
-                            src={getImageUrl(item.product.imageId)}
+                            src={getImageUrl(item.product.imageId, item.product)}
                             alt={item.product.name}
                             width={80}
                             height={80}

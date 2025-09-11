@@ -10,7 +10,8 @@
       "description": "Um perfume profundo e misterioso que combina a riqueza do oud com notas picantes de açafrão e pimenta preta.",
       "notes": "Oud, Açafrão, Pimenta Preta, Couro",
       "imageId": "perfume-1",
-      "priceUrl": ""
+      "priceUrl": "",
+      "imageUrl": ""
     },
     {
       "id": "2",
@@ -22,7 +23,8 @@
       "description": "Um buquê explosivo de rosa turca, peônia e lírio-do-vale, criando uma aura vibrante e romântica.",
       "notes": "Rosa Turca, Peônia, Lírio-do-vale, Lichia",
       "imageId": "perfume-2",
-      "priceUrl": ""
+      "priceUrl": "",
+      "imageUrl": ""
     },
     {
       "id": "5",
@@ -34,7 +36,8 @@
       "description": "Uma mistura luxuosa e sensual de orquídea negra, ylang-ylang e trufa negra.",
       "notes": "Orquídea Negra, Ylang-Ylang, Trufa, Sândalo",
       "imageId": "perfume-5",
-      "priceUrl": ""
+      "priceUrl": "",
+      "imageUrl": ""
     },
     {
       "id": "6",
@@ -46,7 +49,8 @@
       "description": "Um perfume brilhante e energético repleto de laranja mandarina, limão e um toque de gengibre.",
       "notes": "Laranja Mandarina, Limão, Gengibre, Néroli",
       "imageId": "perfume-6",
-      "priceUrl": ""
+      "priceUrl": "",
+      "imageUrl": ""
     }
   ]
 }

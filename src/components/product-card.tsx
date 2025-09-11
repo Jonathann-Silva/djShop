@@ -20,7 +20,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
-  const imageUrl = getImageUrl(product.imageId);
+  const imageUrl = getImageUrl(product.imageId, product);
   const imageHint = getImageHint(product.imageId);
 
   return (

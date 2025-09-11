@@ -21,7 +21,7 @@ export default function ProductDetailPage({
     )
     .slice(0, 4);
 
-  const imageUrl = getImageUrl(product.imageId);
+  const imageUrl = getImageUrl(product.imageId, product);
   const imageHint = getImageHint(product.imageId);
 
   return (

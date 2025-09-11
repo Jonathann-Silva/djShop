@@ -87,7 +87,7 @@ export function Header() {
                       {cartItems.map((item) => (
                         <div key={item.product.id} className="flex gap-4">
                           <Image
-                            src={getImageUrl(item.product.imageId)}
+                            src={getImageUrl(item.product.imageId, item.product)}
                             alt={item.product.name}
                             width={64}
                             height={64}
