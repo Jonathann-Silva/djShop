@@ -1,3 +1,58 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-image",
+      "description": "A stylish and abstract image representing luxury perfume.",
+      "imageUrl": "https://picsum.photos/seed/perfume-hero/1200/800",
+      "imageHint": "perfume abstract"
+    },
+    {
+      "id": "perfume-1",
+      "description": "Bottle of Midnight Oud perfume.",
+      "imageUrl": "https://picsum.photos/seed/perfume1/400/600",
+      "imageHint": "perfume bottle"
+    },
+    {
+      "id": "perfume-2",
+      "description": "Bottle of Crimson Bloom perfume.",
+      "imageUrl": "https://picsum.photos/seed/perfume2/400/600",
+      "imageHint": "perfume bottle"
+    },
+    {
+      "id": "perfume-3",
+      "description": "Bottle of Aqua Celestia perfume.",
+      "imageUrl": "https://picsum.photos/seed/perfume3/400/600",
+      "imageHint": "perfume bottle"
+    },
+    {
+      "id": "perfume-4",
+      "description": "Bottle of Terra Firma perfume.",
+      "imageUrl": "https://picsum.photos/seed/perfume4/400/600",
+      "imageHint": "perfume bottle"
+    },
+    {
+      "id": "perfume-5",
+      "description": "Bottle of Velvet Orchid perfume.",
+      "imageUrl": "https://picsum.photos/seed/perfume5/400/600",
+      "imageHint": "perfume bottle"
+    },
+    {
+      "id": "perfume-6",
+      "description": "Bottle of Solstice Citrus perfume.",
+      "imageUrl": "https://picsum.photos/seed/perfume6/400/600",
+      "imageHint": "perfume bottle"
+    },
+    {
+      "id": "perfume-7",
+      "description": "Bottle of Ember Musk perfume.",
+      "imageUrl": "https://picsum.photos/seed/perfume7/400/600",
+      "imageHint": "perfume bottle"
+    },
+    {
+      "id": "perfume-8",
+      "description": "Bottle of Ocean Breeze perfume.",
+      "imageUrl": "https://picsum.photos/seed/perfume8/400/600",
+      "imageHint": "perfume bottle"
+    }
+  ]
 }
