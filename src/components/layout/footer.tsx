@@ -23,25 +23,25 @@ export function Footer() {
             <h3 className="font-semibold uppercase tracking-wider">Loja</h3>
             <div className="mt-4 flex flex-col space-y-2">
               <Link
-                href="/products"
+                href="/catalogo"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Todos os Perfumes
               </Link>
               <Link
-                href="/products?gender=Masculine"
+                href="/catalogo?gender=Masculine"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Para Ele
               </Link>
               <Link
-                href="/products?gender=Feminine"
+                href="/catalogo?gender=Feminine"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Para Ela
               </Link>
               <Link
-                href="/products?gender=Unisex"
+                href="/catalogo?gender=Unisex"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Unissexo

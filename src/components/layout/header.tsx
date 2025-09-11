@@ -31,7 +31,7 @@ export function Header() {
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           <Link
-            href="/products"
+            href="/catalogo"
             className="transition-colors hover:text-primary"
           >
             Perfumes
@@ -44,7 +44,7 @@ export function Header() {
           </Link>
           {user?.email === 'admin@gmail.com' && (
             <Link
-              href="#" // You can change this to an admin products page
+              href="/products" 
               className="transition-colors hover:text-primary flex items-center gap-1"
             >
               <Wrench className="h-4 w-4" />

@@ -40,7 +40,7 @@ export default function Home() {
               que contam a sua história única.
             </p>
             <Button asChild size="lg" className="mt-8 bg-accent hover:bg-accent/90 text-accent-foreground">
-              <Link href="/products">
+              <Link href="/catalogo">
                 Explorar A Coleção <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

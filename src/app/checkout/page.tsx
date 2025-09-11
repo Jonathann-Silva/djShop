@@ -29,12 +29,12 @@ export default function CheckoutPage() {
   if (totalItems === 0) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-16 text-center">
-        <h1 className="mt-8 text-4xl font-headline font-bold">Your Cart is Empty</h1>
+        <h1 className="mt-8 text-4xl font-headline font-bold">O seu carrinho está vazio</h1>
         <p className="mt-4 text-muted-foreground">
-          You can't checkout without any items.
+          Não pode finalizar a compra sem itens.
         </p>
         <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
-          <Link href="/products">Start Shopping</Link>
+          <Link href="/catalogo">Começar a comprar</Link>
         </Button>
       </div>
     );
@@ -53,35 +53,35 @@ export default function CheckoutPage() {
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
       <h1 className="text-4xl font-headline font-bold mb-8 text-center">
-        Checkout
+        Finalizar Compra
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-8">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Truck className="h-5 w-5" /> Shipping Information
+                <Truck className="h-5 w-5" /> Informação de Envio
               </CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
+                <Label htmlFor="firstName">Primeiro Nome</Label>
                 <Input id="firstName" placeholder="John" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
+                <Label htmlFor="lastName">Último Nome</Label>
                 <Input id="lastName" placeholder="Doe" />
               </div>
               <div className="md:col-span-2 space-y-2">
-                <Label htmlFor="address">Address</Label>
+                <Label htmlFor="address">Morada</Label>
                 <Input id="address" placeholder="123 Perfume Lane" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
+                <Label htmlFor="city">Cidade</Label>
                 <Input id="city" placeholder="Scent City" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="zip">ZIP Code</Label>
+                <Label htmlFor="zip">Código Postal</Label>
                 <Input id="zip" placeholder="12345" />
               </div>
             </CardContent>
@@ -90,17 +90,17 @@ export default function CheckoutPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-5 w-5" /> Payment Details
+                <CreditCard className="h-5 w-5" /> Detalhes do Pagamento
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="cardNumber">Card Number</Label>
+                <Label htmlFor="cardNumber">Número do Cartão</Label>
                 <Input id="cardNumber" placeholder="**** **** **** 1234" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="expiry">Expiry Date</Label>
+                  <Label htmlFor="expiry">Data de Validade</Label>
                   <Input id="expiry" placeholder="MM/YY" />
                 </div>
                 <div className="space-y-2">
@@ -115,7 +115,7 @@ export default function CheckoutPage() {
         <div className="lg:col-span-1">
           <Card className="sticky top-24">
             <CardHeader>
-              <CardTitle>Order Summary</CardTitle>
+              <CardTitle>Resumo da Encomenda</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -151,7 +151,7 @@ export default function CheckoutPage() {
                   <span>${totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Shipping</span>
+                  <span className="text-muted-foreground">Envio</span>
                   <span>${shippingCost.toFixed(2)}</span>
                 </div>
                 <Separator />
@@ -163,10 +163,10 @@ export default function CheckoutPage() {
             </CardContent>
             <CardFooter className="flex-col gap-4">
               <Button onClick={handlePlaceOrder} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Lock className="mr-2 h-4 w-4" /> Place Order
+                <Lock className="mr-2 h-4 w-4" /> Finalizar Encomenda
               </Button>
               <p className="text-xs text-muted-foreground text-center">
-                By placing your order, you agree to our terms and conditions.
+                Ao finalizar a sua encomenda, concorda com os nossos termos e condições.
               </p>
             </CardFooter>
           </Card>

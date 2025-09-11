@@ -43,7 +43,7 @@ export default function ProductDetailPage({
       {relatedProducts.length > 0 && (
         <section className="mt-24">
           <h2 className="text-3xl font-headline font-bold text-center mb-12">
-            Você pode gostar também
+            Poderá também gostar de
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {relatedProducts.map((related) => (
