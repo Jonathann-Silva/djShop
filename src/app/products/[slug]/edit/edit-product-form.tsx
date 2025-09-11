@@ -58,6 +58,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
       toast({
         title: "Produto Atualizado!",
         description: result.message,
+        duration: 2000,
       });
       // This will now redirect to the new catalog page
       router.push("/products");
@@ -219,4 +220,3 @@ export function EditProductForm({ product }: EditProductFormProps) {
     </form>
   );
 }
-

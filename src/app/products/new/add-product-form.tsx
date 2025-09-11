@@ -70,6 +70,7 @@ export function AddProductForm() {
       toast({
         title: "Produto Adicionado!",
         description: result.message,
+        duration: 2000,
       });
       router.push("/products");
       router.refresh(); 
