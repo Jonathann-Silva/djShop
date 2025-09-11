@@ -183,7 +183,7 @@ export default function AccountPage() {
                 </div>
               </div>
             ))}
-             <Button variant="secondary">Adicionar Nova Morada</Button>
+             <Button variant="secondary">Adicionar Novo Endereço</Button>
           </CardContent>
         </Card>
 

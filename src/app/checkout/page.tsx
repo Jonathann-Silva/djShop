@@ -74,7 +74,7 @@ export default function CheckoutPage() {
                 <Input id="lastName" placeholder="Doe" />
               </div>
               <div className="md:col-span-2 space-y-2">
-                <Label htmlFor="address">Morada</Label>
+                <Label htmlFor="address">Endereço</Label>
                 <Input id="address" placeholder="123 Perfume Lane" />
               </div>
               <div className="space-y-2">
