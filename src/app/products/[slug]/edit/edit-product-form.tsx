@@ -25,11 +25,10 @@ import { updateProduct } from "@/lib/actions";
 
 interface EditProductFormProps {
     product: Perfume;
-    brands: string[];
     genders: string[];
 }
 
-export function EditProductForm({ product, brands, genders }: EditProductFormProps) {
+export function EditProductForm({ product, genders }: EditProductFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = React.useState(false);
@@ -87,21 +86,12 @@ export function EditProductForm({ product, brands, genders }: EditProductFormPro
             )}
           </div>
           <div className="space-y-2">
-            <Label>Marca</Label>
-            <Controller
-              name="brand"
-              control={control}
-              rules={{ required: "Marca é obrigatória" }}
-              render={({ field }) => (
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                        {brands.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-              )}
+            <Label htmlFor="brand">Marca</Label>
+            <Input
+              id="brand"
+              {...register("brand", { required: "Marca é obrigatória" })}
             />
-              {errors.brand && (
+            {errors.brand && (
               <p className="text-sm text-destructive">{errors.brand.message}</p>
             )}
           </div>

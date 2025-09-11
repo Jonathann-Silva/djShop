@@ -1,6 +1,6 @@
 
 import { notFound } from "next/navigation";
-import { getProducts, getBrands, getGenders } from "@/lib/actions";
+import { getProducts, getGenders } from "@/lib/actions";
 import {
   Card,
   CardHeader,
@@ -21,10 +21,7 @@ export default async function EditProductPage({
     notFound();
   }
   
-  const [brands, genders] = await Promise.all([
-    getBrands(),
-    getGenders()
-  ]);
+  const genders = await getGenders();
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-12">
@@ -32,7 +29,7 @@ export default async function EditProductPage({
         <CardHeader>
           <CardTitle>Editar Produto: {product.name}</CardTitle>
         </CardHeader>
-        <EditProductForm product={product} brands={brands} genders={genders} />
+        <EditProductForm product={product} genders={genders} />
       </Card>
     </div>
   );
