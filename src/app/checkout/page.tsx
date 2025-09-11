@@ -91,7 +91,7 @@ export default function CheckoutPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-5 w-5" /> Detalhes do Pagamento
+                <CreditCard className="h-5 w-5" /> Formas de pagamento
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
