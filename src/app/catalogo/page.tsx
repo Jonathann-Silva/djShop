@@ -4,7 +4,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Perfume } from "@/lib/products";
-import { getProducts, getBrands, getGenders, getScentProfiles } from "@/lib/products.ts";
+import { getProducts, getBrands, getGenders, getScentProfiles } from "@/lib/actions";
 import { ProductCard } from "@/components/product-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

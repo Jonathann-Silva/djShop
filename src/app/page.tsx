@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Bot, ArrowRight } from "lucide-react";
 
-import { getProducts, getHeroImageUrl, getHeroImageHint } from "@/lib/products";
+import { getProducts } from "@/lib/actions";
+import { getHeroImageUrl, getHeroImageHint } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
 import {

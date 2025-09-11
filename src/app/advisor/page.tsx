@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -39,7 +40,8 @@ import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/hooks/use-cart";
-import { products } from "@/lib/products";
+import type { Perfume } from "@/lib/products";
+import { getProducts } from "@/lib/actions";
 
 const formSchema = z.object({
   genderPreference: z
@@ -63,6 +65,15 @@ export default function AiAdvisorPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { addToCart } = useCart();
+  const [products, setProducts] = useState<Perfume[]>([]);
+
+  useEffect(() => {
+      async function fetchProducts() {
+          const products = await getProducts();
+          setProducts(products);
+      }
+      fetchProducts();
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -181,7 +192,7 @@ export default function AiAdvisorPage() {
                       <FormItem>
                         <FormLabel>Occasion</FormLabel>
                         <Select
-                          onValuechange={field.onChange}
+                          onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>

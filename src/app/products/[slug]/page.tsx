@@ -1,7 +1,8 @@
 
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { getProducts, getImageUrl, getImageHint } from "@/lib/products";
+import { getProducts } from "@/lib/actions";
+import { getImageUrl, getImageHint } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { ProductDetailsClient } from "./product-details-client";
 

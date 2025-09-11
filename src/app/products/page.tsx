@@ -5,7 +5,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import type { Perfume } from "@/lib/products";
-import { getProducts, getImageUrl } from "@/lib/products";
+import { getProducts } from "@/lib/actions";
+import { getImageUrl } from "@/lib/products";
 import Image from "next/image";
 import {
   Table,

@@ -1,6 +1,6 @@
 
 import { notFound } from "next/navigation";
-import { getProducts, getBrands, getScentProfiles, getGenders } from "@/lib/products";
+import { getProducts, getBrands, getScentProfiles, getGenders } from "@/lib/actions";
 import {
   Card,
   CardHeader,

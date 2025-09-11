@@ -4,10 +4,36 @@
 import fs from 'fs/promises';
 import path from 'path';
 import {z} from 'genkit';
-import {Perfume, getProducts} from './products';
+import type {Perfume} from './products';
 import {revalidatePath} from 'next/cache';
 
 const productsFilePath = path.join(process.cwd(), 'src', 'lib', 'products.db.json');
+
+export async function getProducts(): Promise<Perfume[]> {
+    try {
+        const productsData = await fs.readFile(productsFilePath, 'utf-8');
+        const productsJson = JSON.parse(productsData);
+        return productsJson.products;
+    } catch (error) {
+        console.error('Failed to read products:', error);
+        return [];
+    }
+}
+
+export async function getBrands(): Promise<string[]> {
+    const products = await getProducts();
+    return [...new Set(products.map(p => p.brand))];
+}
+
+export async function getScentProfiles(): Promise<string[]> {
+    const products = await getProducts();
+    return [...new Set(products.map(p => p.scentProfile))];
+}
+
+export async function getGenders(): Promise<string[]> {
+    const products = await getProducts();
+    return [...new Set(products.map(p => p.gender))];
+}
 
 const UpdateProductInputSchema = z.object({
   id: z.string(),
