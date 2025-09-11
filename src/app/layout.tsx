@@ -6,8 +6,8 @@ import { Footer } from '@/components/layout/footer';
 import { CartProvider } from '@/context/cart-context';
 
 export const metadata: Metadata = {
-  title: 'Essenza Gallery',
-  description: 'Discover your signature scent.',
+  title: 'Galeria Essenza',
+  description: 'Descubra a sua fragrância de assinatura.',
 };
 
 export default function RootLayout({
