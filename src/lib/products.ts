@@ -1,5 +1,5 @@
 import placeholderData from './placeholder-images.json';
-import productsData from './products.json';
+import productsData from './products.db.json';
 
 export type Perfume = {
   id: string;

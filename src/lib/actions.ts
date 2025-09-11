@@ -6,7 +6,7 @@ import {z} from 'genkit';
 import {Perfume, products} from './products';
 import {revalidatePath} from 'next/cache';
 
-const productsFilePath = path.join(process.cwd(), 'src', 'lib', 'products.json');
+const productsFilePath = path.join(process.cwd(), 'src', 'lib', 'products.db.json');
 
 const UpdateProductInputSchema = z.object({
   id: z.string(),
@@ -54,6 +54,7 @@ export async function updateProduct(
     revalidatePath(`/products/${data.id}`);
     revalidatePath(`/products/${data.id}/edit`);
     revalidatePath('/catalogo');
+    revalidatePath('/');
 
 
     return {success: true, message: 'Produto atualizado com sucesso!'};
