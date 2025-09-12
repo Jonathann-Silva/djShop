@@ -92,14 +92,15 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </CardHeader>
       </Link>
-      <CardContent className="p-2 bg-card flex-grow">
-        <Link href={`/products/${product.id}`}>
-            <CardTitle className="text-sm font-headline tracking-tight">{product.name}</CardTitle>
-            <p className="text-xs text-muted-foreground">{product.brand}</p>
+      <CardContent className="p-2 bg-card flex-grow flex flex-col">
+        <Link href={`/products/${product.id}`} className="flex-grow">
+            <CardTitle className="text-base font-headline leading-tight tracking-tight">{product.name}</CardTitle>
+            <p className="text-xs text-muted-foreground mt-1">{product.brand}</p>
         </Link>
+         <p className="text-xs text-muted-foreground mt-1">{product.sizeMl}ml</p>
       </CardContent>
-      <CardFooter className="p-2 flex justify-between items-center bg-card flex-shrink-0">
-        <div className="text-base font-semibold text-primary h-8 flex items-center">
+      <CardFooter className="p-3 flex justify-between items-center bg-card flex-shrink-0">
+        <div className="text-lg font-semibold text-primary h-8 flex items-center">
          {isFetchingPrice ? (
              <Loader2 className="h-4 w-4 animate-spin" />
          ) : displayPrice !== null ? (
@@ -113,7 +114,7 @@ export function ProductCard({ product }: ProductCardProps) {
           variant="outline"
           onClick={handleAddToCart}
           disabled={isFetchingPrice || displayPrice === null}
-          className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors text-xs px-2 h-8"
+          className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors text-xs px-3 h-9"
         >
           <ShoppingCart className="mr-1 h-4 w-4" />
           Adicionar

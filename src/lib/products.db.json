@@ -84,9 +84,9 @@
       "id": "8",
       "name": "ADYAN AL QALAM DELEGATION EXTRAIT DE PARFUM 100ML",
       "brand": "Adyan by Anfar",
-      "sizeMl": 99,
+      "sizeMl": 100,
       "gender": "Feminine",
-      "profitMargin": 65,
+      "profitMargin": 55,
       "description": "O Adyan Al Qalam Delegation Extrait de Parfum é uma fragrância feminina sofisticada e intensa, especialmente desenvolvida para mulheres que desejam marcar presença, exalar confiança e deixar uma impressão inesquecível. Este perfume é uma verdadeira obra olfativa que combina a delicadeza das flores com a profundidade de nuances orientais, criando um equilíbrio perfeito entre suavidade e intensidade.",
       "topNotes": "lavanda, menta",
       "heartNotes": "baunilha, benjoim",
@@ -95,6 +95,22 @@
       "onSale": false,
       "priceUrl": "https://www.lgimportados.com/produto/adyan-al-qalam-delegation-extrait-de-parfum-fem-100ml-300086",
       "imageUrl": "https://www.lgimportados.com/img/m/IMG_871563_1.JPG?v=1757621925"
+    },
+    {
+      "id": "9",
+      "name": "ADYAN ASLOOB 100ML",
+      "brand": "Adyan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "Adyan Asloob Feminino 100ml Eau de Parfum (EDP) é uma fragrância refinada e envolvente, criada para mulheres que apreciam perfumes sofisticados, com um toque exótico e oriental. Com uma combinação única de notas florais, amadeiradas e orientais, Asloob oferece uma experiência olfativa inesquecível, que exala elegância e sensualidade.",
+      "topNotes": "Pêra, Bergamota e Pimenta Rosa.",
+      "heartNotes": "Rosa e Jasmim.",
+      "baseNotes": "Almíscar branco, Patchouli, Cedro e Baunilha.",
+      "imageId": "perfume-67",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/adyan-asloob-100ml-fem-edp-codigo-710190",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_710190_2.JPG?v=1757692398"
     }
   ]
 }
