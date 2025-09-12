@@ -65,16 +65,18 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
         {product.name}
       </h1>
       <div className="mt-4 h-10 flex items-center">
-        {isFetchingPrice ? (
+        {isFetchingPrice && (
           <div className="flex items-center gap-2">
             <Loader2 className="h-6 w-6 animate-spin text-primary" />
             <span className="text-lg text-muted-foreground">A obter o preço atual...</span>
           </div>
-        ) : displayPrice !== null ? (
+        )}
+        {!isFetchingPrice && displayPrice !== null && (
           <p className="text-3xl font-light text-primary">
             R$ {displayPrice.toFixed(2)}
           </p>
-        ) : (
+        )}
+        {!isFetchingPrice && displayPrice === null && (
           <p className="text-lg text-muted-foreground">Preço indisponível</p>
         )}
       </div>

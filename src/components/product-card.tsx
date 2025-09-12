@@ -54,8 +54,6 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const displayPrice = useMemo(() => {
     if (!product.priceUrl || costPrice === null) {
-      // If there's no URL to fetch from, or if fetch failed, we can't show a price.
-      // Or we could show a "Price on request" message.
       return null;
     }
     const margin = 1 + product.profitMargin / 100;
@@ -101,11 +99,9 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardContent>
       <CardFooter className="p-3 flex justify-between items-center bg-card flex-shrink-0">
         <div className="text-lg font-semibold text-primary h-8 flex items-center">
-         {isFetchingPrice ? (
-             <Loader2 className="h-4 w-4 animate-spin" />
-         ) : displayPrice !== null ? (
-            `R$ ${displayPrice.toFixed(2)}`
-         ) : (
+         {isFetchingPrice && <Loader2 className="h-4 w-4 animate-spin" />}
+         {!isFetchingPrice && displayPrice !== null && `R$ ${displayPrice.toFixed(2)}`}
+         {!isFetchingPrice && displayPrice === null && (
             <span className="text-xs text-muted-foreground">Preço indisponível</span>
          )}
         </div>
