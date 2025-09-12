@@ -2,7 +2,7 @@
   "products": [
     {
       "id": "1",
-      "name": "93 AL WATANIAH DURRAT AL AROOS 85ML",
+      "name": "93 AL WATANIAH DURRAT AL AROOS",
       "brand": "Durrat Al Aroos",
       "sizeMl": 85,
       "gender": "Feminine",
@@ -18,7 +18,7 @@
     },
     {
       "id": "2",
-      "name": "ABERCROMBIE & FITCH AUTHENTIC NIGHTT 100ML EDP",
+      "name": "ABERCROMBIE & FITCH AUTHENTIC NIGHTT",
       "brand": "Abercrombie & Fitch",
       "sizeMl": 100,
       "gender": "Feminine",
@@ -34,7 +34,7 @@
     },
     {
       "id": "5",
-      "name": "ABERCROMBIE & FITCH FIRST INSTINCT BLUE 100ML",
+      "name": "ABERCROMBIE & FITCH FIRST INSTINCT BLUE",
       "brand": "ABERCROMBIE & FITCH",
       "sizeMl": 100,
       "gender": "Feminine",
@@ -50,7 +50,7 @@
     },
     {
       "id": "6",
-      "name": "ABERCROMBIE & FITCH FIRST INSTINCT TOGETHER 100ML",
+      "name": "ABERCROMBIE & FITCH FIRST INSTINCT TOGETHER",
       "brand": "Abercrombie & Fitch",
       "sizeMl": 100,
       "gender": "Feminine",
@@ -66,7 +66,7 @@
     },
     {
       "id": "7",
-      "name": "ADYAN AL MUSK AL AHMAR RED FEM 100ML",
+      "name": "ADYAN AL MUSK AL AHMAR RED",
       "brand": "Adyan",
       "sizeMl": 100,
       "gender": "Feminine",
@@ -82,7 +82,7 @@
     },
     {
       "id": "8",
-      "name": "ADYAN AL QALAM DELEGATION EXTRAIT DE PARFUM 100ML",
+      "name": "ADYAN AL QALAM DELEGATION EXTRAIT DE PARFUM",
       "brand": "Adyan by Anfar",
       "sizeMl": 100,
       "gender": "Feminine",
@@ -98,7 +98,7 @@
     },
     {
       "id": "9",
-      "name": "ADYAN ASLOOB 100ML",
+      "name": "ADYAN ASLOOB",
       "brand": "Adyan",
       "sizeMl": 100,
       "gender": "Feminine",
@@ -111,6 +111,54 @@
       "onSale": false,
       "priceUrl": "https://www.lgimportados.com/produto/adyan-asloob-100ml-fem-edp-codigo-710190",
       "imageUrl": "https://www.lgimportados.com/img/m/IMG_710190_2.JPG?v=1757692398"
+    },
+    {
+      "id": "10",
+      "name": "ADYAN DALIA NOIR",
+      "brand": "Adyan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "Adyan Dalia Noir Fem é uma fragrância sofisticada e envolvente, projetada para a mulher misteriosa e confiante. Com uma combinação perfeita de notas florais, frutais e ambaradas, este Eau de Parfum oferece uma experiência olfativa intensa e marcante, ideal para quem busca um perfume de longa duração e grande projeção.\n\n",
+      "topNotes": "Pêssego, Mandarina e Laranja",
+      "heartNotes": "Jasmim e Lírio Vermelho.",
+      "baseNotes": "Baunilha.",
+      "imageId": "perfume-3",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/adyan-dalia-noir-fem-100ml-edp-codigo-769822",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_769822_1.JPG?v=1757692400"
+    },
+    {
+      "id": "11",
+      "name": "ADYAN DALIA ROUGE ",
+      "brand": "Adyan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "Adyan Dalia Rouge Fem é um Eau de Parfum sofisticado e envolvente, criado para a mulher que busca uma fragrância marcante e de longa duração. Com uma composição delicada, mas intensa, ele oferece uma experiência sensorial única que combina elegância e sedução.",
+      "topNotes": "Amêndoas, Café, Açafrão, Jasmim",
+      "heartNotes": "Rosa Búlgara, Tuberosa, Jasmin Sambac, Madeira Âmbar, Âmbar Cinzento",
+      "baseNotes": "Fava Tonka, Cacau, Pralinê, Baunilha, Resina de Abeto, Cedro",
+      "imageId": "perfume-87",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/adyan-dalia-rouge-fem-100ml-edp",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_769839_1.JPG?v=1757692402"
+    },
+    {
+      "id": "12",
+      "name": "ADYAN EMIRA ",
+      "brand": "Adyan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "Adyan Emira Feminino 100ml Eau de Parfum (EDP) é uma fragrância sofisticada e envolvente, criada para mulheres que buscam um perfume de presença marcante e exótico. Emira é uma mistura luxuosa de notas florais, orientais e amadeiradas, oferecendo uma experiência olfativa rica e sensual que exala confiança, mistério e elegância.",
+      "topNotes": "Rosa, Âmbar, Patchouli.",
+      "heartNotes": "Flores Brancas, Patchouli, Baunilha.",
+      "baseNotes": "Amadeiradas, Oud (madeira de agar), Almíscar",
+      "imageId": "perfume-82",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/adyan-emira-100ml-fem-edp-codigo-710206",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_710206_1.JPG?v=1757692404"
     }
   ]
 }

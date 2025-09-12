@@ -3,7 +3,7 @@
 
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { Perfume } from "@/lib/products";
 import { getProducts } from "@/lib/actions";
 import { getImageUrl } from "@/lib/products";
@@ -28,6 +28,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -36,6 +43,7 @@ export default function AdminProductsPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Perfume[]>([]);
   const [loading, setLoading] = useState(true);
+  const [genderFilter, setGenderFilter] = useState("all");
 
   useEffect(() => {
     async function fetchProducts() {
@@ -52,6 +60,13 @@ export default function AdminProductsPage() {
       }
     }
   }, [user, authLoading, router]);
+
+  const filteredProducts = useMemo(() => {
+    if (genderFilter === "all") {
+      return products;
+    }
+    return products.filter((p) => p.gender === genderFilter);
+  }, [products, genderFilter]);
 
   if (authLoading || loading) {
     return (
@@ -119,12 +134,24 @@ export default function AdminProductsPage() {
             Adicione, edite ou remova produtos do seu catálogo.
           </p>
         </div>
-        <Button asChild>
-          <Link href="/products/new">
-            <PlusCircle className="mr-2" />
-            Adicionar Produto
-          </Link>
-        </Button>
+         <div className="flex items-center gap-4">
+             <Select value={genderFilter} onValueChange={setGenderFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filtrar por gênero" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos os Gêneros</SelectItem>
+                <SelectItem value="Masculine">Masculino</SelectItem>
+                <SelectItem value="Feminine">Feminino</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button asChild>
+              <Link href="/products/new">
+                <PlusCircle className="mr-2" />
+                Adicionar Produto
+              </Link>
+            </Button>
+        </div>
       </div>
 
       <Card>
@@ -140,7 +167,7 @@ export default function AdminProductsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell>
                     <Image
@@ -181,4 +208,3 @@ export default function AdminProductsPage() {
     </div>
   );
 }
-
