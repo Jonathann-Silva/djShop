@@ -14,23 +14,23 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
   const { addToCart } = useCart();
   const [costPrice, setCostPrice] = useState<number | null>(null);
   const [isFetchingPrice, setIsFetchingPrice] = useState(false);
-  const [fetchError, setFetchError] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPrice() {
       if (product.priceUrl) {
         setIsFetchingPrice(true);
-        setFetchError(false);
+        setFetchError(null);
         try {
           const result = await getRealTimePrice({ url: product.priceUrl });
           if (result && typeof result.price === 'number') {
             setCostPrice(result.price);
           } else {
-            setFetchError(true);
+            setFetchError("Preço não encontrado.");
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error("Failed to fetch real-time price:", error);
-          setFetchError(true);
+          setFetchError(error.message || "Falha ao buscar preço.");
         } finally {
           setIsFetchingPrice(false);
         }
@@ -77,7 +77,7 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
           </p>
         )}
         {!isFetchingPrice && (displayPrice === null || fetchError) && (
-          <p className="text-lg text-muted-foreground">Preço indisponível</p>
+          <p className="text-lg text-destructive">{fetchError || 'Preço indisponível'}</p>
         )}
       </div>
       <p className="mt-6 text-lg text-foreground/80">{product.description}</p>

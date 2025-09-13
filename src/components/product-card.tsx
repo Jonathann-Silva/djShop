@@ -28,23 +28,23 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const [costPrice, setCostPrice] = useState<number | null>(null);
   const [isFetchingPrice, setIsFetchingPrice] = useState(false);
-  const [fetchError, setFetchError] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   
   useEffect(() => {
     async function fetchPrice() {
       if (product.priceUrl) {
         setIsFetchingPrice(true);
-        setFetchError(false);
+        setFetchError(null);
         try {
           const result = await getRealTimePrice({ url: product.priceUrl });
           if (result && typeof result.price === 'number') {
             setCostPrice(result.price);
           } else {
-            setFetchError(true);
+            setFetchError("Preço não encontrado.");
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error("Failed to fetch real-time price for card:", error);
-          setFetchError(true);
+          setFetchError(error.message || "Falha ao buscar preço.");
         } finally {
           setIsFetchingPrice(false);
         }
@@ -105,7 +105,7 @@ export function ProductCard({ product }: ProductCardProps) {
          {isFetchingPrice && <Loader2 className="h-4 w-4 animate-spin" />}
          {!isFetchingPrice && displayPrice !== null && `R$ ${displayPrice.toFixed(2)}`}
          {!isFetchingPrice && (displayPrice === null || fetchError) && (
-            <span className="text-xs text-muted-foreground">Preço indisponível</span>
+            <span className="text-xs text-destructive">{fetchError || 'Indisponível'}</span>
          )}
         </div>
         <Button
