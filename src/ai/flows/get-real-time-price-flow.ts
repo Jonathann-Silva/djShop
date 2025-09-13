@@ -40,19 +40,28 @@ const getRealTimePriceFromUrl = ai.defineTool(
   },
   async ({url}) => {
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch page, status: ${response.status}`);
+      }
+
       const html = await response.text();
       const $ = load(html);
 
       // Try a few common selectors to find the price
       const selectors = [
           'div.h4.fw-normal.text-accent', // Original selector for lgimportados
+          '.price',
           'span.price',
           '[itemprop="price"]',
           '.product-price',
           '#price',
           '#product-price',
-          '.price',
           '.Price',
           '.price-tag',
           'span[data-price]',
@@ -66,7 +75,6 @@ const getRealTimePriceFromUrl = ai.defineTool(
             priceText = element.text();
             if(priceText) break;
             
-            // Sometimes price is in a 'content' attribute for meta tags
             if (element.attr('content')) {
                 priceText = element.attr('content')!;
                 if(priceText) break;
@@ -78,13 +86,10 @@ const getRealTimePriceFromUrl = ai.defineTool(
         throw new Error('Price element not found on the page.');
       }
 
-      // Clean the text and parse it into a number
-      // Removes currency symbols, trims whitespace, handles different decimal separators
       const cleanedPrice = priceText
-        .replace(/[^0-9,.]/g, '') // Remove everything except numbers, commas, and dots
-        .trim()
-        .replace('.', '') // Remove thousand separators (like in 1.234,56)
-        .replace(',', '.'); // Replace comma decimal separator with a dot
+        .replace(/[^0-9,.]/g, '') 
+        .replace(/\./g, (match, offset, string) => string.indexOf(',') > offset ? '' : match)
+        .replace(',', '.'); 
         
       const price = parseFloat(cleanedPrice);
 
@@ -95,9 +100,6 @@ const getRealTimePriceFromUrl = ai.defineTool(
       return {price};
     } catch (error) {
         console.error(`Failed to scrape price from ${url}:`, error);
-        // If scraping fails, we can decide what to return.
-        // Returning a price of 0 or throwing an error are options.
-        // Let's throw so the caller knows something went wrong.
         if (error instanceof Error) {
             throw new Error(`Could not fetch or parse price from URL: ${error.message}`);
         }
@@ -113,8 +115,6 @@ const getRealTimePriceFlow = ai.defineFlow(
     outputSchema: GetRealTimePriceOutputSchema,
   },
   async input => {
-    // Directly call the tool instead of using a prompt
     return await getRealTimePriceFromUrl(input);
   }
 );
-

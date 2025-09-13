@@ -28,37 +28,40 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const [costPrice, setCostPrice] = useState<number | null>(null);
   const [isFetchingPrice, setIsFetchingPrice] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
   
   useEffect(() => {
     async function fetchPrice() {
       if (product.priceUrl) {
         setIsFetchingPrice(true);
+        setFetchError(false);
         try {
           const result = await getRealTimePrice({ url: product.priceUrl });
-          if (result && result.price) {
+          if (result && typeof result.price === 'number') {
             setCostPrice(result.price);
+          } else {
+            setFetchError(true);
           }
         } catch (error) {
           console.error("Failed to fetch real-time price for card:", error);
-          setCostPrice(null);
+          setFetchError(true);
         } finally {
           setIsFetchingPrice(false);
         }
       }
     }
-    // Only fetch if there's a URL
     if(product.priceUrl) {
         fetchPrice();
     }
   }, [product.priceUrl]);
 
   const displayPrice = useMemo(() => {
-    if (!product.priceUrl || costPrice === null) {
+    if (!product.priceUrl || fetchError || costPrice === null) {
       return null;
     }
     const margin = 1 + product.profitMargin / 100;
     return costPrice * margin;
-  }, [costPrice, product.profitMargin, product.priceUrl]);
+  }, [costPrice, product.profitMargin, product.priceUrl, fetchError]);
 
 
   const handleAddToCart = () => {
@@ -101,7 +104,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="text-lg font-semibold text-primary h-8 flex items-center">
          {isFetchingPrice && <Loader2 className="h-4 w-4 animate-spin" />}
          {!isFetchingPrice && displayPrice !== null && `R$ ${displayPrice.toFixed(2)}`}
-         {!isFetchingPrice && displayPrice === null && (
+         {!isFetchingPrice && (displayPrice === null || fetchError) && (
             <span className="text-xs text-muted-foreground">Preço indisponível</span>
          )}
         </div>

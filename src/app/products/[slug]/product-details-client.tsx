@@ -23,7 +23,7 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
         setFetchError(false);
         try {
           const result = await getRealTimePrice({ url: product.priceUrl });
-          if (result && result.price) {
+          if (result && typeof result.price === 'number') {
             setCostPrice(result.price);
           } else {
             setFetchError(true);
@@ -41,7 +41,7 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
 
   const displayPrice = useMemo(() => {
     if (!product.priceUrl || fetchError || costPrice === null) {
-      return null; // Don't show a price if it can't be calculated
+      return null; 
     }
     const margin = 1 + product.profitMargin / 100;
     return costPrice * margin;
@@ -76,7 +76,7 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
             R$ {displayPrice.toFixed(2)}
           </p>
         )}
-        {!isFetchingPrice && displayPrice === null && (
+        {!isFetchingPrice && (displayPrice === null || fetchError) && (
           <p className="text-lg text-muted-foreground">Preço indisponível</p>
         )}
       </div>
