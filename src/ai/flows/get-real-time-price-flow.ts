@@ -86,10 +86,12 @@ const getRealTimePriceFromUrl = ai.defineTool(
         throw new Error('Price element not found on the page.');
       }
 
+      // Clean the price string: remove currency symbols, letters, etc.
+      // Handles both '1.234,56' and '1,234.56' formats
       const cleanedPrice = priceText
-        .replace(/[^0-9,.]/g, '') 
-        .replace(/\./g, (match, offset, string) => string.indexOf(',') > offset ? '' : match)
-        .replace(',', '.'); 
+        .replace(/[^0-9,.]/g, '') // Remove all non-numeric characters except for comma and dot
+        .replace(/\./g, (match, offset, string) => string.indexOf(',') > offset ? '' : match) // Remove dots used as thousand separators
+        .replace(',', '.'); // Replace comma decimal separator with a dot
         
       const price = parseFloat(cleanedPrice);
 
@@ -100,6 +102,7 @@ const getRealTimePriceFromUrl = ai.defineTool(
       return {price};
     } catch (error) {
         console.error(`Failed to scrape price from ${url}:`, error);
+        // Let's throw so the caller knows something went wrong.
         if (error instanceof Error) {
             throw new Error(`Could not fetch or parse price from URL: ${error.message}`);
         }
@@ -118,3 +121,4 @@ const getRealTimePriceFlow = ai.defineFlow(
     return await getRealTimePriceFromUrl(input);
   }
 );
+
