@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Flame } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 
@@ -53,7 +53,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen py-12 px-4">
       <Card className="mx-auto max-w-sm w-full">
         <CardHeader className="text-center">
-          <Flame className="mx-auto h-10 w-10 text-primary" />
+          <Sparkles className="mx-auto h-10 w-10 text-primary" />
           <CardTitle className="text-2xl font-headline mt-2">
             Bem-vindo de volta
           </CardTitle>

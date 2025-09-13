@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Flame, User, ShoppingCart, Wrench } from "lucide-react";
+import { Sparkles, User, ShoppingCart, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/hooks/use-auth";
@@ -28,7 +28,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-7xl items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Flame className="h-6 w-6 text-primary" />
+          <Sparkles className="h-6 w-6 text-primary" />
           <span className="font-bold font-headline text-lg">
             DJ Shop
           </span>
