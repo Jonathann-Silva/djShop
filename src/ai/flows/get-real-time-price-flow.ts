@@ -46,12 +46,17 @@ const getRealTimePriceFromUrl = ai.defineTool(
 
       // Try a few common selectors to find the price
       const selectors = [
-          'div.h4.fw-normal.text-accent', // Original selector
+          'div.h4.fw-normal.text-accent', // Original selector for lgimportados
           'span.price',
           '[itemprop="price"]',
           '.product-price',
           '#price',
-          '#product-price'
+          '#product-price',
+          '.price',
+          '.Price',
+          '.price-tag',
+          'span[data-price]',
+          'div[data-price]'
       ];
       
       let priceText = '';
@@ -112,3 +117,4 @@ const getRealTimePriceFlow = ai.defineFlow(
     return await getRealTimePriceFromUrl(input);
   }
 );
+
