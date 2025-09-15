@@ -62,11 +62,10 @@ export default function ProductsPage() {
     <div className="container mx-auto max-w-7xl px-4 py-12">
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-headline font-bold">
-          Our Perfume Collection
+          A Nossa Coleção de Perfumes
         </h1>
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Explore our handpicked selection of exquisite fragrances. Use the
-          filters to find the perfect scent for you.
+          Explore a nossa seleção escolhida a dedo de fragrâncias requintadas. Use os filtros para encontrar o perfume perfeito para si.
         </p>
       </div>
       

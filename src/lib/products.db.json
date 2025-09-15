@@ -287,6 +287,38 @@
       "onSale": false,
       "priceUrl": "https://www.lgimportados.com/produto/adyan-namoos-100ml-fem-edp-codigo-710251",
       "imageUrl": "https://www.lgimportados.com/img/m/IMG_710251_1.JPG?v=1757706642"
+    },
+    {
+      "id": "21",
+      "name": "ADYAN NORAH BELLA",
+      "brand": "Adyan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "Adyan Norah Bella Fem 100ml EDP é uma fragrância sofisticada e elegante, ideal para mulheres que buscam um perfume delicado, porém marcante. Combinando notas florais, frutadas e amadeiradas, essa fragrância é perfeita para expressar feminilidade e charme. A suavidade das flores e a intensidade das madeiras tornam esse perfume uma escolha única, que se adapta facilmente ao dia a dia ou a eventos especiais. Norah Bella é para mulheres que desejam deixar uma impressão duradoura e sofisticada.",
+      "topNotes": "tangerina, lichia, bergamota, ruibarbo e noz‑moscada.",
+      "heartNotes": "rosa turca, groselha preta, pétala, peônia, almíscar e baunilha.",
+      "baseNotes": "cashmeran, chantilly, incenso, vetiver haitiano e cedro.",
+      "imageId": "perfume-1",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/-adyan-norah-bella-fem-100ml-edp",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_775571_3.JPG?v=1757952149"
+    },
+    {
+      "id": "22",
+      "name": "ADYAN NORAH CARAMELA",
+      "brand": "Adyan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "Adyan Norah Caramela Fem 100ml EDP é uma fragrância irresistível e envolvente, perfeita para mulheres que amam notas doces e sofisticadas. Com o delicioso toque de caramelo, essa fragrância cria uma experiência olfativa doce e acolhedora, garantindo uma sensação de conforto e elegância ao longo do dia.",
+      "topNotes": "Caramelo e Leite.",
+      "heartNotes": "Mel e Fava Tonka.",
+      "baseNotes": "Baunilha e Almíscar Branco.",
+      "imageId": "perfume-86",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/-adyan-norah-caramela-fem-100ml-edp-codigo-769853",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_769853_1.JPG?v=1757961800"
     }
   ]
 }
