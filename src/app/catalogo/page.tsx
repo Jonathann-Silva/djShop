@@ -5,13 +5,20 @@ import { useState, useMemo, useEffect } from "react";
 import type { Perfume } from "@/lib/products";
 import { getProducts } from "@/lib/actions";
 import { ProductCard } from "@/components/product-card";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getRealTimePrice } from "@/ai/flows/get-real-time-price-flow";
 
+type ProductWithPrice = Perfume & { price: number | null };
 
 function ProductsSkeleton() {
     return (
@@ -32,30 +39,74 @@ function ProductsSkeleton() {
 }
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Perfume[]>([]);
+  const [products, setProducts] = useState<ProductWithPrice[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("name-asc");
   
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
       const productsData = await getProducts();
-      setProducts(productsData);
+      
+      // Fetch prices for all products
+      const productsWithPrices = await Promise.all(productsData.map(async (p) => {
+          let price: number | null = null;
+          if(p.priceUrl) {
+              try {
+                  const priceResult = await getRealTimePrice({ url: p.priceUrl });
+                  if (priceResult && typeof priceResult.price === 'number') {
+                      const margin = 1 + p.profitMargin / 100;
+                      price = priceResult.price * margin;
+                  }
+              } catch(error) {
+                  console.error(`Failed to fetch price for ${p.name}:`, error);
+              }
+          }
+          return { ...p, price };
+      }));
+
+      setProducts(productsWithPrices);
       setLoading(false);
     }
     fetchData();
   }, []);
 
-  const filteredProducts = useMemo(() => {
-    if (!searchTerm) {
-        return products;
-    }
-    return products.filter((product) => {
+  const filteredAndSortedProducts = useMemo(() => {
+    let filtered = products.filter((product) => {
       return product.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
     });
-  }, [products, searchTerm]);
+
+    switch (sortOrder) {
+        case "name-asc":
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case "name-desc":
+            filtered.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+        case "price-asc":
+            filtered.sort((a, b) => {
+                if (a.price === null) return 1;
+                if (b.price === null) return -1;
+                return a.price - b.price;
+            });
+            break;
+        case "price-desc":
+            filtered.sort((a, b) => {
+                 if (a.price === null) return 1;
+                if (b.price === null) return -1;
+                return b.price - a.price;
+            });
+            break;
+        default:
+            break;
+    }
+    
+    return filtered;
+
+  }, [products, searchTerm, sortOrder]);
 
 
   return (
@@ -69,8 +120,8 @@ export default function ProductsPage() {
         </p>
       </div>
       
-       <div className="mb-8 max-w-md mx-auto">
-            <div className="relative">
+       <div className="mb-8 max-w-md mx-auto flex gap-4">
+            <div className="relative flex-grow">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                     id="search"
@@ -80,13 +131,24 @@ export default function ProductsPage() {
                     className="pl-10"
                 />
             </div>
+             <Select value={sortOrder} onValueChange={setSortOrder}>
+                <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Ordenar por" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="name-asc">A-Z</SelectItem>
+                    <SelectItem value="name-desc">Z-A</SelectItem>
+                    <SelectItem value="price-asc">Menor Preço</SelectItem>
+                    <SelectItem value="price-desc">Maior Preço</SelectItem>
+                </SelectContent>
+            </Select>
         </div>
 
       <main>
           {loading ? <ProductsSkeleton /> : 
-            filteredProducts.length > 0 ? (
+            filteredAndSortedProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {filteredProducts.map((product) => (
+                {filteredAndSortedProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>

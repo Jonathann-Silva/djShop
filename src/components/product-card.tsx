@@ -14,11 +14,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Perfume, getImageUrl, getImageHint } from "@/lib/products";
 import { useCart } from "@/hooks/use-cart";
-import { useEffect, useState, useMemo } from "react";
-import { getRealTimePrice } from "@/ai/flows/get-real-time-price-flow";
 
 interface ProductCardProps {
-  product: Perfume;
+  product: Perfume & { price?: number | null };
 }
 
 export function ProductCard({ product }: ProductCardProps) {
@@ -26,46 +24,10 @@ export function ProductCard({ product }: ProductCardProps) {
   const imageUrl = getImageUrl(product.imageId, product);
   const imageHint = getImageHint(product.imageId);
 
-  const [costPrice, setCostPrice] = useState<number | null>(null);
-  const [isFetchingPrice, setIsFetchingPrice] = useState(false);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-  
-  useEffect(() => {
-    async function fetchPrice() {
-      if (product.priceUrl) {
-        setIsFetchingPrice(true);
-        setFetchError(null);
-        try {
-          const result = await getRealTimePrice({ url: product.priceUrl });
-          if (result && typeof result.price === 'number') {
-            setCostPrice(result.price);
-          } else {
-            setFetchError("Preço não encontrado.");
-          }
-        } catch (error: any) {
-          console.error("Failed to fetch real-time price for card:", error);
-          setFetchError(error.message || "Falha ao buscar preço.");
-        } finally {
-          setIsFetchingPrice(false);
-        }
-      }
-    }
-    if(product.priceUrl) {
-        fetchPrice();
-    }
-  }, [product.priceUrl]);
-
-  const displayPrice = useMemo(() => {
-    if (!product.priceUrl || fetchError || costPrice === null) {
-      return null;
-    }
-    const margin = 1 + product.profitMargin / 100;
-    return costPrice * margin;
-  }, [costPrice, product.profitMargin, product.priceUrl, fetchError]);
-
+  const displayPrice = product.price;
 
   const handleAddToCart = () => {
-    if (displayPrice !== null) {
+    if (displayPrice) {
         const productWithPrice = {...product, price: displayPrice};
         addToCart(productWithPrice)
     }
@@ -102,17 +64,17 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardContent>
       <CardFooter className="p-3 flex justify-between items-center bg-card flex-shrink-0">
         <div className="text-lg font-semibold text-primary h-8 flex items-center">
-         {isFetchingPrice && <Loader2 className="h-4 w-4 animate-spin" />}
-         {!isFetchingPrice && displayPrice !== null && `R$ ${displayPrice.toFixed(2)}`}
-         {!isFetchingPrice && (displayPrice === null || fetchError) && (
-            <span className="text-xs text-destructive">{fetchError || 'Indisponível'}</span>
+         {displayPrice === undefined && <Loader2 className="h-4 w-4 animate-spin" />}
+         {displayPrice && `R$ ${displayPrice.toFixed(2)}`}
+         {displayPrice === null && (
+            <span className="text-xs text-destructive">Indisponível</span>
          )}
         </div>
         <Button
           size="sm"
           variant="outline"
           onClick={handleAddToCart}
-          disabled={isFetchingPrice || displayPrice === null}
+          disabled={!displayPrice}
           className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors text-xs px-3 h-9"
         >
           <ShoppingCart className="mr-1 h-4 w-4" />
