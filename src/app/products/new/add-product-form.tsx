@@ -1,7 +1,7 @@
 
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { Perfume } from "@/lib/products";
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { addProduct } from "@/lib/actions";
+import { addProduct, getBrands } from "@/lib/actions";
 
 // Using Omit to create a type for the form, which doesn't include the 'id'
 type ProductFormValues = Omit<Perfume, 'id'>;
@@ -31,6 +31,15 @@ export function AddProductForm() {
   const router = useRouter();
   const { toast } = useToast();
   const [isSaving, setIsSaving] = React.useState(false);
+  const [brands, setBrands] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchBrands() {
+        const fetchedBrands = await getBrands();
+        setBrands(fetchedBrands);
+    }
+    fetchBrands();
+  }, []);
 
   const {
     register,
@@ -99,9 +108,22 @@ export function AddProductForm() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="brand">Marca</Label>
-            <Input
-              id="brand"
-              {...register("brand", { required: "Marca é obrigatória" })}
+             <Controller
+                name="brand"
+                control={control}
+                rules={{ required: "Marca é obrigatória" }}
+                render={({ field }) => (
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <SelectTrigger id="brand">
+                            <SelectValue placeholder="Selecione uma marca" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {brands.map(brand => (
+                                <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                )}
             />
             {errors.brand && (
               <p className="text-sm text-destructive">{errors.brand.message}</p>
