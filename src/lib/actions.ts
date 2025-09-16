@@ -22,8 +22,10 @@ export async function getProducts(): Promise<Perfume[]> {
 
 export async function getBrands(): Promise<string[]> {
     const products = await getProducts();
-    return [...new Set(products.map(p => p.brand))];
+    const brands = [...new Set(products.map(p => p.brand))];
+    return brands.sort();
 }
+
 
 export async function getGenders(): Promise<string[]> {
     const products = await getProducts();
@@ -51,6 +53,7 @@ const ProductSchema = z.object({
 export async function updateProduct(
   data: Perfume
 ): Promise<{success: boolean; message: string}> {
+
   const validation = ProductSchema.safeParse(data);
 
   if (!validation.success) {
@@ -95,6 +98,7 @@ export async function updateProduct(
 export async function addProduct(
   data: Omit<Perfume, 'id'>
 ): Promise<{success: boolean; message: string}> {
+
    const validation = ProductSchema.omit({ id: true }).safeParse(data);
 
    if (!validation.success) {
@@ -128,4 +132,3 @@ export async function addProduct(
     };
   }
 }
-

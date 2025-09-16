@@ -3,7 +3,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import type { Perfume } from "@/lib/products";
-import { getProducts } from "@/lib/actions";
+import { getProducts, getBrands } from "@/lib/actions";
 import { ProductCard } from "@/components/product-card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -41,15 +41,22 @@ function ProductsSkeleton() {
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<ProductWithPrice[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("name-asc");
+  const [brandFilter, setBrandFilter] = useState("all");
   
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const productsData = await getProducts();
+      const [productsData, brandsData] = await Promise.all([
+          getProducts(),
+          getBrands()
+      ]);
       
+      setBrands(brandsData);
+
       // Fetch prices for all products
       const productsWithPrices = await Promise.all(productsData.map(async (p) => {
           let price: number | null = null;
@@ -75,9 +82,13 @@ export default function ProductsPage() {
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = products.filter((product) => {
-      return product.name
+      const matchesSearch = product.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
+
+      const matchesBrand = brandFilter === "all" || product.brand === brandFilter;
+
+      return matchesSearch && matchesBrand;
     });
 
     switch (sortOrder) {
@@ -107,7 +118,7 @@ export default function ProductsPage() {
     
     return filtered;
 
-  }, [products, searchTerm, sortOrder]);
+  }, [products, searchTerm, sortOrder, brandFilter]);
 
 
   return (
@@ -121,8 +132,8 @@ export default function ProductsPage() {
         </p>
       </div>
       
-       <div className="mb-8 max-w-md mx-auto flex items-end gap-4">
-            <div className="relative flex-grow">
+       <div className="mb-8 max-w-3xl mx-auto flex flex-col md:flex-row items-end gap-4">
+            <div className="relative flex-grow w-full">
                  <Label htmlFor="search" className="mb-2 block text-sm font-medium text-muted-foreground">Procurar</Label>
                 <Search className="absolute left-3 bottom-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -133,10 +144,24 @@ export default function ProductsPage() {
                     className="pl-10"
                 />
             </div>
-            <div className="flex-shrink-0">
+             <div className="flex-shrink-0 w-full md:w-auto">
+                <Label htmlFor="brand" className="mb-2 block text-sm font-medium text-muted-foreground">Marca</Label>
+                <Select value={brandFilter} onValueChange={setBrandFilter}>
+                    <SelectTrigger className="w-full md:w-[180px]" id="brand">
+                        <SelectValue placeholder="Filtrar por marca" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">Todas as marcas</SelectItem>
+                        {brands.map(brand => (
+                            <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="flex-shrink-0 w-full md:w-auto">
                 <Label htmlFor="sort" className="mb-2 block text-sm font-medium text-muted-foreground">Ordenar por</Label>
                 <Select value={sortOrder} onValueChange={setSortOrder}>
-                    <SelectTrigger className="w-[180px]" id="sort">
+                    <SelectTrigger className="w-full md:w-[180px]" id="sort">
                         <SelectValue placeholder="Ordenar por" />
                     </SelectTrigger>
                     <SelectContent>
@@ -161,7 +186,10 @@ export default function ProductsPage() {
               <div className="flex flex-col items-center justify-center h-full bg-muted/40 rounded-lg p-12 text-center">
                    <h3 className="text-2xl font-headline font-semibold">Nenhum perfume encontrado</h3>
                    <p className="mt-2 text-muted-foreground">Tente ajustar seus filtros para encontrar o que procura.</p>
-                   <Button onClick={() => setSearchTerm("")} className="mt-6">Limpar Filtros</Button>
+                   <Button onClick={() => {
+                       setSearchTerm("");
+                       setBrandFilter("all");
+                    }} className="mt-6">Limpar Filtros</Button>
               </div>
             )
           }
