@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getRealTimePrice } from "@/ai/flows/get-real-time-price-flow";
+import { Label } from "@/components/ui/label";
 
 type ProductWithPrice = Perfume & { price: number | null };
 
@@ -120,9 +121,10 @@ export default function ProductsPage() {
         </p>
       </div>
       
-       <div className="mb-8 max-w-md mx-auto flex gap-4">
+       <div className="mb-8 max-w-md mx-auto flex items-end gap-4">
             <div className="relative flex-grow">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                 <Label htmlFor="search" className="mb-2 block text-sm font-medium text-muted-foreground">Procurar</Label>
+                <Search className="absolute left-3 bottom-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                     id="search"
                     placeholder="Procurar perfume..."
@@ -131,17 +133,20 @@ export default function ProductsPage() {
                     className="pl-10"
                 />
             </div>
-             <Select value={sortOrder} onValueChange={setSortOrder}>
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Ordenar por" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="name-asc">A-Z</SelectItem>
-                    <SelectItem value="name-desc">Z-A</SelectItem>
-                    <SelectItem value="price-asc">Menor Preço</SelectItem>
-                    <SelectItem value="price-desc">Maior Preço</SelectItem>
-                </SelectContent>
-            </Select>
+            <div className="flex-shrink-0">
+                <Label htmlFor="sort" className="mb-2 block text-sm font-medium text-muted-foreground">Ordenar por</Label>
+                <Select value={sortOrder} onValueChange={setSortOrder}>
+                    <SelectTrigger className="w-[180px]" id="sort">
+                        <SelectValue placeholder="Ordenar por" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="name-asc">A-Z</SelectItem>
+                        <SelectItem value="name-desc">Z-A</SelectItem>
+                        <SelectItem value="price-asc">Menor Preço</SelectItem>
+                        <SelectItem value="price-desc">Maior Preço</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
         </div>
 
       <main>
