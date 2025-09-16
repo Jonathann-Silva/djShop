@@ -94,15 +94,18 @@ async function fetchProductPrice(
 }
 
 // Wrapper to maintain compatibility with existing components.
-export async function getRealTimePrice({ url }: { url: string }): Promise<{price: number} | null> {
+export async function getRealTimePrice({ url }: { url: string }): Promise<{price: number | null, error?: string | null}> {
     const result = await fetchProductPrice(url);
     if (result.price !== null) {
-        return { price: result.price };
+        return { price: result.price, error: null };
     }
-    // Log the error for debugging on the server
+    
+    // Log the error for debugging on the server side
     if (result.error) {
         console.error(`Price scraping failed for ${url}: ${result.error}`);
     }
-    // Propagate a generic error or handle it as needed. For now, throwing to be caught by callers.
-    throw new Error(result.error || 'Falha ao buscar o preço.');
+
+    // Return null instead of throwing an error to prevent crashing the page
+    return { price: null, error: result.error };
 }
+

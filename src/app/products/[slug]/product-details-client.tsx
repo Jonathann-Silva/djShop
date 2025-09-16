@@ -23,10 +23,10 @@ export function ProductDetailsClient({ product }: { product: Perfume }) {
         setFetchError(null);
         try {
           const result = await getRealTimePrice({ url: product.priceUrl });
-          if (result && typeof result.price === 'number') {
+          if (result && result.price !== null) {
             setCostPrice(result.price);
           } else {
-            setFetchError("Preço não encontrado.");
+            setFetchError(result.error || "Preço não encontrado.");
           }
         } catch (error: any) {
           console.error("Failed to fetch real-time price:", error);
