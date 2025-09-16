@@ -21,7 +21,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, MoreHorizontal } from "lucide-react";
+import { PlusCircle, MoreHorizontal, Tags } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ManageBrandsDialog } from "@/components/manage-brands-dialog";
 
 export default function AdminProductsPage() {
   const { user, loading: authLoading } = useAuth();
@@ -44,6 +45,8 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState<Perfume[]>([]);
   const [loading, setLoading] = useState(true);
   const [genderFilter, setGenderFilter] = useState("all");
+  const [isManageBrandsOpen, setIsManageBrandsOpen] = useState(false);
+
 
   useEffect(() => {
     async function fetchProducts() {
@@ -67,6 +70,13 @@ export default function AdminProductsPage() {
     }
     return products.filter((p) => p.gender === genderFilter);
   }, [products, genderFilter]);
+  
+  const handleBrandsUpdated = async () => {
+      setLoading(true);
+      const fetchedProducts = await getProducts();
+      setProducts(fetchedProducts);
+      setLoading(false);
+  }
 
   if (authLoading || loading) {
     return (
@@ -76,7 +86,11 @@ export default function AdminProductsPage() {
                     <Skeleton className="h-10 w-72 mb-2" />
                     <Skeleton className="h-6 w-96" />
                 </div>
-                <Skeleton className="h-10 w-36" />
+                 <div className="flex items-center gap-4">
+                    <Skeleton className="h-10 w-40" />
+                    <Skeleton className="h-10 w-36" />
+                    <Skeleton className="h-10 w-44" />
+                </div>
             </div>
             <Card>
                 <CardContent className="p-0">
@@ -124,6 +138,8 @@ export default function AdminProductsPage() {
   }
 
   return (
+    <>
+    <ManageBrandsDialog open={isManageBrandsOpen} onOpenChange={setIsManageBrandsOpen} onBrandsUpdated={handleBrandsUpdated} />
     <div className="container mx-auto max-w-7xl px-4 py-12">
       <div className="flex justify-between items-center mb-8">
         <div>
@@ -145,6 +161,10 @@ export default function AdminProductsPage() {
                 <SelectItem value="Feminine">Feminino</SelectItem>
               </SelectContent>
             </Select>
+            <Button variant="outline" onClick={() => setIsManageBrandsOpen(true)}>
+                <Tags className="mr-2 h-4 w-4" />
+                Gerir Marcas
+            </Button>
             <Button asChild>
               <Link href="/products/new">
                 <PlusCircle className="mr-2" />
@@ -206,5 +226,6 @@ export default function AdminProductsPage() {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 }
