@@ -17,7 +17,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/products";
-import { SearchDialog } from "@/components/search-dialog";
 
 export function Header() {
   const { cartItems, totalItems, totalPrice, removeFromCart } = useCart();
@@ -57,7 +56,6 @@ export function Header() {
           )}
         </nav>
         <div className="flex items-center gap-4">
-          <SearchDialog />
           <Link href={user ? "/account" : "/login"}>
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />

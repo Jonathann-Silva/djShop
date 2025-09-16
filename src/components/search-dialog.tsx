@@ -65,14 +65,6 @@ export function SearchDialog() {
 
   return (
     <>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setIsOpen(true)}
-        className="hidden md:inline-flex"
-      >
-        <Search className="h-5 w-5" />
-      </Button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-[525px]">
           <DialogHeader>
