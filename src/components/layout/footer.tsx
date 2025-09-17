@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, Twitter, Instagram, Facebook } from "lucide-react";
+import { SprayCan, Twitter, Instagram, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Footer() {
@@ -9,7 +9,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <Sparkles className="h-7 w-7 text-primary" />
+              <SprayCan className="h-7 w-7 text-primary" />
               <span className="font-bold font-headline text-xl">
                 DJ Shop
               </span>
