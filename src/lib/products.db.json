@@ -17,6 +17,22 @@
       "onSale": true
     },
     {
+      "id": "23",
+      "name": "ABERCROMBIE & FITCH AUTHENTIC",
+      "brand": "Abercrombie & Fitch",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "Abercrombie & Fitch Autêntico Eau de Parfum Feminino 100ml é uma fragrância fresca, vibrante e envolvente, que captura a essência da mulher moderna e confiante. Com uma composição olfativa sofisticada e leve, esse perfume exala elegância e naturalidade, tornando-se a escolha perfeita para quem deseja uma fragrância que combine frescor e feminilidade, ideal para o dia a dia ou para ocasiões especiais.",
+      "topNotes": "Cassis, Lichia, Maçã.",
+      "heartNotes": "Flor de Laranjeira, Jasmim, Lírio-do-Vale.",
+      "baseNotes": "Almíscar, Sândalo, Cedro.",
+      "imageId": "perfume-18",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/-abercrombie-fitch-authentic-fem-100ml-edp",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_587891_1.JPG?v=1758122124"
+    },
+    {
       "id": "2",
       "name": "ABERCROMBIE & FITCH AUTHENTIC NIGHTT",
       "brand": "Abercrombie & Fitch",
@@ -35,7 +51,7 @@
     {
       "id": "5",
       "name": "ABERCROMBIE & FITCH FIRST INSTINCT BLUE",
-      "brand": "ABERCROMBIE & FITCH",
+      "brand": "Abercrombie & Fitch",
       "sizeMl": 100,
       "gender": "Feminine",
       "profitMargin": 55,
