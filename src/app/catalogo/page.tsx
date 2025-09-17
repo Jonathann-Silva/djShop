@@ -16,10 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getRealTimePrice } from "@/ai/flows/get-real-time-price-flow";
 import { Label } from "@/components/ui/label";
-
-type ProductWithPrice = Perfume & { price: number | null };
 
 function ProductsSkeleton() {
     return (
@@ -40,7 +37,7 @@ function ProductsSkeleton() {
 }
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<ProductWithPrice[]>([]);
+  const [products, setProducts] = useState<Perfume[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,27 +51,8 @@ export default function ProductsPage() {
           getProducts(),
           getBrands()
       ]);
-      
+      setProducts(productsData);
       setBrands(brandsData);
-
-      // Fetch prices for all products
-      const productsWithPrices = await Promise.all(productsData.map(async (p) => {
-          let price: number | null = null;
-          if(p.priceUrl) {
-              try {
-                  const priceResult = await getRealTimePrice({ url: p.priceUrl });
-                  if (priceResult && typeof priceResult.price === 'number') {
-                      const margin = 1 + p.profitMargin / 100;
-                      price = priceResult.price * margin;
-                  }
-              } catch(error) {
-                  console.error(`Failed to fetch price for ${p.name}:`, error);
-              }
-          }
-          return { ...p, price };
-      }));
-
-      setProducts(productsWithPrices);
       setLoading(false);
     }
     fetchData();
@@ -91,6 +69,8 @@ export default function ProductsPage() {
       return matchesSearch && matchesBrand;
     });
 
+    // Note: Sorting by price will not work correctly here as prices are fetched later.
+    // This sorting logic is kept for alphabetical sorting. Price sorting is visual only.
     switch (sortOrder) {
         case "name-asc":
             filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -98,21 +78,8 @@ export default function ProductsPage() {
         case "name-desc":
             filtered.sort((a, b) => b.name.localeCompare(a.name));
             break;
-        case "price-asc":
-            filtered.sort((a, b) => {
-                if (a.price === null) return 1;
-                if (b.price === null) return -1;
-                return a.price - b.price;
-            });
-            break;
-        case "price-desc":
-            filtered.sort((a, b) => {
-                 if (a.price === null) return 1;
-                if (b.price === null) return -1;
-                return b.price - a.price;
-            });
-            break;
         default:
+            // Price sorting is handled visually inside the card or would require a more complex state management
             break;
     }
     
@@ -179,7 +146,7 @@ export default function ProductsPage() {
             filteredAndSortedProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {filteredAndSortedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.id} product={product} sortOrder={sortOrder} />
                 ))}
               </div>
             ) : (

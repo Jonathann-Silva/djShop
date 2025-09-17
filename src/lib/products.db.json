@@ -93,7 +93,7 @@
       "baseNotes": "musgo, baunilha, patchouli",
       "imageId": "perfume-14",
       "onSale": false,
-      "priceUrl": "https://www.lgimportados.com/produto/adyan-al-musk-al-ahmar-red-fem-100ml-edp-codigo-845588",
+      "priceUrl": "https://www.lgimportados.com/produto/adyan-al-musk-al-ahmar-red-fem-100ml-edp",
       "imageUrl": "https://www.lgimportados.com/img/m/IMG_845588_1.JPG?v=1757621303"
     },
     {
@@ -499,7 +499,7 @@
     {
       "id": "34",
       "name": "AFNAN 9PM",
-      "brand": "Adyan",
+      "brand": "Afnan",
       "sizeMl": 100,
       "gender": "Feminine",
       "profitMargin": 55,
@@ -511,6 +511,54 @@
       "onSale": false,
       "priceUrl": "https://www.lgimportados.com/produto/-afnan-9pm-fem-100ml-edp",
       "imageUrl": "https://www.lgimportados.com/img/m/IMG_767187_1.JPG?v=1758132085"
+    },
+    {
+      "id": "35",
+      "name": "AFNAN 9PM POUR",
+      "brand": "Afnan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "O Afnan 9PM Pour Femme é um perfume feminino envolvente e sedutor, criado para mulheres modernas que gostam de marcar presença. Com um equilíbrio perfeito entre frescor, doçura e sensualidade, é ideal para noites especiais ou ocasiões em que se deseja deixar uma impressão duradoura.",
+      "topNotes": "Framboesa, Maçã, Violeta, Laranja.",
+      "heartNotes": "Rosa, Peônia, Íris, Jasmim.",
+      "baseNotes": "Cedro, Cipreste, Pinheiro, Âmbar.",
+      "imageId": "perfume-52",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/afnan-9pm-pour-fem-100ml-edp",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_869706_1.JPG?v=1758132087"
+    },
+    {
+      "id": "36",
+      "name": "AFNAN HISTORIC DORIA",
+      "brand": "Afnan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "O Afnan Historic Doria é uma fragrância luxuosa e envolvente, pensada para mulheres que desejam se destacar com uma aura de sofisticação e elegância. Com uma composição rica e complexa, esse perfume combina notas florais, frutadas e amadeiradas, criando uma experiência olfativa marcante e inesquecível. Ideal para ocasiões especiais ou para momentos que exigem um toque de glamour e distinção.",
+      "topNotes": "Orange Blossom, Lemon Zest Bitter, Raspberry.",
+      "heartNotes": "Tuberose, Mandarin, Jasmine, Ambroxan.",
+      "baseNotes": "Musk, Woody, Jasmine Sambac.",
+      "imageId": "perfume-22",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/afnan-historic-doria-fem-100ml-edp-codigo-748001",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_748001_1.JPG?v=1758141611"
+    },
+    {
+      "id": "37",
+      "name": "AFNAN SOUVENIR DESERT ROSE",
+      "brand": "Adyan",
+      "sizeMl": 100,
+      "gender": "Feminine",
+      "profitMargin": 55,
+      "description": "Afnan Souvenir Desert Rose Eau de Parfum 100ml é uma fragrância fascinante e exótica, inspirada na beleza e mistério do deserto. Criada para mulheres que apreciam perfumes sofisticados e intensos, esta fragrância oferece uma combinação única de notas florais e amadeiradas que evocam a serenidade e a riqueza das paisagens áridas, ao mesmo tempo em que exalam sensualidade e elegância.",
+      "topNotes": "Pêssego, Framboesa, Cassis.",
+      "heartNotes": "Heliotrópio, Lírio‑do‑vale, Almíscar branco.",
+      "baseNotes": "Sândalo, Citrinos, Âmbar.",
+      "imageId": "perfume-67",
+      "onSale": false,
+      "priceUrl": "https://www.lgimportados.com/produto/-afnan-souvenir-desert-rose-fem-100ml-edp",
+      "imageUrl": "https://www.lgimportados.com/img/m/IMG_613316_1.JPG?v=1758141612"
     }
   ]
 }
