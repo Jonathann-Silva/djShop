@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { getBrands, removeBrand } from "@/lib/actions";
+import { getBrands, removeBrand, addBrand } from "@/lib/actions";
 import { Trash2, Loader2, PlusCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -49,17 +49,17 @@ export function ManageBrandsDialog({ open, onOpenChange, onBrandsUpdated }: Mana
             toast({ variant: "destructive", title: "Erro", description: "O nome da marca não pode estar vazio." });
             return;
         }
-         if (brands.some(b => b.toLowerCase() === newBrand.trim().toLowerCase())) {
-            toast({ variant: "destructive", title: "Erro", description: "Esta marca já existe." });
-            return;
-        }
-
+        
         setIsSaving(true);
-        // Optimistically update UI
-        setBrands(prev => [...prev, newBrand.trim()].sort());
-        setNewBrand("");
-        toast({ title: "Marca Adicionada", description: `"${newBrand.trim()}" foi adicionada e pode ser usada em novos produtos.`});
-        onBrandsUpdated(); // Refresh parent component
+        const result = await addBrand(newBrand.trim());
+        if (result.success) {
+            toast({ title: "Marca Adicionada", description: result.message });
+            setNewBrand("");
+            await fetchBrands();
+            onBrandsUpdated();
+        } else {
+            toast({ variant: "destructive", title: "Erro ao Adicionar", description: result.message });
+        }
         setIsSaving(false);
     };
 
@@ -142,4 +142,3 @@ export function ManageBrandsDialog({ open, onOpenChange, onBrandsUpdated }: Mana
     </Dialog>
   );
 }
-
