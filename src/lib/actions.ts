@@ -107,14 +107,22 @@ export async function updateProduct(
     console.error("Validação falhou:", validation.error.formErrors.fieldErrors);
     return { success: false, message: 'Dados inválidos.' };
   }
+  
+  const validatedData = validation.data;
+
+  // Recalcula o preço de venda se a margem de lucro for alterada e o preço de custo existir
+  if (validatedData.costPrice && validatedData.profitMargin >= 0) {
+    validatedData.price = validatedData.costPrice * (1 + validatedData.profitMargin / 100);
+  }
+
 
   try {
-    const productRef = doc(db, 'products', data.id);
-    await setDoc(productRef, data, { merge: true });
+    const productRef = doc(db, 'products', validatedData.id);
+    await setDoc(productRef, validatedData, { merge: true });
 
     revalidatePath('/products', 'layout');
-    revalidatePath(`/products/${data.id}`);
-    revalidatePath(`/products/${data.id}/edit`);
+    revalidatePath(`/products/${validatedData.id}`);
+    revalidatePath(`/products/${validatedData.id}/edit`);
     revalidatePath('/catalogo');
 
     return { success: true, message: 'Produto atualizado com sucesso!' };
