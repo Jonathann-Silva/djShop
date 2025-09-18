@@ -16,6 +16,8 @@ export type Perfume = {
   onSale?: boolean;
   priceUrl?: string;
   imageUrl?: string;
+  price?: number | null;
+  costPrice?: number | null;
 };
 
 export function getImageUrl(imageId: string, product?: Perfume) {

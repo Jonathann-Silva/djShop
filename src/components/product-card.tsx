@@ -1,10 +1,10 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart, Loader2 } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -15,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Perfume, getImageUrl, getImageHint } from "@/lib/products";
 import { useCart } from "@/hooks/use-cart";
-import { getRealTimePrice } from "@/ai/flows/get-real-time-price-flow";
 
 interface ProductCardProps {
   product: Perfume;
@@ -27,47 +26,21 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
   const imageUrl = getImageUrl(product.imageId, product);
   const imageHint = getImageHint(product.imageId);
 
-  const [price, setPrice] = useState<number | null | undefined>(undefined);
-
-  useEffect(() => {
-    async function fetchPrice() {
-      if (product.priceUrl) {
-        setPrice(undefined); // Set to loading state
-        try {
-          const result = await getRealTimePrice({ url: product.priceUrl });
-          if (result && result.price !== null) {
-            const margin = 1 + product.profitMargin / 100;
-            setPrice(result.price * margin);
-          } else {
-            setPrice(null); // Set to unavailable
-          }
-        } catch (error) {
-          console.error(`Failed to fetch price for ${product.name}:`, error);
-          setPrice(null);
-        }
-      } else {
-        setPrice(null); // No price URL, so unavailable
-      }
-    }
-    fetchPrice();
-  }, [product.priceUrl, product.profitMargin, product.name]);
-
   const handleAddToCart = () => {
-    if (price) {
-        const productWithPrice = {...product, price};
-        addToCart(productWithPrice)
+    if (product.price) {
+        addToCart(product)
     }
   }
 
   const orderStyle = useMemo(() => {
-    if (sortOrder === 'price-asc' && price !== null && price !== undefined) {
-      return { order: Math.floor(price) };
+    if (sortOrder === 'price-asc' && product.price) {
+      return { order: Math.floor(product.price) };
     }
-    if (sortOrder === 'price-desc' && price !== null && price !== undefined) {
-      return { order: -Math.floor(price) };
+    if (sortOrder === 'price-desc' && product.price) {
+      return { order: -Math.floor(product.price) };
     }
     return {};
-  }, [sortOrder, price]);
+  }, [sortOrder, product.price]);
 
 
   return (
@@ -100,9 +73,9 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
       </CardContent>
       <CardFooter className="p-3 flex justify-between items-center bg-card flex-shrink-0">
         <div className="text-lg font-semibold text-primary h-8 flex items-center">
-         {price === undefined && <Loader2 className="h-4 w-4 animate-spin" />}
-         {price && `R$ ${price.toFixed(2)}`}
-         {price === null && (
+         {product.price ? (
+             `R$ ${product.price.toFixed(2)}`
+         ) : (
             <span className="text-xs text-destructive">Indisponível</span>
          )}
         </div>
@@ -110,7 +83,7 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
           size="sm"
           variant="outline"
           onClick={handleAddToCart}
-          disabled={!price}
+          disabled={!product.price}
           className="group-hover:bg-primary group-hover:text-primary-foreground transition-colors text-xs px-3 h-9"
         >
           <ShoppingCart className="mr-1 h-4 w-4" />

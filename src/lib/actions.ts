@@ -94,7 +94,8 @@ const ProductSchema = z.object({
   onSale: z.boolean().optional(),
   priceUrl: z.string().url('URL de preço inválida').optional().or(z.literal('')),
   imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
-  price: z.number().optional(), 
+  price: z.number().optional().nullable(), 
+  costPrice: z.number().optional().nullable(),
 });
 
 export async function updateProduct(
