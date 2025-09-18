@@ -1,3 +1,4 @@
+
 'use server';
 
 import { adminDb } from './firebase-admin';
@@ -115,17 +116,12 @@ export async function addProduct(
     console.error("Validação falhou:", validation.error.formErrors.fieldErrors);
     return { success: false, message: 'Dados inválidos.' };
   }
-
+  
   try {
     const productsCollection = collection(db, 'products');
-    const products = await getProducts();
-    const newId = (Math.max(0, ...products.map(p => parseInt(p.id, 10))) + 1).toString();
-
-    const newProduct: Perfume = { id: newId, ...data };
-
-    const productRef = doc(db, 'products', newId);
-    await setDoc(productRef, newProduct);
-
+    // Use addDoc to let Firestore generate the ID
+    await addDoc(productsCollection, data);
+    
     revalidatePath('/products', 'layout');
     revalidatePath('/catalogo');
 
