@@ -15,6 +15,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Acesso não autorizado.' }, { status: 401 });
   }
 
+  console.log('Tarefa agendada (CRON Job) acionada com sucesso. Iniciando atualização de preços...');
+
   try {
     const result = await updateAllProductPrices();
     return NextResponse.json(result);

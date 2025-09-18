@@ -29,7 +29,7 @@ A sua chave secreta está no arquivo `.env` do seu projeto. É o valor que está
 
 Por exemplo, se o seu arquivo `.env` contém:
 ```
-CRON_SECRET="minhachavesupersegura123"
+CRON_SECRET="jonathan.daiane23102022"
 ```
 Então, `minhachavesupersegura123` é a **sua chave secreta**.
 
