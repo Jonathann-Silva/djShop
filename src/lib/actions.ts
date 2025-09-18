@@ -3,7 +3,7 @@
 
 import { adminDb } from './firebase-admin';
 import { db } from './firebase';
-import { collection, getDocs, doc, setDoc, addDoc, query, where, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, addDoc, query, where, writeBatch, getDoc } from 'firebase/firestore';
 import { z } from 'genkit';
 import type { Perfume } from './products';
 import { revalidatePath } from 'next/cache';
@@ -64,11 +64,26 @@ export async function getProducts(): Promise<Perfume[]> {
   }
 }
 
+export async function getProductById(id: string): Promise<Perfume | null> {
+    try {
+        const productRef = doc(db, 'products', id);
+        const productSnapshot = await getDoc(productRef);
+        if (productSnapshot.exists()) {
+            return { id: productSnapshot.id, ...productSnapshot.data() } as Perfume;
+        }
+        return null;
+    } catch (error) {
+        console.error('Falha ao ler produto do Firestore:', error);
+        return null;
+    }
+}
+
+
 const ProductSchema = z.object({
   id: z.string(),
   name: z.string().min(1, 'Nome é obrigatório'),
   brand: z.string().min(1, 'Marca é obrigatória'),
-  sizeMl: z.number().min(1, 'Tamanho (ml) é obrigatório'),
+  sizeMl: z.number().nonnegative('O tamanho (ml) não pode ser negativo'),
   gender: z.enum(['Masculine', 'Feminine'], { required_error: 'Gênero é obrigatório' }),
   profitMargin: z.number(),
   description: z.string().min(1, 'Descrição é obrigatória'),
@@ -79,7 +94,7 @@ const ProductSchema = z.object({
   onSale: z.boolean().optional(),
   priceUrl: z.string().url('URL de preço inválida').optional().or(z.literal('')),
   imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
-  price: z.number().optional(), // Added missing price field
+  price: z.number().optional(), 
 });
 
 export async function updateProduct(
@@ -111,6 +126,7 @@ export async function updateProduct(
 export async function addProduct(
   data: Omit<Perfume, 'id'>
 ): Promise<{ success: boolean; message: string }> {
+  // Omit ID for validation as it's not present for new products yet.
   const validation = ProductSchema.omit({ id: true }).safeParse(data);
 
   if (!validation.success) {

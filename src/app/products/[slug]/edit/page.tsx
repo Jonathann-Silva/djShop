@@ -1,6 +1,6 @@
 
 import { notFound } from "next/navigation";
-import { getProducts } from "@/lib/actions";
+import { getProductById } from "@/lib/actions";
 import {
   Card,
   CardHeader,
@@ -14,8 +14,7 @@ export default async function EditProductPage({
 }: {
   params: { slug: string };
 }) {
-  const products = await getProducts();
-  const product = products.find((p) => p.id === params.slug);
+  const product = await getProductById(params.slug);
 
   if (!product) {
     notFound();
