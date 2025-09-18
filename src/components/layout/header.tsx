@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { SprayCan, User, ShoppingCart, Wrench } from "lucide-react";
+import { SprayCan, User, ShoppingCart, Wrench, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/hooks/use-auth";
@@ -17,13 +17,17 @@ import {
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/products";
+import { SearchDialog } from "../search-dialog";
 
 export function Header() {
   const { cartItems, totalItems, totalPrice, removeFromCart } = useCart();
   const { user } = useAuth();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
+    <>
+    <SearchDialog />
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-7xl items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
@@ -56,6 +60,9 @@ export function Header() {
           )}
         </nav>
         <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" onClick={() => setIsSearchOpen(true)}>
+             <Search className="h-5 w-5" />
+          </Button>
           <Link href={user ? "/account" : "/login"}>
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
@@ -137,5 +144,6 @@ export function Header() {
         </div>
       </div>
     </header>
+    </>
   );
 }

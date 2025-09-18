@@ -1,3 +1,4 @@
+
 {
   "products": [
     {
@@ -556,7 +557,7 @@
       "heartNotes": "Heliotrópio, Lírio‑do‑vale, Almíscar branco.",
       "baseNotes": "Sândalo, Citrinos, Âmbar.",
       "imageId": "perfume-67",
-      "onSale": false,
+      "onSale": true,
       "priceUrl": "https://www.lgimportados.com/produto/-afnan-souvenir-desert-rose-fem-100ml-edp",
       "imageUrl": "https://www.lgimportados.com/img/m/IMG_613316_1.JPG?v=1758141612"
     }

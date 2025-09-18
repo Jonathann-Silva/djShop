@@ -17,7 +17,7 @@ import {
 
 export default async function Home() {
   const products = await getProducts();
-  const featuredProducts = products.filter(p => p.onSale).slice(0, 4);
+  const featuredProducts = products.filter(p => p.onSale).slice(0, 5);
   const heroImageUrl = getHeroImageUrl();
   const heroImageHint = getHeroImageHint();
 
@@ -56,7 +56,7 @@ export default async function Home() {
           <h2 className="text-3xl md:text-4xl font-headline font-bold text-center mb-12">
             Coleção em Destaque
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
             {featuredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
