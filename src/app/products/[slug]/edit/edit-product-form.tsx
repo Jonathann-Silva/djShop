@@ -1,6 +1,4 @@
-
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
@@ -9,10 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { CardContent, CardFooter } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -25,23 +20,31 @@ import { useToast } from "@/hooks/use-toast";
 import { updateProduct, getBrands } from "@/lib/actions";
 
 interface EditProductFormProps {
-    product: Perfume;
+  product: Perfume;
 }
 
 export function EditProductForm({ product }: EditProductFormProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const [isSaving, setIsSaving] = React.useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [brands, setBrands] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchBrands() {
+      try {
         const fetchedBrands = await getBrands();
         setBrands(fetchedBrands);
+      } catch (error) {
+        console.error("Erro ao buscar marcas:", error);
+        toast({
+          variant: "destructive",
+          title: "Erro ao Carregar Marcas",
+          description: "Não foi possível carregar as marcas no momento.",
+        });
+      }
     }
     fetchBrands();
   }, []);
-
 
   const {
     register,
@@ -54,30 +57,45 @@ export function EditProductForm({ product }: EditProductFormProps) {
 
   const onSubmit = async (data: Perfume) => {
     setIsSaving(true);
-    // Ensure numbers are correctly formatted
+
+    // Garantindo que números sejam corretamente formatados
     const dataToSubmit = {
       ...data,
       profitMargin: Number(data.profitMargin) || 0,
       sizeMl: Number(data.sizeMl) || 0,
     };
-    const result = await updateProduct(dataToSubmit);
-    setIsSaving(false);
 
-    if (result.success) {
+    try {
+      // Verificar se os dados estão completos
+      console.log('Data to submit:', dataToSubmit);
+      
+      // Chama a função que atualiza o produto
+      const result = await updateProduct(dataToSubmit);
+      setIsSaving(false);
+
+      if (result.success) {
+        toast({
+          title: "Produto Atualizado!",
+          description: result.message,
+          duration: 2000,
+        });
+        router.push("/products");
+        router.refresh(); // Caso precise recarregar a página
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Erro ao Salvar",
+          description: result.message || "Ocorreu um erro inesperado.",
+        });
+      }
+    } catch (error) {
+      setIsSaving(false);
       toast({
-        title: "Produto Atualizado!",
-        description: result.message,
-        duration: 2000,
-      });
-      // This will now redirect to the new catalog page
-      router.push("/products");
-      router.refresh(); 
-    } else {
-       toast({
         variant: "destructive",
         title: "Erro ao Salvar",
-        description: result.message,
+        description: "Ocorreu um erro inesperado ao tentar salvar o produto.",
       });
+      console.error("Erro ao salvar produto:", error);
     }
   };
 
@@ -98,21 +116,23 @@ export function EditProductForm({ product }: EditProductFormProps) {
           <div className="space-y-2">
             <Label htmlFor="brand">Marca</Label>
             <Controller
-                name="brand"
-                control={control}
-                rules={{ required: "Marca é obrigatória" }}
-                render={({ field }) => (
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <SelectTrigger id="brand">
-                            <SelectValue placeholder="Selecione uma marca" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {brands.map(brand => (
-                                <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                )}
+              name="brand"
+              control={control}
+              rules={{ required: "Marca é obrigatória" }}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <SelectTrigger id="brand">
+                    <SelectValue placeholder="Selecione uma marca" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {brands.map((brand) => (
+                      <SelectItem key={brand} value={brand}>
+                        {brand}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             />
             {errors.brand && (
               <p className="text-sm text-destructive">{errors.brand.message}</p>
@@ -126,118 +146,121 @@ export function EditProductForm({ product }: EditProductFormProps) {
             id="description"
             {...register("description", { required: "Descrição é obrigatória" })}
           />
-            {errors.description && (
-              <p className="text-sm text-destructive">{errors.description.message}</p>
-            )}
+          {errors.description && (
+            <p className="text-sm text-destructive">{errors.description.message}</p>
+          )}
         </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="profitMargin">Margem de Lucro (%)</Label>
-                <Input
-                    id="profitMargin"
-                    type="number"
-                    step="1"
-                    {...register("profitMargin", { required: "Margem de lucro é obrigatória", valueAsNumber: true })}
-                />
-                {errors.profitMargin && (
-                    <p className="text-sm text-destructive">{errors.profitMargin.message}</p>
-                )}
-            </div>
-              <div className="space-y-2">
-                <Label>Gênero</Label>
-                <Controller
-                    name="gender"
-                    control={control}
-                    rules={{ required: "Gênero é obrigatório" }}
-                    render={({ field }) => (
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger><SelectValue /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Masculine">Masculino</SelectItem>
-                                <SelectItem value="Feminine">Feminino</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    )}
-                />
-                {errors.gender && <p className="text-sm text-destructive">{errors.gender.message}</p>}
-            </div>
-              <div className="space-y-2">
-                <Label htmlFor="sizeMl">ml</Label>
-                 <Input
-                    id="sizeMl"
-                    type="number"
-                    {...register("sizeMl", { required: "Tamanho (ml) é obrigatório", valueAsNumber: true })}
-                />
-                {errors.sizeMl && <p className="text-sm text-destructive">{errors.sizeMl.message}</p>}
-            </div>
-          </div>
-          
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="topNotes">Notas de Topo</Label>
-            <Textarea
-              id="topNotes"
-              {...register("topNotes")}
-               placeholder="Ex: Bergamota, Limão, Lavanda"
+            <Label htmlFor="profitMargin">Margem de Lucro (%)</Label>
+            <Input
+              id="profitMargin"
+              type="number"
+              step="1"
+              {...register("profitMargin", { required: "Margem de lucro é obrigatória", valueAsNumber: true })}
             />
+            {errors.profitMargin && (
+              <p className="text-sm text-destructive">{errors.profitMargin.message}</p>
+            )}
           </div>
-           <div className="space-y-2">
-            <Label htmlFor="heartNotes">Notas de Coração</Label>
-            <Textarea
-              id="heartNotes"
-              {...register("heartNotes")}
-               placeholder="Ex: Jasmim, Rosa, Pimenta Preta"
+          <div className="space-y-2">
+            <Label>Gênero</Label>
+            <Controller
+              name="gender"
+              control={control}
+              rules={{ required: "Gênero é obrigatório" }}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Masculine">Masculino</SelectItem>
+                    <SelectItem value="Feminine">Feminino</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
             />
+            {errors.gender && (
+              <p className="text-sm text-destructive">{errors.gender.message}</p>
+            )}
           </div>
-           <div className="space-y-2">
-            <Label htmlFor="baseNotes">Notas de Base</Label>
-            <Textarea
-              id="baseNotes"
-              {...register("baseNotes")}
-              placeholder="Ex: Sândalo, Patchouli, Baunilha"
+          <div className="space-y-2">
+            <Label htmlFor="sizeMl">ml</Label>
+            <Input
+              id="sizeMl"
+              type="number"
+              {...register("sizeMl", { required: "Tamanho (ml) é obrigatório", valueAsNumber: true })}
             />
+            {errors.sizeMl && (
+              <p className="text-sm text-destructive">{errors.sizeMl.message}</p>
+            )}
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-                <Label htmlFor="priceUrl">URL de Preço</Label>
-                <Input
-                id="priceUrl"
-                {...register("priceUrl")}
-                placeholder="https://example.com/product/perfume"
-                />
-            </div>
+        </div>
 
-            <div className="space-y-2">
-                <Label htmlFor="imageUrl">URL da Imagem</Label>
-                <Input
-                id="imageUrl"
-                {...register("imageUrl")}
-                placeholder="https://example.com/image.jpg"
-                />
-            </div>
+        <div className="space-y-2">
+          <Label htmlFor="topNotes">Notas de Topo</Label>
+          <Textarea
+            id="topNotes"
+            {...register("topNotes")}
+            placeholder="Ex: Bergamota, Limão, Lavanda"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="heartNotes">Notas de Coração</Label>
+          <Textarea
+            id="heartNotes"
+            {...register("heartNotes")}
+            placeholder="Ex: Jasmim, Rosa, Pimenta Preta"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="baseNotes">Notas de Base</Label>
+          <Textarea
+            id="baseNotes"
+            {...register("baseNotes")}
+            placeholder="Ex: Sândalo, Patchouli, Baunilha"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="priceUrl">URL de Preço</Label>
+            <Input
+              id="priceUrl"
+              {...register("priceUrl")}
+              placeholder="https://example.com/product/perfume"
+            />
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="imageUrl">URL da Imagem</Label>
+            <Input
+              id="imageUrl"
+              {...register("imageUrl")}
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+        </div>
 
         <div className="flex items-center space-x-2">
-            <Controller
-                name="onSale"
-                control={control}
-                render={({ field }) => (
-                     <Switch
-                        id="onSale"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                )}
-            />
-            <Label htmlFor="onSale">Produto em promoção</Label>
+          <Controller
+            name="onSale"
+            control={control}
+            render={({ field }) => (
+              <Switch id="onSale" checked={field.value} onCheckedChange={field.onChange} />
+            )}
+          />
+          <Label htmlFor="onSale">Produto em promoção</Label>
         </div>
-
-
       </CardContent>
+
       <CardFooter className="flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSaving}>Cancelar</Button>
-        <Button type="submit" disabled={isSaving}>{isSaving ? 'Salvando...' : 'Salvar Alterações'}</Button>
+        <Button type="submit" disabled={isSaving}>
+          {isSaving ? "Salvando..." : "Salvar Alterações"}
+        </Button>
       </CardFooter>
     </form>
   );

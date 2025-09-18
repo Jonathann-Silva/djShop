@@ -79,6 +79,7 @@ const ProductSchema = z.object({
   onSale: z.boolean().optional(),
   priceUrl: z.string().url('URL de preço inválida').optional().or(z.literal('')),
   imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
+  price: z.number().optional(), // Added missing price field
 });
 
 export async function updateProduct(
