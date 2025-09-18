@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -44,7 +45,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
       }
     }
     fetchBrands();
-  }, []);
+  }, [toast]);
 
   const {
     register,
@@ -59,17 +60,13 @@ export function EditProductForm({ product }: EditProductFormProps) {
     setIsSaving(true);
 
     // Garantindo que números sejam corretamente formatados
-    const dataToSubmit = {
+    const dataToSubmit: Perfume = {
       ...data,
       profitMargin: Number(data.profitMargin) || 0,
       sizeMl: Number(data.sizeMl) || 0,
     };
 
     try {
-      // Verificar se os dados estão completos
-      console.log('Data to submit:', dataToSubmit);
-      
-      // Chama a função que atualiza o produto
       const result = await updateProduct(dataToSubmit);
       setIsSaving(false);
 
@@ -77,10 +74,10 @@ export function EditProductForm({ product }: EditProductFormProps) {
         toast({
           title: "Produto Atualizado!",
           description: result.message,
-          duration: 2000,
+          duration: 3000,
         });
         router.push("/products");
-        router.refresh(); // Caso precise recarregar a página
+        router.refresh(); 
       } else {
         toast({
           variant: "destructive",
@@ -158,7 +155,11 @@ export function EditProductForm({ product }: EditProductFormProps) {
               id="profitMargin"
               type="number"
               step="1"
-              {...register("profitMargin", { required: "Margem de lucro é obrigatória", valueAsNumber: true })}
+              {...register("profitMargin", { 
+                  required: "Margem de lucro é obrigatória", 
+                  valueAsNumber: true,
+                  validate: value => !isNaN(value) || "Deve ser um número"
+              })}
             />
             {errors.profitMargin && (
               <p className="text-sm text-destructive">{errors.profitMargin.message}</p>
@@ -191,7 +192,11 @@ export function EditProductForm({ product }: EditProductFormProps) {
             <Input
               id="sizeMl"
               type="number"
-              {...register("sizeMl", { required: "Tamanho (ml) é obrigatório", valueAsNumber: true })}
+              {...register("sizeMl", { 
+                  required: "Tamanho (ml) é obrigatório", 
+                  valueAsNumber: true,
+                  validate: value => !isNaN(value) || "Deve ser um número"
+              })}
             />
             {errors.sizeMl && (
               <p className="text-sm text-destructive">{errors.sizeMl.message}</p>
