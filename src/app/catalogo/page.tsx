@@ -111,20 +111,6 @@ export default function ProductsPage() {
                     className="pl-10"
                 />
             </div>
-             <div className="flex-shrink-0 w-full md:w-auto">
-                <Label htmlFor="brand" className="mb-2 block text-sm font-medium text-muted-foreground">Marca</Label>
-                <Select value={brandFilter} onValueChange={setBrandFilter}>
-                    <SelectTrigger className="w-full md:w-[180px]" id="brand">
-                        <SelectValue placeholder="Filtrar por marca" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">Todas as marcas</SelectItem>
-                        {brands.map(brand => (
-                            <SelectItem key={brand} value={brand}>{brand}</SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
             <div className="flex-shrink-0 w-full md:w-auto">
                 <Label htmlFor="sort" className="mb-2 block text-sm font-medium text-muted-foreground">Ordenar por</Label>
                 <Select value={sortOrder} onValueChange={setSortOrder}>
@@ -139,6 +125,24 @@ export default function ProductsPage() {
                     </SelectContent>
                 </Select>
             </div>
+        </div>
+
+        <div className="mb-10 flex flex-wrap justify-center gap-2">
+            <Button
+                variant={brandFilter === 'all' ? 'default' : 'outline'}
+                onClick={() => setBrandFilter('all')}
+            >
+                Todas as Marcas
+            </Button>
+            {brands.map(brand => (
+                 <Button
+                    key={brand}
+                    variant={brandFilter === brand ? 'default' : 'outline'}
+                    onClick={() => setBrandFilter(brand)}
+                 >
+                     {brand}
+                 </Button>
+            ))}
         </div>
 
       <main>
