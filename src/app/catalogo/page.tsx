@@ -7,7 +7,7 @@ import { getProducts, getBrands } from "@/lib/actions";
 import { ProductCard } from "@/components/product-card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, FemaleSign, MaleSign } from "lucide-react";
+import { Search, Venus, Mars } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -88,6 +88,12 @@ export default function ProductsPage() {
         case "name-desc":
             filtered.sort((a, b) => b.name.localeCompare(a.name));
             break;
+        case "price-asc":
+            filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+            break;
+        case "price-desc":
+            filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+            break;
         default:
             break;
     }
@@ -118,11 +124,11 @@ export default function ProductsPage() {
         <Tabs value={genderFilter} onValueChange={handleGenderChange} className="w-auto">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="Feminine">
-              <FemaleSign className="mr-2 h-4 w-4" />
+              <Venus className="mr-2 h-4 w-4" />
               Feminino
             </TabsTrigger>
             <TabsTrigger value="Masculine">
-              <MaleSign className="mr-2 h-4 w-4" />
+              <Mars className="mr-2 h-4 w-4" />
               Masculino
             </TabsTrigger>
           </TabsList>
@@ -182,7 +188,7 @@ export default function ProductsPage() {
             filteredAndSortedProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {filteredAndSortedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} sortOrder={sortOrder} />
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (
