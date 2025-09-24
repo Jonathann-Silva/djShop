@@ -7,7 +7,7 @@ import { getProducts, getBrands } from "@/lib/actions";
 import { ProductCard } from "@/components/product-card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Search, FemaleSign, MaleSign } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 function ProductsSkeleton() {
     return (
@@ -38,11 +39,12 @@ function ProductsSkeleton() {
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Perfume[]>([]);
-  const [brands, setBrands] = useState<string[]>([]);
+  const [allBrands, setAllBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("name-asc");
   const [brandFilter, setBrandFilter] = useState("all");
+  const [genderFilter, setGenderFilter] = useState<"Feminine" | "Masculine">("Feminine");
   
   useEffect(() => {
     async function fetchData() {
@@ -52,25 +54,33 @@ export default function ProductsPage() {
           getBrands()
       ]);
       setProducts(productsData);
-      setBrands(brandsData);
+      setAllBrands(brandsData);
       setLoading(false);
     }
     fetchData();
   }, []);
 
-  const filteredAndSortedProducts = useMemo(() => {
-    let filtered = products.filter((product) => {
+  const { filteredAndSortedProducts, availableBrands } = useMemo(() => {
+    // First, filter by gender
+    const genderFilteredProducts = products.filter(
+      (product) => product.gender === genderFilter
+    );
+
+    // Get brands available for the selected gender
+    const currentBrands = [
+      ...new Set(genderFilteredProducts.map((p) => p.brand)),
+    ].sort();
+
+    // Then, apply search and brand filters
+    let filtered = genderFilteredProducts.filter((product) => {
       const matchesSearch = product.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
-
       const matchesBrand = brandFilter === "all" || product.brand === brandFilter;
-
       return matchesSearch && matchesBrand;
     });
 
-    // Note: Sorting by price will not work correctly here as prices are fetched later.
-    // This sorting logic is kept for alphabetical sorting. Price sorting is visual only.
+    // Apply sorting
     switch (sortOrder) {
         case "name-asc":
             filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -79,14 +89,19 @@ export default function ProductsPage() {
             filtered.sort((a, b) => b.name.localeCompare(a.name));
             break;
         default:
-            // Price sorting is handled visually inside the card or would require a more complex state management
             break;
     }
     
-    return filtered;
+    return {
+      filteredAndSortedProducts: filtered,
+      availableBrands: currentBrands,
+    };
+  }, [products, searchTerm, sortOrder, brandFilter, genderFilter]);
 
-  }, [products, searchTerm, sortOrder, brandFilter]);
-
+  const handleGenderChange = (value: string) => {
+    setGenderFilter(value as "Feminine" | "Masculine");
+    setBrandFilter("all"); // Reset brand filter when gender changes
+  };
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
@@ -97,6 +112,21 @@ export default function ProductsPage() {
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
           Explore a nossa seleção escolhida a dedo de fragrâncias requintadas. Use os filtros para encontrar o perfume perfeito para si.
         </p>
+      </div>
+
+      <div className="mb-8 flex justify-center">
+        <Tabs value={genderFilter} onValueChange={handleGenderChange} className="w-auto">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="Feminine">
+              <FemaleSign className="mr-2 h-4 w-4" />
+              Feminino
+            </TabsTrigger>
+            <TabsTrigger value="Masculine">
+              <MaleSign className="mr-2 h-4 w-4" />
+              Masculino
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       
        <div className="mb-8 max-w-3xl mx-auto flex flex-col md:flex-row items-end gap-4">
@@ -135,7 +165,7 @@ export default function ProductsPage() {
             >
                 Todas as Marcas
             </Button>
-            {brands.map(brand => (
+            {availableBrands.map(brand => (
                  <Button
                     key={brand}
                     variant={brandFilter === brand ? 'default' : 'outline'}

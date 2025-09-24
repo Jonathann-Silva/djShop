@@ -35,7 +35,7 @@ export function Footer() {
                 Para Ele
               </Link>
               <Link
-                href="/catalogo?gender=Feminine"
+                href="/catalogo"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Para Ela
