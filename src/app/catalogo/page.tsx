@@ -131,6 +131,7 @@ export default function ProductsPage() {
             <Button
                 variant={brandFilter === 'all' ? 'default' : 'outline'}
                 onClick={() => setBrandFilter('all')}
+                className="px-4"
             >
                 Todas as Marcas
             </Button>
@@ -139,6 +140,7 @@ export default function ProductsPage() {
                     key={brand}
                     variant={brandFilter === brand ? 'default' : 'outline'}
                     onClick={() => setBrandFilter(brand)}
+                    className="px-4"
                  >
                      {brand}
                  </Button>
