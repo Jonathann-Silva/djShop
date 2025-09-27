@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { SprayCan, Twitter, Instagram, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,19 +24,19 @@ export function Footer() {
             <h3 className="font-semibold uppercase tracking-wider">Loja</h3>
             <div className="mt-4 flex flex-col space-y-2">
               <Link
-                href="/catalogo"
+                href="/catalogo/perfumes"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Todos os Perfumes
               </Link>
               <Link
-                href="/catalogo?gender=Masculine"
+                href="/catalogo/perfumes?gender=Masculine"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Para Ele
               </Link>
               <Link
-                href="/catalogo"
+                href="/catalogo/perfumes"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Para Ela

@@ -50,7 +50,7 @@ export default function CheckoutPage() {
           Não pode finalizar a compra sem itens.
         </p>
         <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
-          <Link href="/catalogo">Começar a comprar</Link>
+          <Link href="/catalogo/perfumes">Começar a comprar</Link>
         </Button>
       </div>
     );
