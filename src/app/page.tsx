@@ -15,7 +15,7 @@ export default function Home() {
     {
       name: "Bebidas",
       href: "/catalogo/bebidas",
-      imageUrl: "/bebidas.png",
+      imageUrl: "https://soagora.com.br/wp-content/uploads/2023/12/image-64.png",
       imageHint: "luxury drinks bottles",
       description: "Sabores requintados para momentos especiais.",
     },

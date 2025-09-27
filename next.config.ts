@@ -40,6 +40,12 @@ const nextConfig: NextConfig = {
         hostname: 'marcaspelomundo.com.br',
         port: '',
         pathname: '/**',
+      },
+       {
+        protocol: 'https',
+        hostname: 'soagora.com.br',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
