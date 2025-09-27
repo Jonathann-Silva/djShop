@@ -22,7 +22,7 @@ export default function Home() {
     {
       name: "Eletrônicos",
       href: "/catalogo/eletronicos",
-      imageUrl: "https://picsum.photos/seed/electronics-category/800/600",
+      imageUrl: "https://storage.googleapis.com/aai-web-samples/nextjs/dj-shop/electronics.png",
       imageHint: "modern electronic gadgets",
       description: "Tecnologia de ponta para o seu dia a dia.",
     },
