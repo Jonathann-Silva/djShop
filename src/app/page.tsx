@@ -15,14 +15,14 @@ export default function Home() {
     {
       name: "Bebidas",
       href: "/catalogo/bebidas",
-      imageUrl: "https://picsum.photos/seed/drinks-category/800/600",
+      imageUrl: "/bebidas.png",
       imageHint: "luxury drinks bottles",
       description: "Sabores requintados para momentos especiais.",
     },
     {
       name: "Eletrônicos",
       href: "/catalogo/eletronicos",
-      imageUrl: "https://storage.googleapis.com/aai-web-samples/nextjs/dj-shop/electronics.png",
+      imageUrl: "/eletronicos.png",
       imageHint: "modern electronic gadgets",
       description: "Tecnologia de ponta para o seu dia a dia.",
     },
