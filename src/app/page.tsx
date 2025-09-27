@@ -22,7 +22,7 @@ export default function Home() {
     {
       name: "Eletrônicos",
       href: "/catalogo/eletronicos",
-      imageUrl: "/eletronicos.png",
+      imageUrl: "https://marcaspelomundo.com.br/wp-content/uploads/2021/11/eletronicos.jpg",
       imageHint: "modern electronic gadgets",
       description: "Tecnologia de ponta para o seu dia a dia.",
     },
