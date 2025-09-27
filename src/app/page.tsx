@@ -15,7 +15,7 @@ export default function Home() {
     {
       name: "Bebidas",
       href: "/catalogo/bebidas",
-      imageUrl: "https://storage.googleapis.com/aai-web-samples/nextjs/dj-shop/drinks.png",
+      imageUrl: "https://picsum.photos/seed/drinks-category/800/600",
       imageHint: "luxury drinks bottles",
       description: "Sabores requintados para momentos especiais.",
     },
