@@ -8,7 +8,7 @@ export default function Home() {
     {
       name: "Perfumes",
       href: "/catalogo/perfumes",
-      imageUrl: "https://picsum.photos/seed/perfumes-category/800/600",
+      imageUrl: "https://blog.meninashoes.com.br/wp-content/uploads/2022/12/foto-varios-perfumes.jpg",
       imageHint: "perfume bottle collection",
       description: "Fragrâncias que definem sua personalidade.",
     },

@@ -46,6 +46,12 @@ const nextConfig: NextConfig = {
         hostname: 'soagora.com.br',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'blog.meninashoes.com.br',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
