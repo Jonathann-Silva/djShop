@@ -56,7 +56,7 @@ export default function Home() {
                 {category.name}
               </h2>
               <p className="text-white/90 mt-1">{category.description}</p>
-              <div className="mt-4 flex items-center text-accent-foreground font-semibold">
+              <div className="mt-4 flex items-center text-white font-semibold text-lg">
                 Ver catálogo
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </div>
