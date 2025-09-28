@@ -5,7 +5,7 @@ import { adminDb } from './firebase-admin';
 import { db } from './firebase';
 import { collection, getDocs, doc, setDoc, addDoc, query, where, writeBatch, getDoc, deleteDoc } from 'firebase/firestore';
 import { z } from 'zod';
-import type { Perfume, Eletronico } from './products';
+import type { Perfume, Eletronico, Bebida } from './products';
 import { revalidatePath } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
@@ -302,6 +302,127 @@ export async function removeElectronic(id: string): Promise<{ success: boolean; 
 }
 
 
+// --- Bebida Actions ---
+
+export async function getBebidas(): Promise<Bebida[]> {
+  try {
+    const bebidasCollection = collection(db, 'bebidas');
+    const bebidasSnapshot = await getDocs(bebidasCollection);
+    const bebidasList = bebidasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Bebida));
+    return bebidasList;
+  } catch (error) {
+    console.error('Falha ao ler bebidas do Firestore:', error);
+    return [];
+  }
+}
+
+export async function getBebidaById(id: string): Promise<Bebida | null> {
+    try {
+        const bebidaRef = doc(db, 'bebidas', id);
+        const bebidaSnapshot = await getDoc(bebidaRef);
+        if (bebidaSnapshot.exists()) {
+            return { id: bebidaSnapshot.id, ...bebidaSnapshot.data() } as Bebida;
+        }
+        return null;
+    } catch (error) {
+        console.error('Falha ao ler bebida do Firestore:', error);
+        return null;
+    }
+}
+
+const BebidaSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, 'Nome é obrigatório'),
+  brand: z.string().min(1, 'Marca é obrigatória'),
+  profitMargin: z.number(),
+  description: z.string().min(1, 'Descrição é obrigatória'),
+  imageId: z.string().min(1, 'ID da Imagem é obrigatório'),
+  onSale: z.boolean().optional(),
+  priceUrl: z.string().url('URL de preço inválida').optional().or(z.literal('')),
+  imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
+  price: z.number().optional().nullable(), 
+  costPrice: z.number().optional().nullable(),
+  createdAt: z.number().optional(),
+});
+
+
+export async function updateBebida(
+  data: Bebida
+): Promise<{ success: boolean; message: string }> {
+  const validation = BebidaSchema.safeParse(data);
+
+  if (!validation.success) {
+    console.error("Validação falhou:", validation.error.formErrors.fieldErrors);
+    return { success: false, message: 'Dados inválidos.' };
+  }
+  
+  const validatedData = validation.data;
+
+  if (validatedData.costPrice && validatedData.profitMargin >= 0) {
+    validatedData.price = validatedData.costPrice * (1 + validatedData.profitMargin / 100);
+  }
+
+  try {
+    const bebidaRef = doc(db, 'bebidas', validatedData.id);
+    await setDoc(bebidaRef, validatedData, { merge: true });
+
+    revalidatePath('/admin/bebidas', 'layout');
+    revalidatePath(`/admin/bebidas/${validatedData.id}/edit`);
+
+    return { success: true, message: 'Bebida atualizada com sucesso!' };
+  } catch (error) {
+    console.error('Falha ao atualizar a bebida:', error);
+    return { success: false, message: 'Ocorreu um erro ao salvar a bebida.' };
+  }
+}
+
+export async function addBebida(
+  data: Omit<Bebida, 'id' | 'createdAt'>
+): Promise<{ success: boolean; message: string }> {
+  const validationSchema = BebidaSchema.omit({ id: true, createdAt: true });
+  const validation = validationSchema.safeParse(data);
+
+  if (!validation.success) {
+    console.error("Validação falhou:", validation.error.formErrors.fieldErrors);
+    return { success: false, message: 'Dados inválidos.' };
+  }
+
+  const dataWithTimestamp = {
+    ...validation.data,
+    createdAt: Date.now(),
+  };
+  
+  try {
+    const bebidasCollection = collection(db, 'bebidas');
+    await addDoc(bebidasCollection, dataWithTimestamp);
+    
+    revalidatePath('/admin/bebidas', 'layout');
+
+    return { success: true, message: 'Bebida adicionada com sucesso!' };
+  } catch (error) {
+    console.error('Falha ao adicionar a bebida:', error);
+    return { success: false, message: 'Ocorreu um erro ao salvar a bebida.' };
+  }
+}
+
+export async function removeBebida(id: string): Promise<{ success: boolean; message: string }> {
+    if (!id) {
+        return { success: false, message: 'ID da bebida não fornecido.' };
+    }
+    try {
+        const bebidaRef = doc(db, 'bebidas', id);
+        await deleteDoc(bebidaRef);
+        
+        revalidatePath('/admin/bebidas', 'layout');
+
+        return { success: true, message: 'Bebida removida com sucesso!' };
+    } catch (error) {
+        console.error('Falha ao remover a bebida:', error);
+        return { success: false, message: 'Ocorreu um erro ao remover a bebida.' };
+    }
+}
+
+
 // --- Brand Actions ---
 
 export async function getBrands(): Promise<string[]> {
@@ -335,6 +456,7 @@ export async function addBrand(brandName: string): Promise<{ success: boolean; m
 
     revalidatePath('/admin/perfumes', 'layout');
     revalidatePath('/admin/eletronicos', 'layout');
+    revalidatePath('/admin/bebidas', 'layout');
     revalidatePath('/catalogo', 'layout');
     return { success: true, message: `Marca "${trimmedBrandName}" adicionada com sucesso.` };
   } catch (error) {
@@ -366,6 +488,15 @@ export async function removeBrand(brandName: string): Promise<{ success: boolean
       return { success: false, message: 'Não é possível remover a marca pois ela está sendo utilizada por um ou mais eletrônicos.' };
     }
 
+    // Verifica se a marca está em uso em bebidas
+    const bebidasCollection = collection(db, 'bebidas');
+    const bebidaQuery = query(bebidasCollection, where("brand", "==", brandName));
+    const bebidaSnapshot = await getDocs(bebidaQuery);
+
+    if (!bebidaSnapshot.empty) {
+        return { success: false, message: 'Não é possível remover a marca pois ela está sendo utilizada por uma ou mais bebidas.' };
+    }
+
     // Encontra e remove a marca
     const brandsCollection = collection(db, 'brands');
     const brandQuery = query(brandsCollection, where("name", "==", brandName));
@@ -383,6 +514,7 @@ export async function removeBrand(brandName: string): Promise<{ success: boolean
 
     revalidatePath('/admin/perfumes', 'layout');
     revalidatePath('/admin/eletronicos', 'layout');
+    revalidatePath('/admin/bebidas', 'layout');
     revalidatePath('/catalogo', 'layout');
     return { success: true, message: `Marca "${brandName}" foi removida.` };
   } catch (error) {
