@@ -45,7 +45,7 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState<Perfume[]>([]);
   const [loading, setLoading] = useState(true);
   const [genderFilter, setGenderFilter] = useState("all");
-  const [sortOrder, setSortOrder] = useState("name-asc");
+  const [sortOrder, setSortOrder] = useState("date-desc");
   const [isManageBrandsOpen, setIsManageBrandsOpen] = useState(false);
 
 
@@ -66,7 +66,7 @@ export default function AdminProductsPage() {
   }, [user, authLoading, router]);
 
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = products;
+    let filtered = [...products];
 
     if (genderFilter !== "all") {
       filtered = filtered.filter((p) => p.gender === genderFilter);
@@ -84,6 +84,12 @@ export default function AdminProductsPage() {
             break;
          case "brand-desc":
             filtered.sort((a, b) => b.brand.localeCompare(a.brand));
+            break;
+        case "date-asc":
+            filtered.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+            break;
+        case "date-desc":
+            filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
             break;
         default:
             break;
@@ -187,6 +193,8 @@ export default function AdminProductsPage() {
                     <SelectValue placeholder="Ordenar por" />
                 </SelectTrigger>
                 <SelectContent>
+                    <SelectItem value="date-desc">Data (mais novo)</SelectItem>
+                    <SelectItem value="date-asc">Data (mais antigo)</SelectItem>
                     <SelectItem value="name-asc">Nome (A-Z)</SelectItem>
                     <SelectItem value="name-desc">Nome (Z-A)</SelectItem>
                     <SelectItem value="brand-asc">Marca (A-Z)</SelectItem>

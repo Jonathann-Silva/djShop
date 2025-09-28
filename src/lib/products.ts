@@ -18,6 +18,7 @@ export interface Perfume {
   imageUrl?: string;
   price?: number | null;
   costPrice?: number | null;
+  createdAt?: number;
 }
 
 export function getImageUrl(imageId: string, product?: Perfume): string {

@@ -31,9 +31,10 @@ async function migrateDataIfNeeded() {
 
     const batch = adminDb.batch();
 
-    productsToMigrate.forEach((product: Perfume) => {
+    productsToMigrate.forEach((product: Omit<Perfume, 'createdAt'>) => {
       const productRef = adminDb.collection('products').doc(product.id);
-      batch.set(productRef, product);
+      const productWithDate = { ...product, createdAt: Date.now() };
+      batch.set(productRef, productWithDate);
     });
 
     brandsToMigrate.forEach((brandName: string) => {
@@ -96,6 +97,7 @@ const ProductSchema = z.object({
   imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
   price: z.number().optional().nullable(), 
   costPrice: z.number().optional().nullable(),
+  createdAt: z.number().optional(),
 });
 
 export async function updateProduct(
@@ -133,20 +135,24 @@ export async function updateProduct(
 }
 
 export async function addProduct(
-  data: Omit<Perfume, 'id'>
+  data: Omit<Perfume, 'id' | 'createdAt'>
 ): Promise<{ success: boolean; message: string }> {
-  // Omit ID for validation as it's not present for new products yet.
-  const validation = ProductSchema.omit({ id: true }).safeParse(data);
+  const validationSchema = ProductSchema.omit({ id: true, createdAt: true });
+  const validation = validationSchema.safeParse(data);
 
   if (!validation.success) {
     console.error("Validação falhou:", validation.error.formErrors.fieldErrors);
     return { success: false, message: 'Dados inválidos.' };
   }
+
+  const dataWithTimestamp = {
+    ...validation.data,
+    createdAt: Date.now(),
+  };
   
   try {
     const productsCollection = collection(db, 'products');
-    // Use addDoc to let Firestore generate the ID
-    await addDoc(productsCollection, data);
+    await addDoc(productsCollection, dataWithTimestamp);
     
     revalidatePath('/products', 'layout');
     revalidatePath('/catalogo');

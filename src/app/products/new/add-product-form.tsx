@@ -25,7 +25,7 @@ import { useToast } from "@/hooks/use-toast";
 import { addProduct, getBrands } from "@/lib/actions";
 
 // Using Omit to create a type for the form, which doesn't include the 'id'
-type ProductFormValues = Omit<Perfume, 'id'>;
+type ProductFormValues = Omit<Perfume, 'id' | 'createdAt'>;
 
 export function AddProductForm() {
   const router = useRouter();
