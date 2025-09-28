@@ -39,7 +39,6 @@ function ProductsSkeleton() {
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Perfume[]>([]);
-  const [allBrands, setAllBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("name-asc");
@@ -49,29 +48,22 @@ export default function ProductsPage() {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const [productsData, brandsData] = await Promise.all([
-          getProducts(),
-          getBrands()
-      ]);
+      const productsData = await getProducts();
       setProducts(productsData);
-      setAllBrands(brandsData);
       setLoading(false);
     }
     fetchData();
   }, []);
 
   const { filteredAndSortedProducts, availableBrands } = useMemo(() => {
-    // First, filter by gender
     const genderFilteredProducts = products.filter(
       (product) => product.gender === genderFilter
     );
 
-    // Get brands available for the selected gender
     const currentBrands = [
       ...new Set(genderFilteredProducts.map((p) => p.brand)),
     ].sort();
 
-    // Then, apply search and brand filters
     let filtered = genderFilteredProducts.filter((product) => {
       const matchesSearch = product.name
         .toLowerCase()
@@ -80,7 +72,6 @@ export default function ProductsPage() {
       return matchesSearch && matchesBrand;
     });
 
-    // Apply sorting
     switch (sortOrder) {
         case "name-asc":
             filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -106,7 +97,7 @@ export default function ProductsPage() {
 
   const handleGenderChange = (value: string) => {
     setGenderFilter(value as "Feminine" | "Masculine");
-    setBrandFilter("all"); // Reset brand filter when gender changes
+    setBrandFilter("all"); 
   };
 
   return (

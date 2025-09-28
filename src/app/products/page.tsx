@@ -45,6 +45,7 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState<Perfume[]>([]);
   const [loading, setLoading] = useState(true);
   const [genderFilter, setGenderFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("name-asc");
   const [isManageBrandsOpen, setIsManageBrandsOpen] = useState(false);
 
 
@@ -64,12 +65,32 @@ export default function AdminProductsPage() {
     }
   }, [user, authLoading, router]);
 
-  const filteredProducts = useMemo(() => {
-    if (genderFilter === "all") {
-      return products;
+  const filteredAndSortedProducts = useMemo(() => {
+    let filtered = products;
+
+    if (genderFilter !== "all") {
+      filtered = filtered.filter((p) => p.gender === genderFilter);
     }
-    return products.filter((p) => p.gender === genderFilter);
-  }, [products, genderFilter]);
+    
+    switch (sortOrder) {
+        case "name-asc":
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case "name-desc":
+            filtered.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+        case "brand-asc":
+            filtered.sort((a, b) => a.brand.localeCompare(b.brand));
+            break;
+         case "brand-desc":
+            filtered.sort((a, b) => b.brand.localeCompare(a.brand));
+            break;
+        default:
+            break;
+    }
+
+    return filtered;
+  }, [products, genderFilter, sortOrder]);
   
   const handleBrandsUpdated = async () => {
       setLoading(true);
@@ -161,6 +182,17 @@ export default function AdminProductsPage() {
                 <SelectItem value="Feminine">Feminino</SelectItem>
               </SelectContent>
             </Select>
+            <Select value={sortOrder} onValueChange={setSortOrder}>
+                <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Ordenar por" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="name-asc">Nome (A-Z)</SelectItem>
+                    <SelectItem value="name-desc">Nome (Z-A)</SelectItem>
+                    <SelectItem value="brand-asc">Marca (A-Z)</SelectItem>
+                    <SelectItem value="brand-desc">Marca (Z-A)</SelectItem>
+                </SelectContent>
+            </Select>
             <Button variant="outline" onClick={() => setIsManageBrandsOpen(true)}>
                 <Tags className="mr-2 h-4 w-4" />
                 Gerir Marcas
@@ -187,7 +219,7 @@ export default function AdminProductsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredProducts.map((product) => (
+              {filteredAndSortedProducts.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell>
                     <Image
