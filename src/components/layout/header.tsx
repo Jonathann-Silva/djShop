@@ -51,11 +51,11 @@ export function Header() {
           </Link>
           {user?.email === 'admin@gmail.com' && (
             <Link
-              href="/products" 
+              href="/admin" 
               className="transition-colors hover:text-primary flex items-center gap-1"
             >
               <Wrench className="h-4 w-4" />
-              Produtos
+              Admin
             </Link>
           )}
         </nav>

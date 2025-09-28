@@ -122,10 +122,9 @@ export async function updateProduct(
     const productRef = doc(db, 'products', validatedData.id);
     await setDoc(productRef, validatedData, { merge: true });
 
-    revalidatePath('/products', 'layout');
-    revalidatePath(`/products/${validatedData.id}`);
-    revalidatePath(`/products/${validatedData.id}/edit`);
-    revalidatePath('/catalogo');
+    revalidatePath('/admin/perfumes', 'layout');
+    revalidatePath(`/admin/perfumes/${validatedData.id}/edit`);
+    revalidatePath('/catalogo', 'layout');
 
     return { success: true, message: 'Produto atualizado com sucesso!' };
   } catch (error) {
@@ -154,8 +153,8 @@ export async function addProduct(
     const productsCollection = collection(db, 'products');
     await addDoc(productsCollection, dataWithTimestamp);
     
-    revalidatePath('/products', 'layout');
-    revalidatePath('/catalogo');
+    revalidatePath('/admin/perfumes', 'layout');
+    revalidatePath('/catalogo', 'layout');
 
     return { success: true, message: 'Produto adicionado com sucesso!' };
   } catch (error) {
@@ -172,7 +171,7 @@ export async function removeProduct(id: string): Promise<{ success: boolean; mes
         const productRef = doc(db, 'products', id);
         await deleteDoc(productRef);
         
-        revalidatePath('/products', 'layout');
+        revalidatePath('/admin/perfumes', 'layout');
         revalidatePath('/catalogo', 'layout');
 
         return { success: true, message: 'Produto removido com sucesso!' };
@@ -214,8 +213,8 @@ export async function addBrand(brandName: string): Promise<{ success: boolean; m
 
     await addDoc(brandsCollection, { name: trimmedBrandName });
 
-    revalidatePath('/products', 'layout');
-    revalidatePath('/catalogo');
+    revalidatePath('/admin/perfumes', 'layout');
+    revalidatePath('/catalogo', 'layout');
     return { success: true, message: `Marca "${trimmedBrandName}" adicionada com sucesso.` };
   } catch (error) {
     console.error('Falha ao adicionar marca:', error);
@@ -252,8 +251,8 @@ export async function removeBrand(brandName: string): Promise<{ success: boolean
     });
     await batch.commit();
 
-    revalidatePath('/products', 'layout');
-    revalidatePath('/catalogo');
+    revalidatePath('/admin/perfumes', 'layout');
+    revalidatePath('/catalogo', 'layout');
     return { success: true, message: `Marca "${brandName}" foi removida.` };
   } catch (error) {
     console.error('Falha ao remover marca:', error);
