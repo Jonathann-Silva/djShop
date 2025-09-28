@@ -3,7 +3,7 @@
 
 import { adminDb } from './firebase-admin';
 import { db } from './firebase';
-import { collection, getDocs, doc, setDoc, addDoc, query, where, writeBatch, getDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, addDoc, query, where, writeBatch, getDoc, deleteDoc } from 'firebase/firestore';
 import { z } from 'genkit';
 import type { Perfume } from './products';
 import { revalidatePath } from 'next/cache';
@@ -163,6 +163,25 @@ export async function addProduct(
     return { success: false, message: 'Ocorreu um erro ao salvar o produto.' };
   }
 }
+
+export async function removeProduct(id: string): Promise<{ success: boolean; message: string }> {
+    if (!id) {
+        return { success: false, message: 'ID do produto não fornecido.' };
+    }
+    try {
+        const productRef = doc(db, 'products', id);
+        await deleteDoc(productRef);
+        
+        revalidatePath('/products', 'layout');
+        revalidatePath('/catalogo', 'layout');
+
+        return { success: true, message: 'Produto removido com sucesso!' };
+    } catch (error) {
+        console.error('Falha ao remover o produto:', error);
+        return { success: false, message: 'Ocorreu um erro ao remover o produto.' };
+    }
+}
+
 
 // --- Brand Actions ---
 

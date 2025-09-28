@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import type { Perfume } from "@/lib/products";
-import { getProducts } from "@/lib/actions";
+import { getProducts, removeProduct } from "@/lib/actions";
 import { getImageUrl } from "@/lib/products";
 import Image from "next/image";
 import {
@@ -21,7 +21,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, MoreHorizontal, Tags } from "lucide-react";
+import { PlusCircle, MoreHorizontal, Tags, Trash2, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,18 +35,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ManageBrandsDialog } from "@/components/manage-brands-dialog";
+import { useToast } from "@/hooks/use-toast";
+
 
 export default function AdminProductsPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
   const [products, setProducts] = useState<Perfume[]>([]);
   const [loading, setLoading] = useState(true);
   const [genderFilter, setGenderFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("date-desc");
   const [isManageBrandsOpen, setIsManageBrandsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<Perfume | null>(null);
 
 
   useEffect(() => {
@@ -103,6 +119,29 @@ export default function AdminProductsPage() {
       const fetchedProducts = await getProducts();
       setProducts(fetchedProducts);
       setLoading(false);
+  }
+
+  const handleDeleteProduct = async () => {
+    if (!productToDelete) return;
+    setIsDeleting(true);
+    const result = await removeProduct(productToDelete.id);
+    setIsDeleting(false);
+
+    if (result.success) {
+        toast({
+            title: "Produto Removido",
+            description: result.message,
+        });
+        // Remove product from local state to update UI immediately
+        setProducts(prev => prev.filter(p => p.id !== productToDelete.id));
+    } else {
+        toast({
+            variant: "destructive",
+            title: "Erro ao Remover",
+            description: result.message,
+        });
+    }
+    setProductToDelete(null); // Close dialog
   }
 
   if (authLoading || loading) {
@@ -167,6 +206,25 @@ export default function AdminProductsPage() {
   return (
     <>
     <ManageBrandsDialog open={isManageBrandsOpen} onOpenChange={setIsManageBrandsOpen} onBrandsUpdated={handleBrandsUpdated} />
+
+    <AlertDialog open={!!productToDelete} onOpenChange={(open) => !open && setProductToDelete(null)}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Tem a certeza?</AlertDialogTitle>
+                <AlertDialogDescription>
+                   Esta ação não pode ser desfeita. Isto irá remover permanentemente o produto <span className="font-bold">{productToDelete?.name}</span> do seu catálogo.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteProduct} disabled={isDeleting} className="bg-destructive hover:bg-destructive/90">
+                    {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Sim, remover
+                </AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+
     <div className="container mx-auto max-w-7xl px-4 py-12">
       <div className="flex justify-between items-center mb-8">
         <div>
@@ -253,7 +311,11 @@ export default function AdminProductsPage() {
                         <DropdownMenuItem asChild>
                            <Link href={`/products/${product.id}/edit`}>Editar</Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem 
+                            className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                            onClick={() => setProductToDelete(product)}
+                            >
+                          <Trash2 className="mr-2 h-4 w-4" />
                           Remover
                         </DropdownMenuItem>
                       </DropdownMenuContent>
