@@ -59,7 +59,7 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState<Perfume[]>([]);
   const [loading, setLoading] = useState(true);
   const [genderFilter, setGenderFilter] = useState("all");
-  const [sortOrder, setSortOrder] = useState("date-desc");
+  const [sortOrder, setSortOrder] = useState("name-asc");
   const [isManageBrandsOpen, setIsManageBrandsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Perfume | null>(null);
@@ -251,12 +251,12 @@ export default function AdminProductsPage() {
                     <SelectValue placeholder="Ordenar por" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="date-desc">Data (mais novo)</SelectItem>
-                    <SelectItem value="date-asc">Data (mais antigo)</SelectItem>
                     <SelectItem value="name-asc">Nome (A-Z)</SelectItem>
                     <SelectItem value="name-desc">Nome (Z-A)</SelectItem>
                     <SelectItem value="brand-asc">Marca (A-Z)</SelectItem>
                     <SelectItem value="brand-desc">Marca (Z-A)</SelectItem>
+                    <SelectItem value="date-desc">Data (mais novo)</SelectItem>
+                    <SelectItem value="date-asc">Data (mais antigo)</SelectItem>
                 </SelectContent>
             </Select>
             <Button variant="outline" onClick={() => setIsManageBrandsOpen(true)}>
