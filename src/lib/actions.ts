@@ -4,8 +4,8 @@
 import { adminDb } from './firebase-admin';
 import { db } from './firebase';
 import { collection, getDocs, doc, setDoc, addDoc, query, where, writeBatch, getDoc, deleteDoc } from 'firebase/firestore';
-import { z } from 'genkit';
-import type { Perfume } from './products';
+import { z } from 'zod';
+import type { Perfume, Eletronico } from './products';
 import { revalidatePath } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
@@ -181,6 +181,126 @@ export async function removeProduct(id: string): Promise<{ success: boolean; mes
     }
 }
 
+// --- Eletronico Actions ---
+
+export async function getElectronics(): Promise<Eletronico[]> {
+  try {
+    const electronicsCollection = collection(db, 'electronics');
+    const electronicsSnapshot = await getDocs(electronicsCollection);
+    const electronicsList = electronicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Eletronico));
+    return electronicsList;
+  } catch (error) {
+    console.error('Falha ao ler eletrônicos do Firestore:', error);
+    return [];
+  }
+}
+
+export async function getElectronicById(id: string): Promise<Eletronico | null> {
+    try {
+        const electronicRef = doc(db, 'electronics', id);
+        const electronicSnapshot = await getDoc(electronicRef);
+        if (electronicSnapshot.exists()) {
+            return { id: electronicSnapshot.id, ...electronicSnapshot.data() } as Eletronico;
+        }
+        return null;
+    } catch (error) {
+        console.error('Falha ao ler eletrônico do Firestore:', error);
+        return null;
+    }
+}
+
+const EletronicoSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, 'Nome é obrigatório'),
+  brand: z.string().min(1, 'Marca é obrigatória'),
+  profitMargin: z.number(),
+  description: z.string().min(1, 'Descrição é obrigatória'),
+  imageId: z.string().min(1, 'ID da Imagem é obrigatório'),
+  onSale: z.boolean().optional(),
+  priceUrl: z.string().url('URL de preço inválida').optional().or(z.literal('')),
+  imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
+  price: z.number().optional().nullable(), 
+  costPrice: z.number().optional().nullable(),
+  createdAt: z.number().optional(),
+});
+
+
+export async function updateElectronic(
+  data: Eletronico
+): Promise<{ success: boolean; message: string }> {
+  const validation = EletronicoSchema.safeParse(data);
+
+  if (!validation.success) {
+    console.error("Validação falhou:", validation.error.formErrors.fieldErrors);
+    return { success: false, message: 'Dados inválidos.' };
+  }
+  
+  const validatedData = validation.data;
+
+  if (validatedData.costPrice && validatedData.profitMargin >= 0) {
+    validatedData.price = validatedData.costPrice * (1 + validatedData.profitMargin / 100);
+  }
+
+  try {
+    const electronicRef = doc(db, 'electronics', validatedData.id);
+    await setDoc(electronicRef, validatedData, { merge: true });
+
+    revalidatePath('/admin/eletronicos', 'layout');
+    revalidatePath(`/admin/eletronicos/${validatedData.id}/edit`);
+
+    return { success: true, message: 'Eletrônico atualizado com sucesso!' };
+  } catch (error) {
+    console.error('Falha ao atualizar o eletrônico:', error);
+    return { success: false, message: 'Ocorreu um erro ao salvar o eletrônico.' };
+  }
+}
+
+export async function addElectronic(
+  data: Omit<Eletronico, 'id' | 'createdAt'>
+): Promise<{ success: boolean; message: string }> {
+  const validationSchema = EletronicoSchema.omit({ id: true, createdAt: true });
+  const validation = validationSchema.safeParse(data);
+
+  if (!validation.success) {
+    console.error("Validação falhou:", validation.error.formErrors.fieldErrors);
+    return { success: false, message: 'Dados inválidos.' };
+  }
+
+  const dataWithTimestamp = {
+    ...validation.data,
+    createdAt: Date.now(),
+  };
+  
+  try {
+    const electronicsCollection = collection(db, 'electronics');
+    await addDoc(electronicsCollection, dataWithTimestamp);
+    
+    revalidatePath('/admin/eletronicos', 'layout');
+
+    return { success: true, message: 'Eletrônico adicionado com sucesso!' };
+  } catch (error) {
+    console.error('Falha ao adicionar o eletrônico:', error);
+    return { success: false, message: 'Ocorreu um erro ao salvar o eletrônico.' };
+  }
+}
+
+export async function removeElectronic(id: string): Promise<{ success: boolean; message: string }> {
+    if (!id) {
+        return { success: false, message: 'ID do eletrônico não fornecido.' };
+    }
+    try {
+        const electronicRef = doc(db, 'electronics', id);
+        await deleteDoc(electronicRef);
+        
+        revalidatePath('/admin/eletronicos', 'layout');
+
+        return { success: true, message: 'Eletrônico removido com sucesso!' };
+    } catch (error) {
+        console.error('Falha ao remover o eletrônico:', error);
+        return { success: false, message: 'Ocorreu um erro ao remover o eletrônico.' };
+    }
+}
+
 
 // --- Brand Actions ---
 
@@ -214,6 +334,7 @@ export async function addBrand(brandName: string): Promise<{ success: boolean; m
     await addDoc(brandsCollection, { name: trimmedBrandName });
 
     revalidatePath('/admin/perfumes', 'layout');
+    revalidatePath('/admin/eletronicos', 'layout');
     revalidatePath('/catalogo', 'layout');
     return { success: true, message: `Marca "${trimmedBrandName}" adicionada com sucesso.` };
   } catch (error) {
@@ -227,13 +348,22 @@ export async function removeBrand(brandName: string): Promise<{ success: boolean
     return { success: false, message: 'Nome da marca não fornecido.' };
   }
   try {
-    // Verifica se a marca está em uso
+    // Verifica se a marca está em uso em perfumes
     const productsCollection = collection(db, 'products');
     const productQuery = query(productsCollection, where("brand", "==", brandName));
     const productSnapshot = await getDocs(productQuery);
 
     if (!productSnapshot.empty) {
-      return { success: false, message: 'Não é possível remover a marca pois ela está sendo utilizada por um ou mais produtos.' };
+      return { success: false, message: 'Não é possível remover a marca pois ela está sendo utilizada por um ou mais perfumes.' };
+    }
+    
+    // Verifica se a marca está em uso em eletronicos
+    const electronicsCollection = collection(db, 'electronics');
+    const electronicQuery = query(electronicsCollection, where("brand", "==", brandName));
+    const electronicSnapshot = await getDocs(electronicQuery);
+    
+    if (!electronicSnapshot.empty) {
+      return { success: false, message: 'Não é possível remover a marca pois ela está sendo utilizada por um ou mais eletrônicos.' };
     }
 
     // Encontra e remove a marca
@@ -252,6 +382,7 @@ export async function removeBrand(brandName: string): Promise<{ success: boolean
     await batch.commit();
 
     revalidatePath('/admin/perfumes', 'layout');
+    revalidatePath('/admin/eletronicos', 'layout');
     revalidatePath('/catalogo', 'layout');
     return { success: true, message: `Marca "${brandName}" foi removida.` };
   } catch (error) {

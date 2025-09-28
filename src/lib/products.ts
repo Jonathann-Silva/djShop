@@ -21,7 +21,23 @@ export interface Perfume {
   createdAt?: number;
 }
 
-export function getImageUrl(imageId: string, product?: Perfume): string {
+export interface Eletronico {
+  id: string;
+  name: string;
+  brand: string;
+  profitMargin: number;
+  description: string;
+  imageId: string;
+  onSale?: boolean;
+  priceUrl?: string;
+  imageUrl?: string;
+  price?: number | null;
+  costPrice?: number | null;
+  createdAt?: number;
+}
+
+
+export function getImageUrl(imageId: string, product?: Perfume | Eletronico): string {
   if (product?.imageUrl) {
     return product.imageUrl;
   }
