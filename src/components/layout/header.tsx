@@ -44,6 +44,18 @@ export function Header() {
             Perfumes
           </Link>
           <Link
+            href="/catalogo/bebidas"
+            className="transition-colors hover:text-primary"
+          >
+            Bebidas
+          </Link>
+          <Link
+            href="/catalogo/eletronicos"
+            className="transition-colors hover:text-primary"
+          >
+            Eletrônicos
+          </Link>
+          <Link
             href="/advisor"
             className="transition-colors hover:text-primary"
           >
