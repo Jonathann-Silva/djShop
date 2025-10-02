@@ -10,50 +10,9 @@ import { revalidatePath } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
 
-// --- Data Migration Helper ---
-async function migrateDataIfNeeded() {
-  const productsCollection = adminDb.collection('products');
-  const productsSnapshot = await productsCollection.get();
-
-  if (!productsSnapshot.empty) return;
-
-  console.log("Firestore está vazio. Iniciando migração de dados...");
-
-  try {
-    const productsFilePath = path.join(process.cwd(), 'src', 'lib', 'products.db.json');
-    const brandsFilePath = path.join(process.cwd(), 'src', 'lib', 'brands.db.json');
-
-    const productsData = await fs.readFile(productsFilePath, 'utf-8');
-    const brandsData = await fs.readFile(brandsFilePath, 'utf-8');
-
-    const productsToMigrate = JSON.parse(productsData).products;
-    const brandsToMigrate = JSON.parse(brandsData).brands;
-
-    const batch = adminDb.batch();
-
-    productsToMigrate.forEach((product: Omit<Perfume, 'createdAt'>) => {
-      const productRef = adminDb.collection('products').doc(product.id);
-      const productWithDate = { ...product, createdAt: Date.now() };
-      batch.set(productRef, productWithDate);
-    });
-
-    brandsToMigrate.forEach((brandName: string) => {
-      const brandRef = adminDb.collection('brands').doc();
-      batch.set(brandRef, { name: brandName });
-    });
-
-    await batch.commit();
-    console.log("Migração concluída com sucesso!");
-  } catch (error) {
-    console.error("Erro na migração:", error);
-  }
-}
-
 // --- Product Actions ---
 
 export async function getProducts(): Promise<Perfume[]> {
-  await migrateDataIfNeeded(); // Garantir que dados existam
-
   try {
     const productsCollection = collection(db, 'products');
     const productsSnapshot = await getDocs(productsCollection);
