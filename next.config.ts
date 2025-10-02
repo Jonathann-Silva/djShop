@@ -58,6 +58,12 @@ const nextConfig: NextConfig = {
         hostname: 'blog.meninashoes.com.br',
         port: '',
         pathname: '/**',
+      },
+       {
+        protocol: 'https',
+        hostname: 'aazperfumes.com.br',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
