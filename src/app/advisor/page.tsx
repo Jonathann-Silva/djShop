@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -66,14 +66,23 @@ export default function AiAdvisorPage() {
   const { toast } = useToast();
   const { addToCart } = useCart();
   const [products, setProducts] = useState<Perfume[]>([]);
+  const [productsLoaded, setProductsLoaded] = useState(false);
+
 
   useEffect(() => {
       async function fetchProducts() {
           const products = await getProducts();
           setProducts(products);
+          setProductsLoaded(true);
       }
       fetchProducts();
   }, []);
+
+  const productsMap = useMemo(() => {
+    const map = new Map<string, Perfume>();
+    products.forEach(p => map.set(`${p.name.toLowerCase()}-${p.brand.toLowerCase()}`, p));
+    return map;
+  }, [products]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -106,7 +115,7 @@ export default function AiAdvisorPage() {
   }
 
   const findProduct = (name: string, brand: string) => {
-    return products.find(p => p.name.toLowerCase() === name.toLowerCase() && p.brand.toLowerCase() === brand.toLowerCase());
+    return productsMap.get(`${name.toLowerCase()}-${brand.toLowerCase()}`);
   }
 
   return (
@@ -256,13 +265,18 @@ export default function AiAdvisorPage() {
               <CardFooter>
                 <Button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoading || !productsLoaded}
                   className="w-full md:w-auto ml-auto bg-accent hover:bg-accent/90 text-accent-foreground"
                 >
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       A encontrar o seu perfume...
+                    </>
+                  ) : !productsLoaded ? (
+                     <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      A carregar produtos...
                     </>
                   ) : (
                     <>

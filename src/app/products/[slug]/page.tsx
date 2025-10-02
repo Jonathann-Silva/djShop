@@ -1,7 +1,7 @@
 
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { getProducts } from "@/lib/actions";
+import { getProducts, getProductById } from "@/lib/actions";
 import { getImageUrl, getImageHint } from "@/lib/products";
 import { ProductCard } from "@/components/product-card";
 import { ProductDetailsClient } from "./product-details-client";
@@ -11,15 +11,17 @@ export default async function ProductDetailPage({
 }: {
   params: { slug: string };
 }) {
-  const products = await getProducts();
-  const product = products.find((p) => p.id === params.slug);
+  const product = await getProductById(params.slug);
 
   if (!product) {
     notFound();
   }
+  
+  // Fetch all products once for related products
+  const allProducts = await getProducts();
 
   // Find related products by brand, excluding the current one
-  const relatedProducts = products
+  const relatedProducts = allProducts
     .filter(
       (p) => p.brand === product.brand && p.id !== product.id
     )
