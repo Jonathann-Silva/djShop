@@ -59,7 +59,7 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
               width={400}
               height={400}
               data-ai-hint={imageHint}
-              className="object-cover w-full h-auto aspect-square transition-transform duration-300 ease-in-out group-hover:scale-105"
+              className="object-cover w-full aspect-square transition-transform duration-300 ease-in-out group-hover:scale-105"
             />
           </div>
         </CardHeader>
