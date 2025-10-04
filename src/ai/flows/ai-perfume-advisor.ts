@@ -43,9 +43,7 @@ const AIPerfumeAdvisorOutputSchema = z.object({
       name: z.string().describe('The name of the perfume.'),
       brand: z.string().describe('The brand of the perfume.'),
       description: z.string().describe('A brief description of the perfume.'),
-      topNotes: z.string().describe('Key top scent notes of the perfume.'),
-      heartNotes: z.string().describe('Key heart scent notes of the perfume.'),
-      baseNotes: z.string().describe('Key base scent notes of the perfume.'),
+      notes: z.string().describe('Key scent notes of the perfume (e.g., "Top: Bergamot, Heart: Rose, Base: Sandalwood").'),
       price: z.string().describe('The price range of the perfume.'),
     })
   ).describe('A list of perfume recommendations based on user preferences.'),
@@ -71,7 +69,7 @@ Occasion: {{{occasion}}}
 Budget: {{{budget}}}
 Additional Notes: {{{additionalNotes}}}
 
-Format your response as a JSON object with a "recommendations" field, which is an array of perfume objects. Each perfume object should include the name, brand, description, topNotes, heartNotes, baseNotes, and price.
+Format your response as a JSON object with a "recommendations" field, which is an array of perfume objects. Each perfume object should include the name, brand, description, a consolidated 'notes' string, and price.
 `,
 });
 
