@@ -22,7 +22,8 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { addBebida, getBrands } from "@/lib/actions";
+import { addBebida } from "@/lib/actions";
+import { getBrands } from "@/lib/data";
 
 type BebidaFormValues = Omit<Bebida, 'id' | 'createdAt'>;
 

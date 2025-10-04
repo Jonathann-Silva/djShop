@@ -5,7 +5,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import type { Eletronico } from "@/lib/products";
-import { getElectronics, removeElectronic } from "@/lib/actions";
+import { removeElectronic } from "@/lib/actions";
+import { getElectronics } from "@/lib/data";
 import { getImageUrl } from "@/lib/products";
 import Image from "next/image";
 import {

@@ -1,6 +1,7 @@
 
 'use server';
-import { getProducts, updateProduct } from '@/lib/actions';
+import { updateProduct } from '@/lib/actions';
+import { getProducts } from '@/lib/data';
 import { getRealTimePrice } from '@/ai/flows/get-real-time-price-flow';
 import { Perfume } from '@/lib/products';
 import { revalidatePath } from 'next/cache';

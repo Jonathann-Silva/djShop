@@ -1,6 +1,6 @@
 
 import { notFound } from "next/navigation";
-import { getBebidaById } from "@/lib/actions";
+import { getBebidaById } from "@/lib/data";
 import {
   Card,
   CardHeader,

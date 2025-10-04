@@ -12,33 +12,6 @@ import path from 'path';
 
 // --- Product Actions ---
 
-export async function getProducts(): Promise<Perfume[]> {
-  try {
-    const productsCollection = collection(db, 'products');
-    const productsSnapshot = await getDocs(productsCollection);
-    const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Perfume));
-    return productsList;
-  } catch (error) {
-    console.error('Falha ao ler produtos do Firestore:', error);
-    return [];
-  }
-}
-
-export async function getProductById(id: string): Promise<Perfume | null> {
-    try {
-        const productRef = doc(db, 'products', id);
-        const productSnapshot = await getDoc(productRef);
-        if (productSnapshot.exists()) {
-            return { id: productSnapshot.id, ...productSnapshot.data() } as Perfume;
-        }
-        return null;
-    } catch (error) {
-        console.error('Falha ao ler produto do Firestore:', error);
-        return null;
-    }
-}
-
-
 const ProductSchema = z.object({
   id: z.string(),
   name: z.string().min(1, 'Nome é obrigatório'),
@@ -84,6 +57,7 @@ export async function updateProduct(
     revalidatePath('/admin/perfumes', 'layout');
     revalidatePath(`/admin/perfumes/${validatedData.id}/edit`);
     revalidatePath('/catalogo', 'layout');
+    revalidatePath(`/products/${validatedData.id}`);
 
     return { success: true, message: 'Produto atualizado com sucesso!' };
   } catch (error) {
@@ -141,32 +115,6 @@ export async function removeProduct(id: string): Promise<{ success: boolean; mes
 }
 
 // --- Eletronico Actions ---
-
-export async function getElectronics(): Promise<Eletronico[]> {
-  try {
-    const electronicsCollection = collection(db, 'electronics');
-    const electronicsSnapshot = await getDocs(electronicsCollection);
-    const electronicsList = electronicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Eletronico));
-    return electronicsList;
-  } catch (error) {
-    console.error('Falha ao ler eletrônicos do Firestore:', error);
-    return [];
-  }
-}
-
-export async function getElectronicById(id: string): Promise<Eletronico | null> {
-    try {
-        const electronicRef = doc(db, 'electronics', id);
-        const electronicSnapshot = await getDoc(electronicRef);
-        if (electronicSnapshot.exists()) {
-            return { id: electronicSnapshot.id, ...electronicSnapshot.data() } as Eletronico;
-        }
-        return null;
-    } catch (error) {
-        console.error('Falha ao ler eletrônico do Firestore:', error);
-        return null;
-    }
-}
 
 const EletronicoSchema = z.object({
   id: z.string(),
@@ -263,32 +211,6 @@ export async function removeElectronic(id: string): Promise<{ success: boolean; 
 
 // --- Bebida Actions ---
 
-export async function getBebidas(): Promise<Bebida[]> {
-  try {
-    const bebidasCollection = collection(db, 'bebidas');
-    const bebidasSnapshot = await getDocs(bebidasCollection);
-    const bebidasList = bebidasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Bebida));
-    return bebidasList;
-  } catch (error) {
-    console.error('Falha ao ler bebidas do Firestore:', error);
-    return [];
-  }
-}
-
-export async function getBebidaById(id: string): Promise<Bebida | null> {
-    try {
-        const bebidaRef = doc(db, 'bebidas', id);
-        const bebidaSnapshot = await getDoc(bebidaRef);
-        if (bebidaSnapshot.exists()) {
-            return { id: bebidaSnapshot.id, ...bebidaSnapshot.data() } as Bebida;
-        }
-        return null;
-    } catch (error) {
-        console.error('Falha ao ler bebida do Firestore:', error);
-        return null;
-    }
-}
-
 const BebidaSchema = z.object({
   id: z.string(),
   name: z.string().min(1, 'Nome é obrigatório'),
@@ -384,18 +306,6 @@ export async function removeBebida(id: string): Promise<{ success: boolean; mess
 
 // --- Brand Actions ---
 
-export async function getBrands(): Promise<string[]> {
-  try {
-    const brandsCollection = collection(db, 'brands');
-    const brandsSnapshot = await getDocs(brandsCollection);
-    const brandsList = brandsSnapshot.docs.map(doc => doc.data().name as string);
-    return brandsList.sort();
-  } catch (error) {
-    console.error('Falha ao ler marcas do Firestore:', error);
-    return [];
-  }
-}
-
 export async function addBrand(brandName: string): Promise<{ success: boolean; message: string }> {
   if (!brandName || brandName.trim().length === 0) {
     return { success: false, message: 'O nome da marca não pode estar vazio.' };
@@ -480,11 +390,4 @@ export async function removeBrand(brandName: string): Promise<{ success: boolean
     console.error('Falha ao remover marca:', error);
     return { success: false, message: 'Ocorreu um erro ao remover a marca.' };
   }
-}
-
-// --- Outros ---
-
-export async function getGenders(): Promise<string[]> {
-  const products = await getProducts();
-  return [...new Set(products.map(p => p.gender))];
 }

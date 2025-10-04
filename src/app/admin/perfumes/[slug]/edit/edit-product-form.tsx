@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { updateProduct, getBrands } from "@/lib/actions";
+import { updateProduct } from "@/lib/actions";
+import { getBrands } from "@/lib/data";
 
 interface EditProductFormProps {
   product: Perfume;

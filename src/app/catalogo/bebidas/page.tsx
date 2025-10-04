@@ -1,21 +1,37 @@
 
-"use client";
+import { Bebida } from "@/lib/products";
+import { getBebidas } from "@/lib/data";
+import { ProductCard } from "@/components/product-card";
 
-import { Package } from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+export const revalidate = 3600; // Revalidate every hour
 
-export default function BebidasPage() {
-  return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 text-center">
-      <Package className="mx-auto h-24 w-24 text-muted-foreground" />
-      <h1 className="mt-8 text-4xl font-headline font-bold">Catálogo de Bebidas</h1>
-      <p className="mt-4 text-muted-foreground">
-        Esta seção está em construção. Volte em breve para ver nossa seleção de bebidas.
-      </p>
-      <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
-        <Link href="/">Voltar para a Página Inicial</Link>
-      </Button>
-    </div>
-  );
+export default async function BebidasPage() {
+    const products: Bebida[] = await getBebidas();
+
+    return (
+        <div className="container mx-auto max-w-7xl px-4 py-12">
+            <div className="text-center mb-12">
+                <h1 className="text-4xl md:text-5xl font-headline font-bold">
+                    Nosso Catálogo de Bebidas
+                </h1>
+                <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+                    Explore nossa seleção de bebidas premium.
+                </p>
+            </div>
+
+            <main>
+                {products.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                        {products.map((product) => (
+                            <ProductCard key={product.id} product={product} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-12">
+                        <p className="text-muted-foreground">Nenhuma bebida encontrada no momento.</p>
+                    </div>
+                )}
+            </main>
+        </div>
+    );
 }

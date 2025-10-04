@@ -22,7 +22,8 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { addElectronic, getBrands } from "@/lib/actions";
+import { addElectronic } from "@/lib/actions";
+import { getBrands } from "@/lib/data";
 
 type ElectronicFormValues = Omit<Eletronico, 'id' | 'createdAt'>;
 

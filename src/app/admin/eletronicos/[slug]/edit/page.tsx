@@ -1,6 +1,6 @@
 
 import { notFound } from "next/navigation";
-import { getElectronicById } from "@/lib/actions";
+import { getElectronicById } from "@/lib/data";
 import {
   Card,
   CardHeader,

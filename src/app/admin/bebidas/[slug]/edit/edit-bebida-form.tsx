@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { updateBebida, getBrands } from "@/lib/actions";
+import { updateBebida } from "@/lib/actions";
+import { getBrands } from "@/lib/data";
 
 interface EditBebidaFormProps {
   product: Bebida;

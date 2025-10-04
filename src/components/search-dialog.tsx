@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { getProducts } from "@/lib/actions";
+import { getProducts } from "@/lib/data";
 import type { Perfume } from "@/lib/products";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";

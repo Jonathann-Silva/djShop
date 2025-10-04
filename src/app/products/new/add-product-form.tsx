@@ -22,7 +22,8 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { addProduct, getBrands } from "@/lib/actions";
+import { addProduct } from "@/lib/actions";
+import { getBrands } from "@/lib/data";
 
 // Using Omit to create a type for the form, which doesn't include the 'id'
 type ProductFormValues = Omit<Perfume, 'id' | 'createdAt'>;

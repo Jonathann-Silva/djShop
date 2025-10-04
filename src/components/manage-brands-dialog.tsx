@@ -13,7 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { getBrands, removeBrand, addBrand } from "@/lib/actions";
+import { removeBrand, addBrand } from "@/lib/actions";
+import { getBrands } from "@/lib/data";
 import { Trash2, Loader2, PlusCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
