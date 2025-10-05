@@ -3,7 +3,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import type { Perfume } from '@/lib/products';
-import { getProducts, getBrands } from '@/lib/data';
+import { getProducts } from '@/lib/data';
 import { ProductCard } from '@/components/product-card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -18,8 +18,6 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-export const revalidate = 3600;
 
 function ProductsSkeleton() {
   return (
