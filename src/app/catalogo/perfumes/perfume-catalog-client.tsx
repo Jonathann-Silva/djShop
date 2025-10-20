@@ -127,8 +127,8 @@ export function PerfumeCatalogClient({ products, availableBrands: allBrands }: P
         </Tabs>
       </div>
 
-      <div className="mb-8 max-w-3xl mx-auto flex flex-col md:flex-row items-end gap-4">
-        <div className="relative flex-grow w-full">
+      <div className="mb-10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 items-end gap-4">
+        <div className="relative flex-grow w-full md:col-span-1">
           <Label
             htmlFor="search"
             className="mb-2 block text-sm font-medium text-muted-foreground"
@@ -144,7 +144,28 @@ export function PerfumeCatalogClient({ products, availableBrands: allBrands }: P
             className="pl-10"
           />
         </div>
-        <div className="flex-shrink-0 w-full md:w-auto">
+        <div className="flex-shrink-0 w-full md:col-span-1">
+          <Label
+            htmlFor="brand"
+            className="mb-2 block text-sm font-medium text-muted-foreground"
+          >
+            Filtrar por Marca
+          </Label>
+          <Select value={brandFilter} onValueChange={setBrandFilter}>
+            <SelectTrigger className="w-full" id="brand">
+              <SelectValue placeholder="Filtrar por marca" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas as Marcas</SelectItem>
+              {availableBrandsForGender.map((brand) => (
+                <SelectItem key={brand} value={brand}>
+                  {brand}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex-shrink-0 w-full md:col-span-1">
           <Label
             htmlFor="sort"
             className="mb-2 block text-sm font-medium text-muted-foreground"
@@ -152,7 +173,7 @@ export function PerfumeCatalogClient({ products, availableBrands: allBrands }: P
             Ordenar por
           </Label>
           <Select value={sortOrder} onValueChange={setSortOrder}>
-            <SelectTrigger className="w-full md:w-[180px]" id="sort">
+            <SelectTrigger className="w-full" id="sort">
               <SelectValue placeholder="Ordenar por" />
             </SelectTrigger>
             <SelectContent>
@@ -163,26 +184,6 @@ export function PerfumeCatalogClient({ products, availableBrands: allBrands }: P
             </SelectContent>
           </Select>
         </div>
-      </div>
-
-      <div className="mb-10 flex flex-wrap justify-center gap-2">
-        <Button
-          variant={brandFilter === 'all' ? 'default' : 'outline'}
-          onClick={() => setBrandFilter('all')}
-          className="px-4"
-        >
-          Todas as Marcas
-        </Button>
-        {availableBrandsForGender.map((brand) => (
-          <Button
-            key={brand}
-            variant={brandFilter === brand ? 'default' : 'outline'}
-            onClick={() => setBrandFilter(brand)}
-            className="px-4"
-          >
-            {brand}
-          </Button>
-        ))}
       </div>
 
       <main>
