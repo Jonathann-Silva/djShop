@@ -123,7 +123,7 @@ export default function CheckoutPage() {
                 <Input id="city" placeholder="Cidade das Essências" value={city} onChange={(e) => setCity(e.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="zip">Código Postal</Label>
+                <Label htmlFor="zip">Cep</Label>
                 <Input id="zip" placeholder="12345-678" value={zip} onChange={(e) => setZip(e.target.value)} />
               </div>
             </CardContent>
