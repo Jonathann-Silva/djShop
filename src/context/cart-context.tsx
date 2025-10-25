@@ -2,18 +2,12 @@
 "use client";
 
 import React, { createContext, useState, useEffect, ReactNode } from "react";
-import { Perfume } from "@/lib/products";
+import { Product, CartItem } from "@/lib/products";
 import { useToast } from "@/hooks/use-toast";
-
-// Add price to the product in the cart item
-export interface CartItem {
-  product: Perfume;
-  quantity: number;
-}
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (product: Perfume, quantity?: number) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -38,7 +32,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product: Perfume, quantity = 1) => {
+  const addToCart = (product: Product, quantity = 1) => {
     if (!product.price) {
         toast({
             variant: "destructive",

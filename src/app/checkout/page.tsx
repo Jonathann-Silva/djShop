@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,13 +25,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/products";
-import { CreditCard, Lock, Truck } from "lucide-react";
+import { CreditCard, Lock, Truck, PartyPopper, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
+import { sendTelegramNotification } from "@/lib/actions";
 
 export default function CheckoutPage() {
   const { cartItems, totalPrice, totalItems, clearCart } = useCart();
   const { toast } = useToast();
+  const router = useRouter();
 
   // State for form fields
   const [firstName, setFirstName] = useState("");
@@ -39,8 +42,66 @@ export default function CheckoutPage() {
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
   const grandTotal = totalPrice;
+
+  const handlePlaceOrder = async () => {
+    // Basic validation
+    if (!firstName || !lastName || !address || !paymentMethod) {
+      toast({
+        variant: "destructive",
+        title: "Campos em falta",
+        description: "Por favor, preencha todas as informações de envio e pagamento.",
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+
+    const productsSummary = cartItems.map(item => 
+        `- ${item.product.name} (x${item.quantity}) - R$ ${(item.product.price * item.quantity).toFixed(2)}`
+    ).join('\n');
+
+    let message = `🎉 *Novo Pedido Recebido!* 🎉\n\n`;
+    message += `*Cliente:* ${firstName} ${lastName}\n`;
+    message += `*Endereço de Entrega:* ${address}, ${city} - ${zip}\n\n`;
+    message += `*Itens do Pedido:*\n`;
+    message += `${productsSummary}\n\n`;
+    message += `*Forma de Pagamento:* ${paymentMethod}\n`;
+    message += `*Valor Total:* R$ ${grandTotal.toFixed(2)}`;
+
+    const result = await sendTelegramNotification(message);
+
+    if (result.success) {
+      setOrderPlaced(true);
+      clearCart();
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Erro ao Finalizar Pedido",
+        description: result.message || "Não foi possível enviar seu pedido. Por favor, tente novamente.",
+      });
+    }
+
+    setIsProcessing(false);
+  };
+
+  if (orderPlaced) {
+    return (
+      <div className="container mx-auto max-w-2xl px-4 py-16 text-center">
+        <PartyPopper className="mx-auto h-24 w-24 text-green-500" />
+        <h1 className="mt-8 text-4xl font-headline font-bold">Pedido Realizado com Sucesso!</h1>
+        <p className="mt-4 text-muted-foreground">
+          Recebemos o seu pedido e entraremos em contato em breve para confirmar os detalhes. Obrigado por comprar conosco!
+        </p>
+        <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
+          <Link href="/">Voltar para a Página Inicial</Link>
+        </Button>
+      </div>
+    );
+  }
 
   if (totalItems === 0) {
     return (
@@ -55,42 +116,6 @@ export default function CheckoutPage() {
       </div>
     );
   }
-  
-  const handlePlaceOrder = () => {
-    // Basic validation
-    if (!firstName || !lastName || !address || !paymentMethod) {
-      toast({
-        variant: "destructive",
-        title: "Campos em falta",
-        description: "Por favor, preencha todas as informações de envio e pagamento.",
-      });
-      return;
-    }
-    
-    // --- Substitua pelo seu número de WhatsApp com o código do país (ex: 5511999999999) ---
-    const yourWhatsAppNumber = "5511999999999"; 
-    // ---------------------------------------------------------------------------------
-
-    const productsSummary = cartItems.map(item => 
-        `- ${item.product.name} (x${item.quantity}) - R$ ${(item.product.price * item.quantity).toFixed(2)}`
-    ).join('\n');
-
-    let message = `Olá! Gostaria de fazer um novo pedido:\n\n`;
-    message += `*Cliente:* ${firstName} ${lastName}\n`;
-    message += `*Endereço de Entrega:* ${address}, ${city} - ${zip}\n\n`;
-    message += `*Itens do Pedido:*\n`;
-    message += `${productsSummary}\n\n`;
-    message += `*Forma de Pagamento:* ${paymentMethod}\n`;
-    message += `*Valor Total:* R$ ${grandTotal.toFixed(2)}\n\n`;
-    message += `Aguardando confirmação. Obrigado!`;
-
-    const whatsappUrl = `https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(message)}`;
-    
-    // Clear cart and redirect
-    clearCart();
-    window.open(whatsappUrl, '_blank');
-  };
-
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12">
@@ -199,8 +224,17 @@ export default function CheckoutPage() {
               </div>
             </CardContent>
             <CardFooter className="flex-col gap-4">
-              <Button onClick={handlePlaceOrder} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Lock className="mr-2 h-4 w-4" /> Finalizar Encomenda
+              <Button onClick={handlePlaceOrder} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isProcessing}>
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    A processar...
+                  </>
+                ) : (
+                  <>
+                    <Lock className="mr-2 h-4 w-4" /> Finalizar Encomenda
+                  </>
+                )}
               </Button>
               <p className="text-xs text-muted-foreground text-center">
                 Ao finalizar a sua encomenda, concorda com os nossos termos e condições.

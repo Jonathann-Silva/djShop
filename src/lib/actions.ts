@@ -5,10 +5,51 @@ import { adminDb } from './firebase-admin';
 import { db } from './firebase';
 import { collection, getDocs, doc, setDoc, addDoc, query, where, writeBatch, getDoc, deleteDoc } from 'firebase/firestore';
 import { z } from 'zod';
-import type { Perfume, Eletronico, Bebida } from './products';
+import type { Perfume, Eletronico, Bebida, CartItem } from './products';
 import { revalidatePath } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
+
+// --- Telegram Action ---
+
+export async function sendTelegramNotification(message: string): Promise<{ success: boolean; message: string }> {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!botToken || !chatId) {
+    console.error("Telegram Bot Token ou Chat ID não estão configurados no .env");
+    return { success: false, message: "A funcionalidade de notificação não está configurada." };
+  }
+
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message,
+        parse_mode: 'Markdown',
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.ok) {
+      return { success: true, message: "Pedido enviado com sucesso!" };
+    } else {
+      console.error("Erro ao enviar para o Telegram:", result);
+      return { success: false, message: `Falha ao notificar o pedido: ${result.description}` };
+    }
+  } catch (error) {
+    console.error("Erro de rede ao contatar a API do Telegram:", error);
+    return { success: false, message: "Ocorreu um erro de rede ao enviar o pedido." };
+  }
+}
+
 
 // --- Product Actions ---
 

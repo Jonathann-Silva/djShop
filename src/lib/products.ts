@@ -54,8 +54,15 @@ export interface Bebida {
   category?: 'bebida';
 }
 
+export type Product = Perfume | Eletronico | Bebida;
 
-export function getImageUrl(imageId: string, product?: Perfume | Eletronico | Bebida): string {
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+
+export function getImageUrl(imageId: string, product?: Product): string {
   if (product?.imageUrl) {
     return product.imageUrl;
   }
