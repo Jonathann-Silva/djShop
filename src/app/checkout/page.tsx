@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from 'next/navigation';
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,16 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
-  const grandTotal = totalPrice;
+  const grandTotal = useMemo(() => {
+    if (paymentMethod === "Crédito parcelado 2x") {
+      return totalPrice * 1.06;
+    }
+    if (paymentMethod === "Crédito parcelado 3x") {
+      return totalPrice * 1.075;
+    }
+    return totalPrice;
+  }, [totalPrice, paymentMethod]);
+
 
   const handlePlaceOrder = async () => {
     // Basic validation
@@ -170,8 +179,8 @@ export default function CheckoutPage() {
                   <SelectItem value="Pix">Pix</SelectItem>
                   <SelectItem value="Débito">Débito</SelectItem>
                   <SelectItem value="Crédito à vista">Crédito à vista</SelectItem>
-                  <SelectItem value="Crédito 2x">Crédito parcelado 2x</SelectItem>
-                  <SelectItem value="Crédito 3x">Crédito parcelado 3x</SelectItem>
+                  <SelectItem value="Crédito parcelado 2x">Crédito parcelado 2x</SelectItem>
+                  <SelectItem value="Crédito parcelado 3x">Crédito parcelado 3x</SelectItem>
                 </SelectContent>
               </Select>
             </CardContent>
@@ -216,6 +225,12 @@ export default function CheckoutPage() {
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>R$ {totalPrice.toFixed(2)}</span>
                 </div>
+                 {(paymentMethod === 'Crédito parcelado 2x' || paymentMethod === 'Crédito parcelado 3x') && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Taxa de Parcelamento</span>
+                    <span>R$ {(grandTotal - totalPrice).toFixed(2)}</span>
+                  </div>
+                )}
                 <Separator />
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
