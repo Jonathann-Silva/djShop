@@ -133,11 +133,11 @@ export default function CheckoutPage() {
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">Primeiro Nome</Label>
-                <Input id="firstName" placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                <Input id="firstName" placeholder="" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">Último Nome</Label>
-                <Input id="lastName" placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                <Input id="lastName" placeholder="" value={lastName} onChange={(e) => setLastName(e.target.value)} />
               </div>
               <div className="md:col-span-2 space-y-2">
                 <Label htmlFor="address">Endereço</Label>
