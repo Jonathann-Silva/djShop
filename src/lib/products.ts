@@ -61,6 +61,23 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface Order {
+    id: string;
+    customerName: string;
+    address: string;
+    items: {
+        productId: string;
+        name: string;
+        quantity: number;
+        price: number | null;
+        category: string;
+    }[];
+    paymentMethod: string;
+    total: number;
+    status: 'Pendente' | 'Entregue';
+    createdAt: number;
+}
+
 
 export function getImageUrl(imageId: string, product?: Product): string {
   if (product?.imageUrl) {

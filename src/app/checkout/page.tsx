@@ -28,7 +28,7 @@ import { getImageUrl } from "@/lib/products";
 import { CreditCard, Lock, Truck, PartyPopper, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
-import { sendTelegramNotification } from "@/lib/actions";
+import { sendTelegramNotification, createOrder } from "@/lib/actions";
 
 export default function CheckoutPage() {
   const { cartItems, totalPrice, totalItems, clearCart } = useCart();
@@ -80,17 +80,46 @@ export default function CheckoutPage() {
     message += `${productsSummary}\n\n`;
     message += `*Forma de Pagamento:* ${paymentMethod}\n`;
     message += `*Valor Total:* R$ ${grandTotal.toFixed(2)}`;
+    
+    // Create order in Firestore
+    const orderData = {
+      customerName: `${firstName} ${lastName}`,
+      address: `${address}, ${city} - ${zip}`,
+      items: cartItems.map(item => ({ 
+          productId: item.product.id,
+          name: item.product.name,
+          quantity: item.quantity,
+          price: item.product.price,
+          category: item.product.category || 'perfume'
+      })),
+      paymentMethod,
+      total: grandTotal,
+      status: 'Pendente' as 'Pendente' | 'Entregue',
+    };
 
-    const result = await sendTelegramNotification(message);
+    const orderResult = await createOrder(orderData);
 
-    if (result.success) {
+    if (!orderResult.success) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao Salvar Pedido",
+        description: orderResult.message || "Não foi possível salvar seu pedido no banco de dados.",
+      });
+      setIsProcessing(false);
+      return;
+    }
+    
+    // Send Telegram notification
+    const telegramResult = await sendTelegramNotification(message);
+
+    if (telegramResult.success) {
       setOrderPlaced(true);
       clearCart();
     } else {
       toast({
         variant: "destructive",
         title: "Erro ao Finalizar Pedido",
-        description: result.message || "Não foi possível enviar seu pedido. Por favor, tente novamente.",
+        description: telegramResult.message || "Não foi possível enviar seu pedido. Por favor, tente novamente.",
       });
     }
 

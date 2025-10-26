@@ -5,7 +5,7 @@ import { adminDb } from './firebase-admin';
 import { db } from './firebase';
 import { collection, getDocs, doc, setDoc, addDoc, query, where, writeBatch, getDoc, deleteDoc } from 'firebase/firestore';
 import { z } from 'zod';
-import type { Perfume, Eletronico, Bebida, CartItem } from './products';
+import type { Perfume, Eletronico, Bebida, CartItem, Order } from './products';
 import { revalidatePath } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
@@ -430,5 +430,73 @@ export async function removeBrand(brandName: string): Promise<{ success: boolean
   } catch (error) {
     console.error('Falha ao remover marca:', error);
     return { success: false, message: 'Ocorreu um erro ao remover a marca.' };
+  }
+}
+
+// --- Order Actions ---
+
+const OrderItemSchema = z.object({
+  productId: z.string(),
+  name: z.string(),
+  quantity: z.number(),
+  price: z.number().nullable(),
+  category: z.string(),
+});
+
+const OrderSchema = z.object({
+  customerName: z.string(),
+  address: z.string(),
+  items: z.array(OrderItemSchema),
+  paymentMethod: z.string(),
+  total: z.number(),
+  status: z.enum(['Pendente', 'Entregue']),
+});
+
+
+export async function createOrder(
+  data: Omit<Order, 'id' | 'createdAt'>
+): Promise<{ success: boolean; message: string }> {
+  const validation = OrderSchema.safeParse(data);
+
+  if (!validation.success) {
+    console.error("Validação do pedido falhou:", validation.error.formErrors.fieldErrors);
+    return { success: false, message: 'Dados do pedido inválidos.' };
+  }
+
+  const dataWithTimestamp = {
+    ...validation.data,
+    createdAt: Date.now(),
+  };
+
+  try {
+    const ordersCollection = collection(db, 'orders');
+    await addDoc(ordersCollection, dataWithTimestamp);
+    
+    revalidatePath('/admin/pedidos');
+
+    return { success: true, message: 'Pedido criado com sucesso!' };
+  } catch (error) {
+    console.error('Falha ao criar o pedido:', error);
+    return { success: false, message: 'Ocorreu um erro ao salvar o pedido.' };
+  }
+}
+
+export async function updateOrderStatus(
+  orderId: string,
+  status: 'Pendente' | 'Entregue'
+): Promise<{ success: boolean; message: string }> {
+  if (!orderId || !status) {
+    return { success: false, message: 'Dados inválidos.' };
+  }
+  
+  try {
+    const orderRef = doc(db, 'orders', orderId);
+    await setDoc(orderRef, { status: status }, { merge: true });
+
+    revalidatePath('/admin/pedidos');
+    return { success: true, message: 'Status do pedido atualizado!' };
+  } catch (error) {
+    console.error('Falha ao atualizar o status do pedido:', error);
+    return { success: false, message: 'Ocorreu um erro ao atualizar o status.' };
   }
 }

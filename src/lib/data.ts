@@ -4,7 +4,7 @@
 import { unstable_noStore as noStore } from 'next/cache';
 import { db } from './firebase';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
-import type { Perfume, Eletronico, Bebida } from './products';
+import type { Perfume, Eletronico, Bebida, Order } from './products';
 
 
 // --- Read Functions ---
@@ -106,4 +106,17 @@ export async function getBrands(): Promise<string[]> {
 export async function getGenders(): Promise<string[]> {
   const products = await getProducts();
   return [...new Set(products.map(p => p.gender))];
+}
+
+export async function getOrders(): Promise<Order[]> {
+    noStore();
+    try {
+        const ordersCollection = collection(db, 'orders');
+        const ordersSnapshot = await getDocs(ordersCollection);
+        const ordersList = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Order));
+        return ordersList;
+    } catch (error) {
+        console.error('Falha ao ler pedidos do Firestore:', error);
+        return [];
+    }
 }

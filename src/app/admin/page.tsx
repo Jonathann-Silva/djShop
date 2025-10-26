@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { SprayCan, HardDrive, GlassWater, ArrowRight } from "lucide-react";
+import { SprayCan, HardDrive, GlassWater, ArrowRight, Package } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 
@@ -22,6 +22,12 @@ export default function AdminDashboardPage() {
     }
 
     const categories = [
+        {
+            name: "Pedidos",
+            href: "/admin/pedidos",
+            icon: Package,
+            description: "Gerir todos os pedidos da loja.",
+        },
         {
             name: "Perfumes",
             href: "/admin/perfumes",
@@ -49,11 +55,11 @@ export default function AdminDashboardPage() {
                     Painel de Administração
                 </h1>
                 <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-                    Selecione uma categoria para gerir os produtos.
+                    Selecione uma categoria para gerir os produtos ou pedidos.
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-6xl mx-auto">
                 {categories.map((category) => (
                     <Card key={category.name} className="flex flex-col">
                         <CardHeader>

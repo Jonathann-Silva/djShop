@@ -17,38 +17,6 @@ import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
-// Mock data for demonstration
-const addresses = [
-  {
-    id: 1,
-    type: "Home",
-    street: "123 Perfume Lane",
-    city: "Scent City, ST 12345",
-    isDefault: true,
-  },
-  {
-    id: 2,
-    type: "Work",
-    street: "456 Fragrance Ave",
-    city: "Aroma Town, AT 67890",
-    isDefault: false,
-  },
-];
-
-const orders = [
-  {
-    id: "ORD-001",
-    date: "2023-10-26",
-    total: 180.0,
-    status: "Delivered",
-  },
-  {
-    id: "ORD-002",
-    date: "2023-11-15",
-    total: 220.0,
-    status: "Shipped",
-  },
-];
 
 export default function AccountPage() {
   const { user, logout, loading } = useAuth();
@@ -78,25 +46,6 @@ export default function AccountPage() {
               <Skeleton className="h-5 w-32" />
               <Skeleton className="h-4 w-48" />
               <Skeleton className="h-10 w-32" />
-            </CardContent>
-          </Card>
-           <Card>
-            <CardHeader>
-              <Skeleton className="h-6 w-48" />
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Skeleton className="h-20 w-full" />
-               <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-10 w-40" />
-            </CardContent>
-          </Card>
-           <Card>
-            <CardHeader>
-               <Skeleton className="h-6 w-48" />
-            </CardHeader>
-            <CardContent>
-                <Skeleton className="h-16 w-full mb-4" />
-                 <Skeleton className="h-16 w-full" />
             </CardContent>
           </Card>
         </div>
@@ -146,74 +95,7 @@ export default function AccountPage() {
               <p className="font-semibold">{user.displayName || 'Utilizador'}</p>
               <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
-            <Button variant="secondary">Editar Perfil</Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="h-5 w-5" />
-              Endereço
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {addresses.map((address) => (
-              <div key={address.id} className="p-4 border rounded-md">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-semibold">
-                      {address.type}{" "}
-                      {address.isDefault && (
-                        <span className="text-xs bg-primary/20 text-primary-dark font-medium px-2 py-0.5 rounded-full ml-2">
-                          Padrão
-                        </span>
-                      )}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {address.street}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {address.city}
-                    </p>
-                  </div>
-                  <Button variant="ghost" size="sm">
-                    Editar
-                  </Button>
-                </div>
-              </div>
-            ))}
-             <Button variant="secondary">Adicionar Novo Endereço</Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Package className="h-5 w-5" />
-              Histórico de Encomendas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {orders.map((order, index) => (
-                <React.Fragment key={order.id}>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-semibold">Encomenda #{order.id}</p>
-                      <p className="text-sm text-muted-foreground">
-                        Data: {order.date}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                       <p className="font-semibold">R$ {order.total.toFixed(2)}</p>
-                       <p className={`text-sm font-medium ${order.status === 'Delivered' ? 'text-green-600' : 'text-amber-600'}`}>{order.status === 'Delivered' ? 'Entregue' : 'Enviado'}</p>
-                    </div>
-                  </div>
-                  {index < orders.length -1 && <Separator />}
-                </React.Fragment>
-              ))}
-            </div>
+            <Button variant="secondary" disabled>Editar Perfil</Button>
           </CardContent>
         </Card>
       </div>
