@@ -446,6 +446,7 @@ const OrderItemSchema = z.object({
 const OrderSchema = z.object({
   customerName: z.string(),
   address: z.string(),
+  phone: z.string(),
   items: z.array(OrderItemSchema),
   paymentMethod: z.string(),
   total: z.number(),
@@ -500,3 +501,5 @@ export async function updateOrderStatus(
     return { success: false, message: 'Ocorreu um erro ao atualizar o status.' };
   }
 }
+
+    

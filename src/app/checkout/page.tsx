@@ -38,8 +38,10 @@ export default function CheckoutPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
+  const [number, setNumber] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
+  const [phone, setPhone] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -57,7 +59,7 @@ export default function CheckoutPage() {
 
   const handlePlaceOrder = async () => {
     // Basic validation
-    if (!firstName || !address || !paymentMethod) {
+    if (!firstName || !address || !number || !city || !phone || !paymentMethod) {
       toast({
         variant: "destructive",
         title: "Campos em falta",
@@ -74,7 +76,8 @@ export default function CheckoutPage() {
 
     let message = `🎉 *Novo Pedido Recebido!* 🎉\n\n`;
     message += `*Cliente:* ${firstName} ${lastName}\n`;
-    message += `*Endereço de Entrega:* ${address}, ${city} - ${zip}\n\n`;
+    message += `*Telefone:* ${phone}\n`;
+    message += `*Endereço de Entrega:* ${address}, nº ${number}, ${city} - ${zip}\n\n`;
     message += `*Itens do Pedido:*\n`;
     message += `${productsSummary}\n\n`;
     message += `*Forma de Pagamento:* ${paymentMethod}\n`;
@@ -83,7 +86,8 @@ export default function CheckoutPage() {
     // Create order in Firestore
     const orderData = {
       customerName: `${firstName} ${lastName}`,
-      address: `${address}, ${city} - ${zip}`,
+      address: `${address}, nº ${number}, ${city} - ${zip}`,
+      phone: phone,
       items: cartItems.map(item => ({ 
           productId: item.product.id,
           name: item.product.name,
@@ -140,7 +144,7 @@ export default function CheckoutPage() {
     );
   }
 
-  if (totalItems === 0) {
+  if (totalItems === 0 && !orderPlaced) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-16 text-center">
         <h1 className="mt-8 text-4xl font-headline font-bold">O seu carrinho está vazio</h1>
@@ -167,26 +171,34 @@ export default function CheckoutPage() {
                 <Truck className="h-5 w-5" /> Informação de Envio
               </CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
+            <CardContent className="grid grid-cols-1 md:grid-cols-6 gap-4">
+              <div className="space-y-2 col-span-6 md:col-span-3">
                 <Label htmlFor="firstName">Nome</Label>
-                <Input id="firstName" placeholder="" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                <Input id="firstName" placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 col-span-6 md:col-span-3">
                 <Label htmlFor="lastName">Sobrenome</Label>
-                <Input id="lastName" placeholder="" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                <Input id="lastName" placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
               </div>
-              <div className="md:col-span-2 space-y-2">
+              <div className="space-y-2 col-span-6 md:col-span-4">
                 <Label htmlFor="address">Endereço</Label>
-                <Input id="address" placeholder="Rua das Flores, 123" value={address} onChange={(e) => setAddress(e.target.value)} />
+                <Input id="address" placeholder="Rua das Flores" value={address} onChange={(e) => setAddress(e.target.value)} />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 col-span-6 md:col-span-2">
+                <Label htmlFor="number">Número</Label>
+                <Input id="number" placeholder="123" value={number} onChange={(e) => setNumber(e.target.value)} />
+              </div>
+              <div className="space-y-2 col-span-6 md:col-span-3">
                 <Label htmlFor="city">Cidade</Label>
                 <Input id="city" placeholder="Cidade das Essências" value={city} onChange={(e) => setCity(e.target.value)} />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 col-span-6 md:col-span-3">
                 <Label htmlFor="zip">Cep</Label>
                 <Input id="zip" placeholder="12345-678" value={zip} onChange={(e) => setZip(e.target.value)} />
+              </div>
+               <div className="space-y-2 col-span-6">
+                <Label htmlFor="phone">Telefone</Label>
+                <Input id="phone" type="tel" placeholder="(11) 98765-4321" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
             </CardContent>
           </Card>
@@ -289,3 +301,5 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
+    

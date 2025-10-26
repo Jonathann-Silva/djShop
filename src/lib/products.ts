@@ -65,6 +65,7 @@ export interface Order {
     id: string;
     customerName: string;
     address: string;
+    phone: string;
     items: {
         productId: string;
         name: string;
@@ -105,3 +106,5 @@ export function getHeroImageHint(): string {
     const heroImage = placeholderData.placeholderImages.find(p => p.id === 'hero-image');
     return heroImage ? heroImage.imageHint : 'perfume abstract';
 }
+
+    

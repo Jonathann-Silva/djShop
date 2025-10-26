@@ -208,6 +208,12 @@ export default function AdminOrdersPage() {
                                 <div className="space-y-2 pl-4 border-l-2 ml-2">
                                   <p className="font-semibold">Endereço:</p>
                                   <p className="text-muted-foreground">{order.address}</p>
+                                  {order.phone && (
+                                    <>
+                                      <p className="font-semibold mt-2">Telefone:</p>
+                                      <p className="text-muted-foreground">{order.phone}</p>
+                                    </>
+                                  )}
                                   <p className="font-semibold mt-2">Itens:</p>
                                   <ul className="list-disc list-inside text-muted-foreground">
                                     {order.items.map(item => (
@@ -258,3 +264,5 @@ export default function AdminOrdersPage() {
     </div>
   );
 }
+
+    
