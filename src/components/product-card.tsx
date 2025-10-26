@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from "react";
@@ -16,8 +17,7 @@ import { Perfume, Product, getImageUrl, getImageHint } from "@/lib/products";
 import { useCart } from "@/hooks/use-cart";
 
 interface ProductCardProps {
-  // Adicione a propriedade 'originalPrice' à sua interface de Produto
-  product: Product & { originalPrice?: number | null };
+  product: Product;
   sortOrder?: string;
 }
 
@@ -25,9 +25,6 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
   const { addToCart } = useCart();
   const imageUrl = getImageUrl(product.imageId, product);
   const imageHint = getImageHint(product.imageId);
-
-  // Lógica para determinar se o produto está em promoção
-  const isOnSale = product.originalPrice && product.originalPrice > product.price;
 
   const handleAddToCart = () => {
     if (product.price) {
@@ -57,8 +54,7 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
       <Link href={`/products/${product.id}`} className="flex-shrink-0 relative">
         <CardHeader className="p-0">
           <div className="overflow-hidden">
-            {/* MUDANÇA 1: Lógica da etiqueta corrigida */}
-            {isOnSale && (
+            {product.onSale && (
               <div className="absolute top-2 right-2 z-10 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
                 Promoção
               </div>
@@ -88,11 +84,10 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
         )}
       </CardContent>
       <CardFooter className="p-3 flex justify-between items-center bg-card flex-shrink-0">
-        {/* MUDANÇA 2: Exibição do preço corrigida */}
         <div className="flex flex-col items-start justify-center">
           {product.price ? (
             <>
-              {isOnSale && (
+              {product.onSale && product.originalPrice && (
                 <del className="text-xs text-muted-foreground">
                   R$ {product.originalPrice.toFixed(2)}
                 </del>

@@ -1,3 +1,4 @@
+
 'use server';
 
 import { updateProduct, updateElectronic, updateBebida } from '@/lib/actions';
@@ -81,21 +82,13 @@ export async function updateAllProductPrices(): Promise<{
             console.warn(`Não foi possível obter o preço para "${product.name}". Erro: ${result.error}`);
         }
 
-        // ===================================================================
-        //           ↓↓↓ CORREÇÃO PRINCIPAL APLICADA AQUI ↓↓↓
-        // ===================================================================
-
-        // 1. Sempre capture os valores mais recentes do scraper.
+        // --- Lógica de Promoção ---
         const newOriginalPrice = result.originalPrice;
-        
-        // 2. Calcule o novo status da promoção com base nos dados mais recentes.
         const newOnSaleStatus = newOriginalPrice !== null && result.price !== null && newOriginalPrice > result.price;
-        
-        // 3. Verifique se o status da promoção (onSale) OU o preço original (originalPrice) mudaram.
-        //    Esta é a correção chave: agora ele detecta mudanças no valor da promoção, mesmo que o produto continue "em promoção".
+
         if (product.onSale !== newOnSaleStatus || product.originalPrice !== newOriginalPrice) {
             dataToUpdate.onSale = newOnSaleStatus;
-            dataToUpdate.originalPrice = newOriginalPrice; // Salva o novo preço original (ou null se não estiver mais em promoção)
+            dataToUpdate.originalPrice = newOriginalPrice;
             hasChanged = true;
         }
 
@@ -106,7 +99,6 @@ export async function updateAllProductPrices(): Promise<{
                 case 'eletronico': await updateElectronic(dataToUpdate); break;
                 case 'bebida': await updateBebida(dataToUpdate); break;
             }
-            // Log melhorado para facilitar a depuração
             console.log(`Produto "${product.name}" atualizado. Preço de venda: ${dataToUpdate.price?.toFixed(2)}, Em promoção: ${dataToUpdate.onSale}, Preço Original: ${dataToUpdate.originalPrice}`);
             updatedCount++;
         }
