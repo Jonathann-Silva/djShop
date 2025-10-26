@@ -67,11 +67,11 @@ export default function CheckoutPage() {
  const { grandTotal, installmentValue } = useMemo(() => {
     if (paymentMethod === 'Cartão de Crédito' && installments > 0) {
       const rate = interestRates[installments];
-      const totalWithInterest = Math.ceil(totalPrice * (1 + rate));
+      const totalWithInterest = totalPrice * (1 + rate);
       const singleInstallmentValue = totalWithInterest / installments;
       return { grandTotal: totalWithInterest, installmentValue: singleInstallmentValue };
     }
-    return { grandTotal: Math.ceil(totalPrice), installmentValue: Math.ceil(totalPrice) };
+    return { grandTotal: totalPrice, installmentValue: totalPrice };
   }, [totalPrice, paymentMethod, installments]);
 
   const getPaymentMethodString = () => {
@@ -271,7 +271,7 @@ export default function CheckoutPage() {
                         <SelectContent className="max-h-60">
                              {Object.entries(interestRates).map(([num, rate]) => (
                                 <SelectItem key={num} value={String(num)}>
-                                    {num}x de R$ {((totalPrice * (1 + rate)) / Number(num)).toFixed(2)} (Total: R$ {Math.ceil(totalPrice * (1 + rate)).toFixed(2)})
+                                    {num}x de R$ {((totalPrice * (1 + rate)) / Number(num)).toFixed(2)} (Total: R$ {(totalPrice * (1 + rate)).toFixed(2)})
                                 </SelectItem>
                             ))}
                         </SelectContent>
