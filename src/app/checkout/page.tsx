@@ -268,7 +268,7 @@ export default function CheckoutPage() {
                         <SelectTrigger id="installments">
                             <SelectValue placeholder="Selecione o número de parcelas" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="max-h-60">
                              {Object.entries(interestRates).map(([num, rate]) => (
                                 <SelectItem key={num} value={String(num)}>
                                     {num}x de R$ {((totalPrice * (1 + rate)) / Number(num)).toFixed(2)} (Total: R$ {(totalPrice * (1 + rate)).toFixed(2)})
