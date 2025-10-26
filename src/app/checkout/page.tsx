@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -58,7 +57,7 @@ export default function CheckoutPage() {
 
   const handlePlaceOrder = async () => {
     // Basic validation
-    if (!firstName || !lastName || !address || !paymentMethod) {
+    if (!firstName || !address || !paymentMethod) {
       toast({
         variant: "destructive",
         title: "Campos em falta",
@@ -170,11 +169,11 @@ export default function CheckoutPage() {
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstName">Primeiro Nome</Label>
+                <Label htmlFor="firstName">Nome</Label>
                 <Input id="firstName" placeholder="" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName">Último Nome</Label>
+                <Label htmlFor="lastName">Sobrenome</Label>
                 <Input id="lastName" placeholder="" value={lastName} onChange={(e) => setLastName(e.target.value)} />
               </div>
               <div className="md:col-span-2 space-y-2">
