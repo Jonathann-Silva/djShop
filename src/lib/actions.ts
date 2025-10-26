@@ -504,5 +504,3 @@ export async function updateOrderStatus(
     return { success: false, message: 'Ocorreu um erro ao atualizar o status.' };
   }
 }
-
-    

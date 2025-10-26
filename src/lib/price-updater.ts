@@ -15,7 +15,7 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 */
 async function updateSingleProduct(product: Product) {
   const newCostPrice = product.costPrice!;
-  const newSellingPrice = Math.ceil(newCostPrice * (1 + product.profitMargin / 100));
+  const newSellingPrice = newCostPrice * (1 + product.profitMargin / 100);
 
   const updatedProductData = {
     ...product,
@@ -75,7 +75,7 @@ export async function updateAllProductPrices(): Promise<{
           // Verifica se o preço de custo mudou (com uma pequena tolerância para evitar atualizações desnecessárias)
           if (!product.costPrice || Math.abs(product.costPrice - newCostPrice) > 0.01) {
             dataToUpdate.costPrice = newCostPrice;
-            dataToUpdate.price = Math.ceil(newCostPrice * (1 + product.profitMargin / 100));
+            dataToUpdate.price = newCostPrice * (1 + product.profitMargin / 100);
             hasChanged = true;
           }
         } else {
@@ -88,7 +88,7 @@ export async function updateAllProductPrices(): Promise<{
 
         if (product.onSale !== newOnSaleStatus || product.originalPrice !== newOriginalPrice) {
             dataToUpdate.onSale = newOnSaleStatus;
-            dataToUpdate.originalPrice = newOriginalPrice;
+            dataToUpdate.originalPrice = newOnSaleStatus ? newOriginalPrice : null;
             hasChanged = true;
         }
 
