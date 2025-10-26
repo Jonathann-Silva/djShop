@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -94,9 +95,6 @@ export default function LoginPage() {
             </div>
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
               Login
-            </Button>
-            <Button variant="outline" className="w-full" onClick={handleGoogleLogin} type="button">
-              Login com o Google
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
