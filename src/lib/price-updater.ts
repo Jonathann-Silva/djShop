@@ -1,13 +1,39 @@
 
 'use server';
-import { updateProduct } from '@/lib/actions';
-import { getProducts } from '@/lib/data';
+import { updateProduct, updateElectronic, updateBebida } from '@/lib/actions';
+import { getProducts, getElectronics, getBebidas } from '@/lib/data';
 import { getRealTimePrice } from '@/ai/flows/get-real-time-price-flow';
-import { Perfume } from '@/lib/products';
+import { Perfume, Product } from '@/lib/products';
 import { revalidatePath } from 'next/cache';
 
 // Helper to introduce a delay between requests
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function updateSingleProduct(product: Product) {
+  const newCostPrice = product.costPrice!;
+  const newSellingPrice = Math.ceil(newCostPrice * (1 + product.profitMargin / 100));
+
+  const updatedProductData = {
+    ...product,
+    costPrice: newCostPrice,
+    price: newSellingPrice,
+  };
+
+  switch (product.category) {
+    case 'perfume':
+      await updateProduct(updatedProductData as Perfume);
+      break;
+    case 'eletronico':
+      await updateElectronic(updatedProductData);
+      break;
+    case 'bebida':
+      await updateBebida(updatedProductData);
+      break;
+  }
+
+  console.log(`Preço do produto "${product.name}" atualizado para R$ ${newSellingPrice.toFixed(2)}`);
+}
+
 
 export async function updateAllProductPrices(): Promise<{
   success: boolean;
@@ -19,55 +45,67 @@ export async function updateAllProductPrices(): Promise<{
   console.log('Iniciando a atualização de preços...');
   
   try {
-    const products = await getProducts();
+    const perfumes = (await getProducts()).map(p => ({...p, category: 'perfume' as const}));
+    const eletronicos = (await getElectronics()).map(p => ({...p, category: 'eletronico' as const}));
+    const bebidas = (await getBebidas()).map(p => ({...p, category: 'bebida' as const}));
+    const allProducts = [...perfumes, ...eletronicos, ...bebidas];
+
     let updatedCount = 0;
     let failedCount = 0;
 
-    for (const product of products) {
+    for (const product of allProducts) {
       if (!product.priceUrl) {
-        continue; // Pula produtos sem URL de preço
+        continue;
       }
 
       try {
         const result = await getRealTimePrice({ url: product.priceUrl });
+        const dataToUpdate = { ...product };
+        let hasChanged = false;
 
         if (result.price !== null) {
           const newCostPrice = result.price;
-          const newSellingPrice = newCostPrice * (1 + product.profitMargin / 100);
-
-          // Verifica se o preço de custo realmente mudou antes de atualizar
-          // Usando uma pequena tolerância para evitar atualizações por flutuações mínimas
+          
           if (!product.costPrice || Math.abs(product.costPrice - newCostPrice) > 0.01) {
-            const updatedProductData: Perfume = {
-              ...product,
-              costPrice: newCostPrice,
-              price: newSellingPrice,
-            };
-
-            await updateProduct(updatedProductData);
-            console.log(`Preço do produto "${product.name}" atualizado para R$ ${newSellingPrice.toFixed(2)}`);
-            updatedCount++;
+            dataToUpdate.costPrice = newCostPrice;
+            dataToUpdate.price = Math.ceil(newCostPrice * (1 + product.profitMargin / 100));
+            hasChanged = true;
           }
         } else {
-          console.warn(`Não foi possível obter o preço para "${product.name}". Erro: ${result.error}`);
-          failedCount++;
+           console.warn(`Não foi possível obter o preço para "${product.name}". Erro: ${result.error}`);
         }
+
+        const newOnSaleStatus = result.originalPrice !== null && result.price !== null && result.originalPrice > result.price;
+        if (product.onSale !== newOnSaleStatus) {
+            dataToUpdate.onSale = newOnSaleStatus;
+            dataToUpdate.originalPrice = result.originalPrice;
+            hasChanged = true;
+        }
+
+        if (hasChanged) {
+            switch(dataToUpdate.category) {
+                case 'perfume': await updateProduct(dataToUpdate as Perfume); break;
+                case 'eletronico': await updateElectronic(dataToUpdate); break;
+                case 'bebida': await updateBebida(dataToUpdate); break;
+            }
+            console.log(`Produto "${product.name}" atualizado. Em promoção: ${dataToUpdate.onSale}`);
+            updatedCount++;
+        }
+
       } catch (error) {
         console.error(`Erro ao processar o produto "${product.name}":`, error);
         failedCount++;
       }
       
-      // Adiciona um pequeno atraso para não sobrecarregar o site de origem
       await delay(500); 
     }
 
-    // Revalida as páginas principais após a conclusão de todas as atualizações
     revalidatePath('/catalogo', 'layout');
     revalidatePath('/', 'layout');
 
-    const message = `Atualização concluída. ${updatedCount} preços atualizados, ${failedCount} falhas.`;
+    const message = `Atualização concluída. ${updatedCount} produtos atualizados, ${failedCount} falhas.`;
     console.log(message);
-    return { success: true, message, updatedCount, failedCount, totalCount: products.length };
+    return { success: true, message, updatedCount, failedCount, totalCount: allProducts.length };
 
   } catch (error) {
     console.error('Erro geral no processo de atualização de preços:', error);
@@ -80,3 +118,4 @@ export async function updateAllProductPrices(): Promise<{
     };
   }
 }
+

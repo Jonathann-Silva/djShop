@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { updateBebida } from "@/lib/actions";
 import { getBrands } from "@/lib/data";
@@ -184,17 +183,6 @@ export function EditBebidaForm({ product }: EditBebidaFormProps) {
               placeholder="https://example.com/image.jpg"
             />
           </div>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Controller
-            name="onSale"
-            control={control}
-            render={({ field }) => (
-              <Switch id="onSale" checked={field.value} onCheckedChange={field.onChange} />
-            )}
-          />
-          <Label htmlFor="onSale">Produto em promoção</Label>
         </div>
       </CardContent>
 

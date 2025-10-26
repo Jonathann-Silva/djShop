@@ -18,6 +18,7 @@ export interface Perfume {
   imageUrl?: string;
   price?: number | null;
   costPrice?: number | null;
+  originalPrice?: number | null;
   createdAt?: number;
   category?: 'perfume';
 }
@@ -34,6 +35,7 @@ export interface Eletronico {
   imageUrl?: string;
   price?: number | null;
   costPrice?: number | null;
+  originalPrice?: number | null;
   createdAt?: number;
   category?: 'eletronico';
 }
@@ -50,6 +52,7 @@ export interface Bebida {
   imageUrl?: string;
   price?: number | null;
   costPrice?: number | null;
+  originalPrice?: number | null;
   createdAt?: number;
   category?: 'bebida';
 }

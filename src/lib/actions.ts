@@ -70,6 +70,7 @@ const ProductSchema = z.object({
   imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
   price: z.number().optional().nullable(), 
   costPrice: z.number().optional().nullable(),
+  originalPrice: z.number().optional().nullable(),
   createdAt: z.number().optional(),
 });
 
@@ -169,6 +170,7 @@ const EletronicoSchema = z.object({
   imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
   price: z.number().optional().nullable(), 
   costPrice: z.number().optional().nullable(),
+  originalPrice: z.number().optional().nullable(),
   createdAt: z.number().optional(),
 });
 
@@ -264,6 +266,7 @@ const BebidaSchema = z.object({
   imageUrl: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
   price: z.number().optional().nullable(), 
   costPrice: z.number().optional().nullable(),
+  originalPrice: z.number().optional().nullable(),
   createdAt: z.number().optional(),
 });
 

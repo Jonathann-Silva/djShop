@@ -249,17 +249,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
             />
           </div>
         </div>
-
-        <div className="flex items-center space-x-2">
-          <Controller
-            name="onSale"
-            control={control}
-            render={({ field }) => (
-              <Switch id="onSale" checked={field.value} onCheckedChange={field.onChange} />
-            )}
-          />
-          <Label htmlFor="onSale">Produto em promoção</Label>
-        </div>
       </CardContent>
 
       <CardFooter className="flex justify-end gap-2">

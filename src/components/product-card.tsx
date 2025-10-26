@@ -13,11 +13,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Perfume, getImageUrl, getImageHint } from "@/lib/products";
+import { Perfume, Product, getImageUrl, getImageHint } from "@/lib/products";
 import { useCart } from "@/hooks/use-cart";
 
 interface ProductCardProps {
-  product: Perfume;
+  product: Product;
   sortOrder?: string;
 }
 
@@ -41,6 +41,10 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
     }
     return {};
   }, [sortOrder, product.price]);
+
+  const isPerfume = (product: Product): product is Perfume => {
+    return 'sizeMl' in product;
+  }
 
 
   return (
@@ -69,7 +73,7 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
             <CardTitle className="text-base font-headline leading-tight tracking-tight">{product.name}</CardTitle>
             <p className="text-xs text-muted-foreground mt-1">{product.brand}</p>
         </Link>
-         <p className="text-xs text-muted-foreground mt-1">{product.sizeMl}ml</p>
+        {isPerfume(product) && <p className="text-xs text-muted-foreground mt-1">{product.sizeMl}ml</p>}
       </CardContent>
       <CardFooter className="p-3 flex justify-between items-center bg-card flex-shrink-0">
         <div className="text-lg font-semibold text-primary h-8 flex items-center">

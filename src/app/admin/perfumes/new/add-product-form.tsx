@@ -71,6 +71,7 @@ export function AddProductForm() {
       ...data,
       profitMargin: Number(data.profitMargin) || 0,
       sizeMl: Number(data.sizeMl) || 0,
+      onSale: false, // onSale is now determined automatically
     };
 
     const result = await addProduct(dataToSubmit);
@@ -229,23 +230,6 @@ export function AddProductForm() {
                 />
             </div>
           </div>
-
-        <div className="flex items-center space-x-2">
-            <Controller
-                name="onSale"
-                control={control}
-                render={({ field }) => (
-                     <Switch
-                        id="onSale"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                )}
-            />
-            <Label htmlFor="onSale">Produto em promoção</Label>
-        </div>
-
-
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSaving}>Cancelar</Button>

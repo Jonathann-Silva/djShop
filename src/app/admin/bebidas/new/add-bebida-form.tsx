@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { addBebida } from "@/lib/actions";
 import { getBrands } from "@/lib/data";
@@ -64,6 +63,7 @@ export function AddBebidaForm() {
     const dataToSubmit = {
       ...data,
       profitMargin: Number(data.profitMargin) || 0,
+      onSale: false,
     };
 
     const result = await addBebida(dataToSubmit);
@@ -170,23 +170,6 @@ export function AddBebidaForm() {
                 />
             </div>
         </div>
-
-        <div className="flex items-center space-x-2">
-            <Controller
-                name="onSale"
-                control={control}
-                render={({ field }) => (
-                     <Switch
-                        id="onSale"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                )}
-            />
-            <Label htmlFor="onSale">Produto em promoção</Label>
-        </div>
-
-
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSaving}>Cancelar</Button>
