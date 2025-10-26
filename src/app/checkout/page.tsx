@@ -67,11 +67,11 @@ export default function CheckoutPage() {
  const { grandTotal, installmentValue } = useMemo(() => {
     if (paymentMethod === 'Cartão de Crédito' && installments > 0) {
       const rate = interestRates[installments];
-      const totalWithInterest = totalPrice * (1 + rate);
+      const totalWithInterest = Math.ceil(totalPrice * (1 + rate));
       const singleInstallmentValue = totalWithInterest / installments;
       return { grandTotal: totalWithInterest, installmentValue: singleInstallmentValue };
     }
-    return { grandTotal: totalPrice, installmentValue: totalPrice };
+    return { grandTotal: Math.ceil(totalPrice), installmentValue: Math.ceil(totalPrice) };
   }, [totalPrice, paymentMethod, installments]);
 
   const getPaymentMethodString = () => {
@@ -214,11 +214,11 @@ export default function CheckoutPage() {
             <CardContent className="grid grid-cols-1 md:grid-cols-6 gap-4">
               <div className="space-y-2 col-span-6 md:col-span-3">
                 <Label htmlFor="firstName">Nome</Label>
-                <Input id="firstName" placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
               </div>
               <div className="space-y-2 col-span-6 md:col-span-3">
                 <Label htmlFor="lastName">Sobrenome</Label>
-                <Input id="lastName" placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} />
               </div>
               <div className="space-y-2 col-span-6 md:col-span-4">
                 <Label htmlFor="address">Endereço</Label>
@@ -271,7 +271,7 @@ export default function CheckoutPage() {
                         <SelectContent className="max-h-60">
                              {Object.entries(interestRates).map(([num, rate]) => (
                                 <SelectItem key={num} value={String(num)}>
-                                    {num}x de R$ {((totalPrice * (1 + rate)) / Number(num)).toFixed(2)} (Total: R$ {(totalPrice * (1 + rate)).toFixed(2)})
+                                    {num}x de R$ {((totalPrice * (1 + rate)) / Number(num)).toFixed(2)} (Total: R$ {Math.ceil(totalPrice * (1 + rate)).toFixed(2)})
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -362,3 +362,5 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
+    
