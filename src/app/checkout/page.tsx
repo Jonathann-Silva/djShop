@@ -30,6 +30,22 @@ import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { sendTelegramNotification, createOrder } from "@/lib/actions";
 
+const interestRates: { [key: number]: number } = {
+  1: 0.0325,
+  2: 0.0570,
+  3: 0.0652,
+  4: 0.0735,
+  5: 0.0819,
+  6: 0.0903,
+  7: 0.0989,
+  8: 0.1074,
+  9: 0.1158,
+  10: 0.1243,
+  11: 0.1329,
+  12: 0.1416,
+};
+
+
 export default function CheckoutPage() {
   const { cartItems, totalPrice, totalItems, clearCart } = useCart();
   const { toast } = useToast();
@@ -48,18 +64,22 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
-  const grandTotal = useMemo(() => {
-    // Placeholder for future interest rate logic
-    // For now, no interest is applied.
-    return totalPrice;
+ const { grandTotal, installmentValue } = useMemo(() => {
+    if (paymentMethod === 'Cartão de Crédito' && installments > 0) {
+      const rate = interestRates[installments];
+      const totalWithInterest = totalPrice * (1 + rate);
+      const singleInstallmentValue = totalWithInterest / installments;
+      return { grandTotal: totalWithInterest, installmentValue: singleInstallmentValue };
+    }
+    return { grandTotal: totalPrice, installmentValue: totalPrice };
   }, [totalPrice, paymentMethod, installments]);
 
   const getPaymentMethodString = () => {
     if (paymentMethod === 'Cartão de Crédito') {
         if (installments === 1) {
-            return 'Crédito à vista';
+            return `Crédito à vista (Total: R$ ${grandTotal.toFixed(2)})`;
         }
-        return `Crédito parcelado ${installments}x`;
+        return `Crédito parcelado ${installments}x de R$ ${installmentValue.toFixed(2)} (Total: R$ ${grandTotal.toFixed(2)})`;
     }
     return paymentMethod;
   }
@@ -99,6 +119,7 @@ export default function CheckoutPage() {
     message += `*Endereço de Entrega:* ${address}, nº ${number}, ${city} - ${zip}\n\n`;
     message += `*Itens do Pedido:*\n`;
     message += `${productsSummary}\n\n`;
+    message += `*Subtotal:* R$ ${totalPrice.toFixed(2)}\n`;
     message += `*Forma de Pagamento:* ${finalPaymentMethod}\n`;
     message += `*Valor Total:* R$ ${grandTotal.toFixed(2)}`;
     
@@ -248,9 +269,10 @@ export default function CheckoutPage() {
                             <SelectValue placeholder="Selecione o número de parcelas" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="1">1x (à vista)</SelectItem>
-                            {Array.from({ length: 11 }, (_, i) => i + 2).map(num => (
-                                <SelectItem key={num} value={String(num)}>{num}x</SelectItem>
+                             {Object.entries(interestRates).map(([num, rate]) => (
+                                <SelectItem key={num} value={String(num)}>
+                                    {num}x de R$ {((totalPrice * (1 + rate)) / Number(num)).toFixed(2)} (Total: R$ {(totalPrice * (1 + rate)).toFixed(2)})
+                                </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
@@ -298,6 +320,18 @@ export default function CheckoutPage() {
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>R$ {totalPrice.toFixed(2)}</span>
                 </div>
+                 {paymentMethod === 'Cartão de Crédito' && (
+                    <>
+                    <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Juros ({installments}x)</span>
+                        <span>R$ {(grandTotal - totalPrice).toFixed(2)}</span>
+                    </div>
+                     <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Valor da parcela</span>
+                        <span>{installments}x de R$ {installmentValue.toFixed(2)}</span>
+                    </div>
+                    </>
+                 )}
                 <Separator />
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
@@ -328,5 +362,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-
-    
