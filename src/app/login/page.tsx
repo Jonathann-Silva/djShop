@@ -59,7 +59,7 @@ export default function LoginPage() {
             Bem Vindo!
           </CardTitle>
           <CardDescription>
-            Faça login para aceder à sua conta e histórico de pedidos.
+            Área apenas para Administradores!
           </CardDescription>
         </CardHeader>
         <CardContent>
