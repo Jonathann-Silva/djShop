@@ -31,17 +31,17 @@ import { useToast } from "@/hooks/use-toast";
 import { sendTelegramNotification, createOrder } from "@/lib/actions";
 
 const interestRates: { [key: number]: number } = {
-  1: 0.0325,
+  1: 0.0326,
   2: 0.0570,
   3: 0.0652,
-  4: 0.0735,
-  5: 0.0819,
-  6: 0.0903,
+  4: 0.0736,
+  5: 0.0820,
+  6: 0.0904,
   7: 0.0989,
-  8: 0.1074,
-  9: 0.1158,
-  10: 0.1243,
-  11: 0.1329,
+  8: 0.1075,
+  9: 0.1159,
+  10: 0.1244,
+  11: 0.1330,
   12: 0.1416,
 };
 
@@ -362,5 +362,7 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
+    
 
     
