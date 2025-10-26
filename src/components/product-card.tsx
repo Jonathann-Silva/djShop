@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from "react";
@@ -17,7 +16,8 @@ import { Perfume, Product, getImageUrl, getImageHint } from "@/lib/products";
 import { useCart } from "@/hooks/use-cart";
 
 interface ProductCardProps {
-  product: Product;
+  // Adicione a propriedade 'originalPrice' à sua interface de Produto
+  product: Product & { originalPrice?: number | null };
   sortOrder?: string;
 }
 
@@ -26,33 +26,39 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
   const imageUrl = getImageUrl(product.imageId, product);
   const imageHint = getImageHint(product.imageId);
 
+  // Lógica para determinar se o produto está em promoção
+  const isOnSale = product.originalPrice && product.originalPrice > product.price;
+
   const handleAddToCart = () => {
     if (product.price) {
-        addToCart(product)
+      addToCart(product);
     }
-  }
+  };
 
   const orderStyle = useMemo(() => {
-    if (sortOrder === 'price-asc' && product.price) {
+    if (sortOrder === "price-asc" && product.price) {
       return { order: Math.floor(product.price) };
     }
-    if (sortOrder === 'price-desc' && product.price) {
+    if (sortOrder === "price-desc" && product.price) {
       return { order: -Math.floor(product.price) };
     }
     return {};
   }, [sortOrder, product.price]);
 
   const isPerfume = (product: Product): product is Perfume => {
-    return 'sizeMl' in product;
-  }
-
+    return "sizeMl" in product;
+  };
 
   return (
-    <Card style={orderStyle} className="group overflow-hidden rounded-lg shadow-lg transition-all hover:shadow-xl w-full flex flex-col">
-       <Link href={`/products/${product.id}`} className="flex-shrink-0 relative">
+    <Card
+      style={orderStyle}
+      className="group overflow-hidden rounded-lg shadow-lg transition-all hover:shadow-xl w-full flex flex-col"
+    >
+      <Link href={`/products/${product.id}`} className="flex-shrink-0 relative">
         <CardHeader className="p-0">
           <div className="overflow-hidden">
-             {product.onSale && (
+            {/* MUDANÇA 1: Lógica da etiqueta corrigida */}
+            {isOnSale && (
               <div className="absolute top-2 right-2 z-10 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md">
                 Promoção
               </div>
@@ -70,18 +76,34 @@ export function ProductCard({ product, sortOrder }: ProductCardProps) {
       </Link>
       <CardContent className="p-2 bg-card flex-grow flex flex-col">
         <Link href={`/products/${product.id}`} className="flex-grow">
-            <CardTitle className="text-base font-headline leading-tight tracking-tight">{product.name}</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">{product.brand}</p>
+          <CardTitle className="text-base font-headline leading-tight tracking-tight">
+            {product.name}
+          </CardTitle>
+          <p className="text-xs text-muted-foreground mt-1">{product.brand}</p>
         </Link>
-        {isPerfume(product) && <p className="text-xs text-muted-foreground mt-1">{product.sizeMl}ml</p>}
+        {isPerfume(product) && (
+          <p className="text-xs text-muted-foreground mt-1">
+            {product.sizeMl}ml
+          </p>
+        )}
       </CardContent>
       <CardFooter className="p-3 flex justify-between items-center bg-card flex-shrink-0">
-        <div className="text-lg font-semibold text-primary h-8 flex items-center">
-         {product.price ? (
-             `R$ ${product.price.toFixed(2)}`
-         ) : (
+        {/* MUDANÇA 2: Exibição do preço corrigida */}
+        <div className="flex flex-col items-start justify-center">
+          {product.price ? (
+            <>
+              {isOnSale && (
+                <del className="text-xs text-muted-foreground">
+                  R$ {product.originalPrice.toFixed(2)}
+                </del>
+              )}
+              <div className="text-lg font-semibold text-primary leading-tight">
+                R$ {product.price.toFixed(2)}
+              </div>
+            </>
+          ) : (
             <span className="text-xs text-destructive">Indisponível</span>
-         )}
+          )}
         </div>
         <Button
           size="sm"

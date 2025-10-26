@@ -38,9 +38,9 @@ export default async function ProductDetailPage({
             src={imageUrl}
             alt={product.name}
             width={600}
-            height={800}
+            height={600}
             data-ai-hint={imageHint}
-            className="rounded-lg object-cover w-full aspect-[3/4] shadow-lg"
+            className="rounded-lg object-cover w-full aspect-square shadow-lg"
           />
         </div>
 
