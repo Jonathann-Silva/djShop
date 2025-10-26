@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from "react";
@@ -43,18 +44,25 @@ export default function CheckoutPage() {
   const [zip, setZip] = useState("");
   const [phone, setPhone] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [installments, setInstallments] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   const grandTotal = useMemo(() => {
-    if (paymentMethod === "Crédito parcelado 2x") {
-      return totalPrice * 1.06;
-    }
-    if (paymentMethod === "Crédito parcelado 3x") {
-      return totalPrice * 1.075;
-    }
+    // Placeholder for future interest rate logic
+    // For now, no interest is applied.
     return totalPrice;
-  }, [totalPrice, paymentMethod]);
+  }, [totalPrice, paymentMethod, installments]);
+
+  const getPaymentMethodString = () => {
+    if (paymentMethod === 'Cartão de Crédito') {
+        if (installments === 1) {
+            return 'Crédito à vista';
+        }
+        return `Crédito parcelado ${installments}x`;
+    }
+    return paymentMethod;
+  }
 
 
   const handlePlaceOrder = async () => {
@@ -67,8 +75,19 @@ export default function CheckoutPage() {
       });
       return;
     }
+     if (paymentMethod === 'Cartão de Crédito' && !installments) {
+        toast({
+            variant: "destructive",
+            title: "Campos em falta",
+            description: "Por favor, selecione o número de parcelas.",
+        });
+        return;
+    }
+
 
     setIsProcessing(true);
+    
+    const finalPaymentMethod = getPaymentMethodString();
 
     const productsSummary = cartItems.map(item => 
         `- ${item.product.name} (x${item.quantity}) - R$ ${(item.product.price * item.quantity).toFixed(2)}`
@@ -80,7 +99,7 @@ export default function CheckoutPage() {
     message += `*Endereço de Entrega:* ${address}, nº ${number}, ${city} - ${zip}\n\n`;
     message += `*Itens do Pedido:*\n`;
     message += `${productsSummary}\n\n`;
-    message += `*Forma de Pagamento:* ${paymentMethod}\n`;
+    message += `*Forma de Pagamento:* ${finalPaymentMethod}\n`;
     message += `*Valor Total:* R$ ${grandTotal.toFixed(2)}`;
     
     // Create order in Firestore
@@ -95,7 +114,7 @@ export default function CheckoutPage() {
           price: item.product.price,
           category: item.product.category || 'perfume'
       })),
-      paymentMethod,
+      paymentMethod: finalPaymentMethod,
       total: grandTotal,
       status: 'Pendente' as 'Pendente' | 'Entregue',
     };
@@ -209,7 +228,7 @@ export default function CheckoutPage() {
                 <CreditCard className="h-5 w-5" /> Formas de pagamento
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <Select onValueChange={setPaymentMethod} value={paymentMethod}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione um método de pagamento" />
@@ -218,11 +237,25 @@ export default function CheckoutPage() {
                   <SelectItem value="Dinheiro">Dinheiro</SelectItem>
                   <SelectItem value="Pix">Pix</SelectItem>
                   <SelectItem value="Débito">Débito</SelectItem>
-                  <SelectItem value="Crédito à vista">Crédito à vista</SelectItem>
-                  <SelectItem value="Crédito parcelado 2x">Crédito parcelado 2x</SelectItem>
-                  <SelectItem value="Crédito parcelado 3x">Crédito parcelado 3x</SelectItem>
+                  <SelectItem value="Cartão de Crédito">Cartão de Crédito</SelectItem>
                 </SelectContent>
               </Select>
+              {paymentMethod === 'Cartão de Crédito' && (
+                <div className="space-y-2">
+                    <Label htmlFor="installments">Parcelas</Label>
+                    <Select onValueChange={(value) => setInstallments(Number(value))} value={String(installments)}>
+                        <SelectTrigger id="installments">
+                            <SelectValue placeholder="Selecione o número de parcelas" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="1">1x (à vista)</SelectItem>
+                            {Array.from({ length: 11 }, (_, i) => i + 2).map(num => (
+                                <SelectItem key={num} value={String(num)}>{num}x</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -265,12 +298,6 @@ export default function CheckoutPage() {
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>R$ {totalPrice.toFixed(2)}</span>
                 </div>
-                 {(paymentMethod === 'Crédito parcelado 2x' || paymentMethod === 'Crédito parcelado 3x') && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Taxa de Parcelamento</span>
-                    <span>R$ {(grandTotal - totalPrice).toFixed(2)}</span>
-                  </div>
-                )}
                 <Separator />
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
