@@ -56,7 +56,7 @@ export default function LoginPage() {
         <CardHeader className="text-center">
           <SprayCan className="mx-auto h-10 w-10 text-primary" />
           <CardTitle className="text-2xl font-headline mt-2">
-            Bem-vindo de volta
+            Bem Vindo!
           </CardTitle>
           <CardDescription>
             Faça login para aceder à sua conta e histórico de pedidos.
