@@ -69,11 +69,14 @@ export async function updateAllProductPrices(): Promise<{
         const dataToUpdate = { ...product };
         let hasChanged = false;
 
+        let newCostPrice = product.costPrice;
+        
         // --- Lógica de Preço de Custo e Venda ---
         if (result.price !== null) {
-          const newCostPrice = result.price;
-          // Verifica se o preço de custo mudou (com uma pequena tolerância para evitar atualizações desnecessárias)
-          if (!product.costPrice || Math.abs(product.costPrice - newCostPrice) > 0.01) {
+          const fetchedCostPrice = result.price;
+          // Verifica se o preço de custo mudou
+          if (!product.costPrice || Math.abs(product.costPrice - fetchedCostPrice) > 0.01) {
+            newCostPrice = fetchedCostPrice;
             dataToUpdate.costPrice = newCostPrice;
             dataToUpdate.price = newCostPrice * (1 + product.profitMargin / 100);
             hasChanged = true;
@@ -84,10 +87,13 @@ export async function updateAllProductPrices(): Promise<{
 
         // --- Lógica de Promoção ---
         const newOriginalPrice = result.originalPrice;
-        // Considera promoção se o preço original for maior que o preço de custo (o preço de venda)
-        const newOnSaleStatus = newOriginalPrice !== null && dataToUpdate.costPrice !== null && newOriginalPrice > dataToUpdate.costPrice;
-
-        if (product.onSale !== newOnSaleStatus || product.originalPrice !== newOriginalPrice) {
+        // O `newCostPrice` aqui é o preço de *venda* atual no site de origem. A promoção existe se o preço original for maior que o preço de venda atual.
+        const newOnSaleStatus = newOriginalPrice !== null && newCostPrice !== null && newOriginalPrice > newCostPrice;
+        
+        const currentOriginalPrice = product.originalPrice;
+        
+        // Se o status da promoção mudou OU o preço original mudou
+        if (product.onSale !== newOnSaleStatus || currentOriginalPrice !== newOriginalPrice) {
             dataToUpdate.onSale = newOnSaleStatus;
             dataToUpdate.originalPrice = newOnSaleStatus ? newOriginalPrice : null;
             hasChanged = true;
@@ -132,3 +138,4 @@ export async function updateAllProductPrices(): Promise<{
     };
   }
 }
+
