@@ -63,10 +63,11 @@ export async function updateAllProductPrices(): Promise<{
         }
 
         if (newOnSaleStatus && scrapedOriginalCostPrice) {
-            // If the original cost price has changed, update it and the final original price
-            if (product.originalCostPrice !== scrapedOriginalCostPrice) {
+            const calculatedOriginalPrice = scrapedOriginalCostPrice * profitMultiplier;
+            // If the original cost price or the calculated final price has changed, update it.
+            if (product.originalCostPrice !== scrapedOriginalCostPrice || product.originalPrice !== calculatedOriginalPrice) {
                 dataToUpdate.originalCostPrice = scrapedOriginalCostPrice;
-                dataToUpdate.originalPrice = scrapedOriginalCostPrice * profitMultiplier;
+                dataToUpdate.originalPrice = calculatedOriginalPrice;
                 hasChanged = true;
             }
         } else if (product.onSale && !newOnSaleStatus) { // If product was on sale, but isn't anymore
