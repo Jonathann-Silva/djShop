@@ -37,9 +37,7 @@ export async function updateAllProductPrices(): Promise<{
         const dataToUpdate: Partial<Product> = {};
         let hasChanged = false;
 
-        const fixedProfitMargin = 75; // Alterado para 75%
-        product.profitMargin = fixedProfitMargin; // Garante que o produto tenha a margem atualizada
-        const profitMultiplier = 1 + fixedProfitMargin / 100;
+        const profitMultiplier = 1 + product.profitMargin / 100;
         let newCostPrice = product.costPrice;
 
         if (result.price !== null) {
@@ -75,30 +73,15 @@ export async function updateAllProductPrices(): Promise<{
             dataToUpdate.onSale = false;
             hasChanged = true;
         }
-        
-        // Sempre forçar a atualização da margem e dos preços se a margem for diferente
-        if (product.profitMargin !== fixedProfitMargin) {
-            hasChanged = true;
-        }
 
         if (hasChanged) {
-            const finalData = { ...product, profitMargin: fixedProfitMargin, ...dataToUpdate };
-
-            // Recalcula os preços mesmo se não houver mudança de custo, para refletir a nova margem
-            if (finalData.costPrice) {
-              finalData.price = finalData.costPrice * profitMultiplier;
-            }
-            if (finalData.onSale && finalData.originalCostPrice) {
-              finalData.originalPrice = finalData.originalCostPrice * profitMultiplier;
-            }
-
-
+            const finalData = { ...product, ...dataToUpdate };
             switch(finalData.category) {
                 case 'perfume': await updateProduct(finalData as Perfume); break;
                 case 'eletronico': await updateElectronic(finalData as Eletronico); break;
                 case 'bebida': await updateBebida(finalData as Bebida); break;
             }
-            console.log(`Produto "${product.name}" atualizado. Margem: ${fixedProfitMargin}%. Preço de venda: ${finalData.price?.toFixed(2)}, Em promoção: ${finalData.onSale}, Preço Original: ${finalData.originalPrice?.toFixed(2)}`);
+            console.log(`Produto "${product.name}" atualizado. Preço de venda: ${finalData.price?.toFixed(2)}, Em promoção: ${finalData.onSale}, Preço Original: ${finalData.originalPrice?.toFixed(2)}`);
             updatedCount++;
         }
 
