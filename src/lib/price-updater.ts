@@ -68,17 +68,14 @@ export async function updateAllProductPrices(): Promise<{
         const result = await getRealTimePrice({ url: product.priceUrl });
         const dataToUpdate = { ...product };
         let hasChanged = false;
-
-        let newCostPrice = product.costPrice;
         
         // --- Lógica de Preço de Custo e Venda ---
         if (result.price !== null) {
           const fetchedCostPrice = result.price;
           // Verifica se o preço de custo mudou
           if (!product.costPrice || Math.abs(product.costPrice - fetchedCostPrice) > 0.01) {
-            newCostPrice = fetchedCostPrice;
-            dataToUpdate.costPrice = newCostPrice;
-            dataToUpdate.price = newCostPrice * (1 + product.profitMargin / 100);
+            dataToUpdate.costPrice = fetchedCostPrice;
+            dataToUpdate.price = fetchedCostPrice * (1 + product.profitMargin / 100);
             hasChanged = true;
           }
         } else {
@@ -86,16 +83,19 @@ export async function updateAllProductPrices(): Promise<{
         }
 
         // --- Lógica de Promoção ---
-        const newOriginalPrice = result.originalPrice;
-        // O `newCostPrice` aqui é o preço de *venda* atual no site de origem. A promoção existe se o preço original for maior que o preço de venda atual.
-        const newOnSaleStatus = newOriginalPrice !== null && newCostPrice !== null && newOriginalPrice > newCostPrice;
-        
-        const currentOriginalPrice = product.originalPrice;
-        
-        // Se o status da promoção mudou OU o preço original mudou
-        if (product.onSale !== newOnSaleStatus || currentOriginalPrice !== newOriginalPrice) {
+        const scrapedOriginalCostPrice = result.originalPrice; // Preço "de" no site de origem
+        const newOnSaleStatus = scrapedOriginalCostPrice !== null && dataToUpdate.costPrice !== null && scrapedOriginalCostPrice > dataToUpdate.costPrice;
+
+        let newOriginalSellingPrice: number | null = null;
+        if (newOnSaleStatus && scrapedOriginalCostPrice) {
+            // Aplica a margem de lucro ao preço original de custo para ter o preço de venda original
+            newOriginalSellingPrice = scrapedOriginalCostPrice * (1 + product.profitMargin / 100);
+        }
+
+        // Se o status da promoção mudou OU o preço original de venda calculado mudou
+        if (product.onSale !== newOnSaleStatus || product.originalPrice !== newOriginalSellingPrice) {
             dataToUpdate.onSale = newOnSaleStatus;
-            dataToUpdate.originalPrice = newOnSaleStatus ? newOriginalPrice : null;
+            dataToUpdate.originalPrice = newOriginalSellingPrice;
             hasChanged = true;
         }
 
@@ -106,7 +106,7 @@ export async function updateAllProductPrices(): Promise<{
                 case 'eletronico': await updateElectronic(dataToUpdate); break;
                 case 'bebida': await updateBebida(dataToUpdate); break;
             }
-            console.log(`Produto "${product.name}" atualizado. Preço de venda: ${dataToUpdate.price?.toFixed(2)}, Em promoção: ${dataToUpdate.onSale}, Preço Original: ${dataToUpdate.originalPrice}`);
+            console.log(`Produto "${product.name}" atualizado. Preço de venda: ${dataToUpdate.price?.toFixed(2)}, Em promoção: ${dataToUpdate.onSale}, Preço Original: ${dataToUpdate.originalPrice?.toFixed(2)}`);
             updatedCount++;
         }
 
@@ -138,4 +138,3 @@ export async function updateAllProductPrices(): Promise<{
     };
   }
 }
-
