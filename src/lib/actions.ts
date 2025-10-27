@@ -72,16 +72,12 @@ const ProductSchema = z.object({
   costPrice: z.number().optional().nullable(),
   originalPrice: z.number().optional().nullable(),
   createdAt: z.number().optional(),
-  originalCostPrice: z.number().optional().nullable(), // Campo para armazenar o custo original
+  originalCostPrice: z.number().optional().nullable(),
 });
 
 export async function updateProduct(
   data: Perfume
 ): Promise<{ success: boolean; message: string }> {
-  // We need to fetch the original product to get the originalCostPrice
-  const originalProductDoc = await getDoc(doc(db, 'products', data.id));
-  const originalProductData = originalProductDoc.data() as Perfume;
-
   const validation = ProductSchema.safeParse(data);
 
   if (!validation.success) {
@@ -90,24 +86,29 @@ export async function updateProduct(
   }
   
   const validatedData = validation.data;
-
-  // Recalcula o preço de venda e o preço original com base na nova margem de lucro
-  const profitMultiplier = 1 + validatedData.profitMargin / 100;
-
-  if (validatedData.costPrice && validatedData.profitMargin >= 0) {
-    validatedData.price = validatedData.costPrice * profitMultiplier;
-  }
   
-  // Se o produto está em promoção e temos um custo original salvo, recalcula o preço de venda original
-  const originalCostPrice = originalProductData?.originalCostPrice;
-  if (validatedData.onSale && originalCostPrice && validatedData.profitMargin >= 0) {
-      validatedData.originalPrice = originalCostPrice * profitMultiplier;
-  }
-
+  const productDocRef = doc(db, 'products', validatedData.id);
 
   try {
-    const productRef = doc(db, 'products', validatedData.id);
-    await setDoc(productRef, validatedData, { merge: true });
+    const productDoc = await getDoc(productDocRef);
+    if (!productDoc.exists()) {
+        return { success: false, message: "Produto não encontrado." };
+    }
+    const existingProduct = productDoc.data() as Perfume;
+
+    const dataToUpdate: Partial<Perfume> = { ...validatedData };
+
+    const profitMultiplier = 1 + validatedData.profitMargin / 100;
+
+    if (existingProduct.costPrice) {
+        dataToUpdate.price = existingProduct.costPrice * profitMultiplier;
+    }
+
+    if (existingProduct.onSale && existingProduct.originalCostPrice) {
+        dataToUpdate.originalPrice = existingProduct.originalCostPrice * profitMultiplier;
+    }
+    
+    await setDoc(productDocRef, dataToUpdate, { merge: true });
 
     revalidatePath('/admin/perfumes', 'layout');
     revalidatePath(`/admin/perfumes/${validatedData.id}/edit`);
@@ -192,9 +193,6 @@ const EletronicoSchema = z.object({
 export async function updateElectronic(
   data: Eletronico
 ): Promise<{ success: boolean; message: string }> {
-  const originalProductDoc = await getDoc(doc(db, 'electronics', data.id));
-  const originalProductData = originalProductDoc.data() as Eletronico;
-  
   const validation = EletronicoSchema.safeParse(data);
 
   if (!validation.success) {
@@ -204,20 +202,28 @@ export async function updateElectronic(
   
   const validatedData = validation.data;
   
-  const profitMultiplier = 1 + validatedData.profitMargin / 100;
-
-  if (validatedData.costPrice && validatedData.profitMargin >= 0) {
-    validatedData.price = validatedData.costPrice * profitMultiplier;
-  }
-
-  const originalCostPrice = originalProductData?.originalCostPrice;
-  if (validatedData.onSale && originalCostPrice && validatedData.profitMargin >= 0) {
-      validatedData.originalPrice = originalCostPrice * profitMultiplier;
-  }
+  const electronicDocRef = doc(db, 'electronics', validatedData.id);
 
   try {
-    const electronicRef = doc(db, 'electronics', validatedData.id);
-    await setDoc(electronicRef, validatedData, { merge: true });
+    const electronicDoc = await getDoc(electronicDocRef);
+    if (!electronicDoc.exists()) {
+        return { success: false, message: "Eletrônico não encontrado." };
+    }
+    const existingElectronic = electronicDoc.data() as Eletronico;
+
+    const dataToUpdate: Partial<Eletronico> = { ...validatedData };
+
+    const profitMultiplier = 1 + validatedData.profitMargin / 100;
+
+    if (existingElectronic.costPrice) {
+        dataToUpdate.price = existingElectronic.costPrice * profitMultiplier;
+    }
+
+    if (existingElectronic.onSale && existingElectronic.originalCostPrice) {
+        dataToUpdate.originalPrice = existingElectronic.originalCostPrice * profitMultiplier;
+    }
+
+    await setDoc(electronicDocRef, dataToUpdate, { merge: true });
 
     revalidatePath('/admin/eletronicos', 'layout');
     revalidatePath(`/admin/eletronicos/${validatedData.id}/edit`);
@@ -299,9 +305,6 @@ const BebidaSchema = z.object({
 export async function updateBebida(
   data: Bebida
 ): Promise<{ success: boolean; message: string }> {
-  const originalProductDoc = await getDoc(doc(db, 'bebidas', data.id));
-  const originalProductData = originalProductDoc.data() as Bebida;
-
   const validation = BebidaSchema.safeParse(data);
 
   if (!validation.success) {
@@ -310,20 +313,29 @@ export async function updateBebida(
   }
   
   const validatedData = validation.data;
-  const profitMultiplier = 1 + validatedData.profitMargin / 100;
-
-  if (validatedData.costPrice && validatedData.profitMargin >= 0) {
-    validatedData.price = validatedData.costPrice * profitMultiplier;
-  }
-
-  const originalCostPrice = originalProductData?.originalCostPrice;
-  if (validatedData.onSale && originalCostPrice && validatedData.profitMargin >= 0) {
-      validatedData.originalPrice = originalCostPrice * profitMultiplier;
-  }
+  
+  const bebidaDocRef = doc(db, 'bebidas', validatedData.id);
 
   try {
-    const bebidaRef = doc(db, 'bebidas', validatedData.id);
-    await setDoc(bebidaRef, validatedData, { merge: true });
+    const bebidaDoc = await getDoc(bebidaDocRef);
+    if (!bebidaDoc.exists()) {
+        return { success: false, message: "Bebida não encontrada." };
+    }
+    const existingBebida = bebidaDoc.data() as Bebida;
+    
+    const dataToUpdate: Partial<Bebida> = { ...validatedData };
+
+    const profitMultiplier = 1 + validatedData.profitMargin / 100;
+
+    if (existingBebida.costPrice) {
+        dataToUpdate.price = existingBebida.costPrice * profitMultiplier;
+    }
+
+    if (existingBebida.onSale && existingBebida.originalCostPrice) {
+        dataToUpdate.originalPrice = existingBebida.originalCostPrice * profitMultiplier;
+    }
+
+    await setDoc(bebidaDocRef, dataToUpdate, { merge: true });
 
     revalidatePath('/admin/bebidas', 'layout');
     revalidatePath(`/admin/bebidas/${validatedData.id}/edit`);

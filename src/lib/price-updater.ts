@@ -7,40 +7,8 @@ import { getRealTimePrice } from '@/ai/flows/get-real-time-price-flow';
 import { Perfume, Product } from '@/lib/products';
 import { revalidatePath } from 'next/cache';
 
-// Helper para introduzir um atraso entre as requisições
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-/* Esta função auxiliar parece não ser usada pela lógica principal de atualização em massa, 
-  mas a mantive caso seja usada em outro lugar.
-*/
-async function updateSingleProduct(product: Product) {
-  const newCostPrice = product.costPrice!;
-  const newSellingPrice = newCostPrice * (1 + product.profitMargin / 100);
-
-  const updatedProductData = {
-    ...product,
-    costPrice: newCostPrice,
-    price: newSellingPrice,
-  };
-
-  switch (product.category) {
-    case 'perfume':
-      await updateProduct(updatedProductData as Perfume);
-      break;
-    case 'eletronico':
-      await updateElectronic(updatedProductData);
-      break;
-    case 'bebida':
-      await updateBebida(updatedProductData);
-      break;
-  }
-
-  console.log(`Preço do produto "${product.name}" atualizado para R$ ${newSellingPrice.toFixed(2)}`);
-}
-
-/**
- * Função principal do robô: busca os preços de todos os produtos e atualiza no banco de dados.
- */
 export async function updateAllProductPrices(): Promise<{
   success: boolean;
   message: string;
@@ -66,25 +34,24 @@ export async function updateAllProductPrices(): Promise<{
 
       try {
         const result = await getRealTimePrice({ url: product.priceUrl });
-        const dataToUpdate: any = { ...product }; // Use 'any' to dynamically add properties
+        const dataToUpdate: Partial<Product> = {};
         let hasChanged = false;
+
+        const profitMultiplier = 1 + product.profitMargin / 100;
         
-        // --- Lógica de Preço de Custo e Venda ---
         if (result.price !== null) {
           const fetchedCostPrice = result.price;
-          // Verifica se o preço de custo mudou
           if (!product.costPrice || Math.abs(product.costPrice - fetchedCostPrice) > 0.01) {
             dataToUpdate.costPrice = fetchedCostPrice;
-            dataToUpdate.price = fetchedCostPrice * (1 + product.profitMargin / 100);
+            dataToUpdate.price = fetchedCostPrice * profitMultiplier;
             hasChanged = true;
           }
         } else {
             console.warn(`Não foi possível obter o preço para "${product.name}". Erro: ${result.error}`);
         }
 
-        // --- Lógica de Promoção ---
-        const scrapedOriginalCostPrice = result.originalPrice; // Preço "de" no site de origem
-        const newOnSaleStatus = scrapedOriginalCostPrice !== null && dataToUpdate.costPrice !== null && scrapedOriginalCostPrice > dataToUpdate.costPrice;
+        const scrapedOriginalCostPrice = result.originalPrice;
+        const newOnSaleStatus = scrapedOriginalCostPrice !== null && dataToUpdate.costPrice !== undefined && scrapedOriginalCostPrice > dataToUpdate.costPrice;
 
         if (product.onSale !== newOnSaleStatus) {
             dataToUpdate.onSale = newOnSaleStatus;
@@ -92,27 +59,27 @@ export async function updateAllProductPrices(): Promise<{
         }
 
         if (newOnSaleStatus && scrapedOriginalCostPrice) {
-            // Salva o preço de custo original para recalcular a margem depois
-             if (product.originalCostPrice !== scrapedOriginalCostPrice) {
+            if (product.originalCostPrice !== scrapedOriginalCostPrice) {
                 dataToUpdate.originalCostPrice = scrapedOriginalCostPrice;
-                dataToUpdate.originalPrice = scrapedOriginalCostPrice * (1 + product.profitMargin / 100);
+                dataToUpdate.originalPrice = scrapedOriginalCostPrice * profitMultiplier;
                 hasChanged = true;
              }
-        } else if (!newOnSaleStatus && product.onSale) {
-            // Se o produto não está mais em promoção, limpa os campos
+        } else if (product.onSale && !newOnSaleStatus) {
             dataToUpdate.originalPrice = null;
-            dataToUpdate.originalCostPrice = null; // Limpa o custo original também
+            dataToUpdate.originalCostPrice = null;
+            dataToUpdate.onSale = false;
+            hasChanged = true;
         }
 
 
-        // --- Salvar no Banco de Dados se houver alguma mudança ---
         if (hasChanged) {
-            switch(dataToUpdate.category) {
-                case 'perfume': await updateProduct(dataToUpdate as Perfume); break;
-                case 'eletronico': await updateElectronic(dataToUpdate); break;
-                case 'bebida': await updateBebida(dataToUpdate); break;
+            const finalData = { ...product, ...dataToUpdate };
+            switch(finalData.category) {
+                case 'perfume': await updateProduct(finalData as Perfume); break;
+                case 'eletronico': await updateElectronic(finalData); break;
+                case 'bebida': await updateBebida(finalData); break;
             }
-            console.log(`Produto "${product.name}" atualizado. Preço de venda: ${dataToUpdate.price?.toFixed(2)}, Em promoção: ${dataToUpdate.onSale}, Preço Original: ${dataToUpdate.originalPrice?.toFixed(2)}`);
+            console.log(`Produto "${product.name}" atualizado. Preço de venda: ${finalData.price?.toFixed(2)}, Em promoção: ${finalData.onSale}`);
             updatedCount++;
         }
 
@@ -121,11 +88,9 @@ export async function updateAllProductPrices(): Promise<{
         failedCount++;
       }
       
-      // Atraso para não sobrecarregar o site de origem
       await delay(500); 
     }
 
-    // Revalida o cache das páginas para que os usuários vejam os novos preços
     revalidatePath('/catalogo', 'layout');
     revalidatePath('/', 'layout');
 
