@@ -4,7 +4,7 @@
 import { updateProduct, updateElectronic, updateBebida } from '@/lib/actions';
 import { getProducts, getElectronics, getBebidas } from '@/lib/data';
 import { getRealTimePrice } from '@/ai/flows/get-real-time-price-flow';
-import { Perfume, Product } from '@/lib/products';
+import { Perfume, Product, Eletronico, Bebida } from '@/lib/products';
 import { revalidatePath } from 'next/cache';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -22,7 +22,7 @@ export async function updateAllProductPrices(): Promise<{
     const perfumes = (await getProducts()).map(p => ({...p, category: 'perfume' as const}));
     const eletronicos = (await getElectronics()).map(p => ({...p, category: 'eletronico' as const}));
     const bebidas = (await getBebidas()).map(p => ({...p, category: 'bebida' as const}));
-    const allProducts = [...perfumes, ...eletronicos, ...bebidas];
+    const allProducts: (Perfume | Eletronico | Bebida)[] = [...perfumes, ...eletronicos, ...bebidas];
 
     let updatedCount = 0;
     let failedCount = 0;
@@ -38,10 +38,12 @@ export async function updateAllProductPrices(): Promise<{
         let hasChanged = false;
 
         const profitMultiplier = 1 + product.profitMargin / 100;
-        
+        let newCostPrice = product.costPrice;
+
         if (result.price !== null) {
           const fetchedCostPrice = result.price;
           if (!product.costPrice || Math.abs(product.costPrice - fetchedCostPrice) > 0.01) {
+            newCostPrice = fetchedCostPrice;
             dataToUpdate.costPrice = fetchedCostPrice;
             dataToUpdate.price = fetchedCostPrice * profitMultiplier;
             hasChanged = true;
@@ -51,35 +53,37 @@ export async function updateAllProductPrices(): Promise<{
         }
 
         const scrapedOriginalCostPrice = result.originalPrice;
-        const newOnSaleStatus = scrapedOriginalCostPrice !== null && dataToUpdate.costPrice !== undefined && scrapedOriginalCostPrice > dataToUpdate.costPrice;
+        // A product is on sale if we scraped an original price AND that original price is higher than the current cost price.
+        const newOnSaleStatus = scrapedOriginalCostPrice !== null && newCostPrice !== undefined && scrapedOriginalCostPrice > newCostPrice;
 
+        // If the sale status has changed (e.g. was on sale, now isn't, or vice-versa)
         if (product.onSale !== newOnSaleStatus) {
             dataToUpdate.onSale = newOnSaleStatus;
             hasChanged = true;
         }
 
         if (newOnSaleStatus && scrapedOriginalCostPrice) {
+            // If the original cost price has changed, update it and the final original price
             if (product.originalCostPrice !== scrapedOriginalCostPrice) {
                 dataToUpdate.originalCostPrice = scrapedOriginalCostPrice;
                 dataToUpdate.originalPrice = scrapedOriginalCostPrice * profitMultiplier;
                 hasChanged = true;
-             }
-        } else if (product.onSale && !newOnSaleStatus) {
+            }
+        } else if (product.onSale && !newOnSaleStatus) { // If product was on sale, but isn't anymore
             dataToUpdate.originalPrice = null;
             dataToUpdate.originalCostPrice = null;
-            dataToUpdate.onSale = false;
+            dataToUpdate.onSale = false; // Explicitly set to false
             hasChanged = true;
         }
-
 
         if (hasChanged) {
             const finalData = { ...product, ...dataToUpdate };
             switch(finalData.category) {
                 case 'perfume': await updateProduct(finalData as Perfume); break;
-                case 'eletronico': await updateElectronic(finalData); break;
-                case 'bebida': await updateBebida(finalData); break;
+                case 'eletronico': await updateElectronic(finalData as Eletronico); break;
+                case 'bebida': await updateBebida(finalData as Bebida); break;
             }
-            console.log(`Produto "${product.name}" atualizado. Preço de venda: ${finalData.price?.toFixed(2)}, Em promoção: ${finalData.onSale}`);
+            console.log(`Produto "${product.name}" atualizado. Preço de venda: ${finalData.price?.toFixed(2)}, Em promoção: ${finalData.onSale}, Preço Original: ${finalData.originalPrice?.toFixed(2)}`);
             updatedCount++;
         }
 
