@@ -37,7 +37,9 @@ export async function updateAllProductPrices(): Promise<{
         const dataToUpdate: Partial<Product> = {};
         let hasChanged = false;
 
-        const profitMultiplier = 1 + product.profitMargin / 100;
+        const fixedProfitMargin = 75; // Alterado para 75%
+        product.profitMargin = fixedProfitMargin; // Garante que o produto tenha a margem atualizada
+        const profitMultiplier = 1 + fixedProfitMargin / 100;
         let newCostPrice = product.costPrice;
 
         if (result.price !== null) {
@@ -53,10 +55,8 @@ export async function updateAllProductPrices(): Promise<{
         }
 
         const scrapedOriginalCostPrice = result.originalPrice;
-        // A product is on sale if we scraped an original price AND that original price is higher than the current cost price.
         const newOnSaleStatus = scrapedOriginalCostPrice !== null && newCostPrice !== undefined && scrapedOriginalCostPrice > newCostPrice;
 
-        // If the sale status has changed (e.g. was on sale, now isn't, or vice-versa)
         if (product.onSale !== newOnSaleStatus) {
             dataToUpdate.onSale = newOnSaleStatus;
             hasChanged = true;
@@ -64,27 +64,41 @@ export async function updateAllProductPrices(): Promise<{
 
         if (newOnSaleStatus && scrapedOriginalCostPrice) {
             const calculatedOriginalPrice = scrapedOriginalCostPrice * profitMultiplier;
-            // If the original cost price or the calculated final price has changed, update it.
             if (product.originalCostPrice !== scrapedOriginalCostPrice || product.originalPrice !== calculatedOriginalPrice) {
                 dataToUpdate.originalCostPrice = scrapedOriginalCostPrice;
                 dataToUpdate.originalPrice = calculatedOriginalPrice;
                 hasChanged = true;
             }
-        } else if (product.onSale && !newOnSaleStatus) { // If product was on sale, but isn't anymore
+        } else if (product.onSale && !newOnSaleStatus) {
             dataToUpdate.originalPrice = null;
             dataToUpdate.originalCostPrice = null;
-            dataToUpdate.onSale = false; // Explicitly set to false
+            dataToUpdate.onSale = false;
+            hasChanged = true;
+        }
+        
+        // Sempre forçar a atualização da margem e dos preços se a margem for diferente
+        if (product.profitMargin !== fixedProfitMargin) {
             hasChanged = true;
         }
 
         if (hasChanged) {
-            const finalData = { ...product, ...dataToUpdate };
+            const finalData = { ...product, profitMargin: fixedProfitMargin, ...dataToUpdate };
+
+            // Recalcula os preços mesmo se não houver mudança de custo, para refletir a nova margem
+            if (finalData.costPrice) {
+              finalData.price = finalData.costPrice * profitMultiplier;
+            }
+            if (finalData.onSale && finalData.originalCostPrice) {
+              finalData.originalPrice = finalData.originalCostPrice * profitMultiplier;
+            }
+
+
             switch(finalData.category) {
                 case 'perfume': await updateProduct(finalData as Perfume); break;
                 case 'eletronico': await updateElectronic(finalData as Eletronico); break;
                 case 'bebida': await updateBebida(finalData as Bebida); break;
             }
-            console.log(`Produto "${product.name}" atualizado. Preço de venda: ${finalData.price?.toFixed(2)}, Em promoção: ${finalData.onSale}, Preço Original: ${finalData.originalPrice?.toFixed(2)}`);
+            console.log(`Produto "${product.name}" atualizado. Margem: ${fixedProfitMargin}%. Preço de venda: ${finalData.price?.toFixed(2)}, Em promoção: ${finalData.onSale}, Preço Original: ${finalData.originalPrice?.toFixed(2)}`);
             updatedCount++;
         }
 
