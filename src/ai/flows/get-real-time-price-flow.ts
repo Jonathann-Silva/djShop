@@ -47,17 +47,20 @@ async function fetchProductPrice(
     ];
     
     const onSalePatterns = [
-        /<del class="text-muted.*?">R\$\s*([\d.,]+)<\/del>/,
-        /<del class="text-muted.*?fs-lg.*?">R\$\s*([\d.,]+)<\/del>/,
+        /<del.*?>(?:R\$\s*)?([\d.,]+)<\/del>/,
     ];
     let originalPrice: number | null = null;
     
     for (const onSalePattern of onSalePatterns) {
         const onSaleMatch = html.match(onSalePattern);
-        if (onSaleMatch) {
+        if (onSaleMatch && onSaleMatch[1]) {
             let cleanedPriceStr = onSaleMatch[1].replace(/\./g, '').replace(',', '.');
             originalPrice = parseFloat(cleanedPriceStr);
-            break; 
+            if (!isNaN(originalPrice)) {
+                break;
+            } else {
+                originalPrice = null;
+            }
         }
     }
 

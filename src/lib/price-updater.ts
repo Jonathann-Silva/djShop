@@ -84,7 +84,8 @@ export async function updateAllProductPrices(): Promise<{
 
         // --- Lógica de Promoção ---
         const newOriginalPrice = result.originalPrice;
-        const newOnSaleStatus = newOriginalPrice !== null && result.price !== null && newOriginalPrice > result.price;
+        // Considera promoção se o preço original for maior que o preço de custo (o preço de venda)
+        const newOnSaleStatus = newOriginalPrice !== null && dataToUpdate.costPrice !== null && newOriginalPrice > dataToUpdate.costPrice;
 
         if (product.onSale !== newOnSaleStatus || product.originalPrice !== newOriginalPrice) {
             dataToUpdate.onSale = newOnSaleStatus;
