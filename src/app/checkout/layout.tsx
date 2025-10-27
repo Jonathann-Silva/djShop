@@ -1,11 +1,7 @@
 import { ReactNode } from 'react';
 
+// This layout is no longer necessary as the logic is now in the root layout.
+// You can delete this file.
 export default function CheckoutLayout({ children }: { children: ReactNode }) {
-  return (
-      <div className="flex min-h-screen flex-col">
-        {/* O cabeçalho é renderizado pelo layout raiz (src/app/layout.tsx) */}
-        <main className="flex-grow">{children}</main>
-        {/* O Footer é intencionalmente omitido pelo layout raiz neste caso. */}
-      </div>
-  );
+  return <>{children}</>;
 }

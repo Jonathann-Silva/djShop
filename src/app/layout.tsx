@@ -36,7 +36,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="DJ Shop" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#7C5A9E" />
+        <meta name="theme-color" content="#5a4279" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="font-body antialiased">
@@ -53,20 +53,14 @@ export default function RootLayout({
 function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  if (pathname.startsWith('/checkout')) {
-    return (
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-grow">{children}</main>
-      </div>
-    );
-  }
+  // This logic is now handled by the root layout itself, so no need for a separate checkout layout file.
+  const showFooter = !pathname.startsWith('/checkout');
 
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-grow">{children}</main>
-      <Footer />
+      {showFooter && <Footer />}
     </div>
   );
 }
