@@ -66,7 +66,7 @@ export async function updateAllProductPrices(): Promise<{
 
       try {
         const result = await getRealTimePrice({ url: product.priceUrl });
-        const dataToUpdate = { ...product };
+        const dataToUpdate: any = { ...product }; // Use 'any' to dynamically add properties
         let hasChanged = false;
         
         // --- Lógica de Preço de Custo e Venda ---
@@ -86,18 +86,24 @@ export async function updateAllProductPrices(): Promise<{
         const scrapedOriginalCostPrice = result.originalPrice; // Preço "de" no site de origem
         const newOnSaleStatus = scrapedOriginalCostPrice !== null && dataToUpdate.costPrice !== null && scrapedOriginalCostPrice > dataToUpdate.costPrice;
 
-        let newOriginalSellingPrice: number | null = null;
-        if (newOnSaleStatus && scrapedOriginalCostPrice) {
-            // Aplica a margem de lucro ao preço original de custo para ter o preço de venda original
-            newOriginalSellingPrice = scrapedOriginalCostPrice * (1 + product.profitMargin / 100);
-        }
-
-        // Se o status da promoção mudou OU o preço original de venda calculado mudou
-        if (product.onSale !== newOnSaleStatus || product.originalPrice !== newOriginalSellingPrice) {
+        if (product.onSale !== newOnSaleStatus) {
             dataToUpdate.onSale = newOnSaleStatus;
-            dataToUpdate.originalPrice = newOriginalSellingPrice;
             hasChanged = true;
         }
+
+        if (newOnSaleStatus && scrapedOriginalCostPrice) {
+            // Salva o preço de custo original para recalcular a margem depois
+             if (product.originalCostPrice !== scrapedOriginalCostPrice) {
+                dataToUpdate.originalCostPrice = scrapedOriginalCostPrice;
+                dataToUpdate.originalPrice = scrapedOriginalCostPrice * (1 + product.profitMargin / 100);
+                hasChanged = true;
+             }
+        } else if (!newOnSaleStatus && product.onSale) {
+            // Se o produto não está mais em promoção, limpa os campos
+            dataToUpdate.originalPrice = null;
+            dataToUpdate.originalCostPrice = null; // Limpa o custo original também
+        }
+
 
         // --- Salvar no Banco de Dados se houver alguma mudança ---
         if (hasChanged) {

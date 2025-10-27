@@ -21,6 +21,7 @@ export interface Perfume {
   originalPrice?: number | null;
   createdAt?: number;
   category?: 'perfume';
+  originalCostPrice?: number | null;
 }
 
 export interface Eletronico {
@@ -38,6 +39,7 @@ export interface Eletronico {
   originalPrice?: number | null;
   createdAt?: number;
   category?: 'eletronico';
+  originalCostPrice?: number | null;
 }
 
 export interface Bebida {
@@ -55,6 +57,7 @@ export interface Bebida {
   originalPrice?: number | null;
   createdAt?: number;
   category?: 'bebida';
+  originalCostPrice?: number | null;
 }
 
 export type Product = Perfume | Eletronico | Bebida;

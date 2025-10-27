@@ -72,11 +72,16 @@ const ProductSchema = z.object({
   costPrice: z.number().optional().nullable(),
   originalPrice: z.number().optional().nullable(),
   createdAt: z.number().optional(),
+  originalCostPrice: z.number().optional().nullable(), // Campo para armazenar o custo original
 });
 
 export async function updateProduct(
   data: Perfume
 ): Promise<{ success: boolean; message: string }> {
+  // We need to fetch the original product to get the originalCostPrice
+  const originalProductDoc = await getDoc(doc(db, 'products', data.id));
+  const originalProductData = originalProductDoc.data() as Perfume;
+
   const validation = ProductSchema.safeParse(data);
 
   if (!validation.success) {
@@ -86,9 +91,17 @@ export async function updateProduct(
   
   const validatedData = validation.data;
 
-  // Recalcula o preço de venda se a margem de lucro for alterada e o preço de custo existir
+  // Recalcula o preço de venda e o preço original com base na nova margem de lucro
+  const profitMultiplier = 1 + validatedData.profitMargin / 100;
+
   if (validatedData.costPrice && validatedData.profitMargin >= 0) {
-    validatedData.price = validatedData.costPrice * (1 + validatedData.profitMargin / 100);
+    validatedData.price = validatedData.costPrice * profitMultiplier;
+  }
+  
+  // Se o produto está em promoção e temos um custo original salvo, recalcula o preço de venda original
+  const originalCostPrice = originalProductData?.originalCostPrice;
+  if (validatedData.onSale && originalCostPrice && validatedData.profitMargin >= 0) {
+      validatedData.originalPrice = originalCostPrice * profitMultiplier;
   }
 
 
@@ -172,12 +185,16 @@ const EletronicoSchema = z.object({
   costPrice: z.number().optional().nullable(),
   originalPrice: z.number().optional().nullable(),
   createdAt: z.number().optional(),
+  originalCostPrice: z.number().optional().nullable(),
 });
 
 
 export async function updateElectronic(
   data: Eletronico
 ): Promise<{ success: boolean; message: string }> {
+  const originalProductDoc = await getDoc(doc(db, 'electronics', data.id));
+  const originalProductData = originalProductDoc.data() as Eletronico;
+  
   const validation = EletronicoSchema.safeParse(data);
 
   if (!validation.success) {
@@ -186,9 +203,16 @@ export async function updateElectronic(
   }
   
   const validatedData = validation.data;
+  
+  const profitMultiplier = 1 + validatedData.profitMargin / 100;
 
   if (validatedData.costPrice && validatedData.profitMargin >= 0) {
-    validatedData.price = validatedData.costPrice * (1 + validatedData.profitMargin / 100);
+    validatedData.price = validatedData.costPrice * profitMultiplier;
+  }
+
+  const originalCostPrice = originalProductData?.originalCostPrice;
+  if (validatedData.onSale && originalCostPrice && validatedData.profitMargin >= 0) {
+      validatedData.originalPrice = originalCostPrice * profitMultiplier;
   }
 
   try {
@@ -268,12 +292,16 @@ const BebidaSchema = z.object({
   costPrice: z.number().optional().nullable(),
   originalPrice: z.number().optional().nullable(),
   createdAt: z.number().optional(),
+  originalCostPrice: z.number().optional().nullable(),
 });
 
 
 export async function updateBebida(
   data: Bebida
 ): Promise<{ success: boolean; message: string }> {
+  const originalProductDoc = await getDoc(doc(db, 'bebidas', data.id));
+  const originalProductData = originalProductDoc.data() as Bebida;
+
   const validation = BebidaSchema.safeParse(data);
 
   if (!validation.success) {
@@ -282,9 +310,15 @@ export async function updateBebida(
   }
   
   const validatedData = validation.data;
+  const profitMultiplier = 1 + validatedData.profitMargin / 100;
 
   if (validatedData.costPrice && validatedData.profitMargin >= 0) {
-    validatedData.price = validatedData.costPrice * (1 + validatedData.profitMargin / 100);
+    validatedData.price = validatedData.costPrice * profitMultiplier;
+  }
+
+  const originalCostPrice = originalProductData?.originalCostPrice;
+  if (validatedData.onSale && originalCostPrice && validatedData.profitMargin >= 0) {
+      validatedData.originalPrice = originalCostPrice * profitMultiplier;
   }
 
   try {
