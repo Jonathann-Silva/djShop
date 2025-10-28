@@ -10,6 +10,7 @@ import type { Perfume, Eletronico, Bebida, Order } from './products';
 // --- Read Functions ---
 
 export async function getProducts(): Promise<Perfume[]> {
+  // Removido noStore() daqui para permitir o cache em páginas de listagem.
   try {
     const productsCollection = collection(db, 'products');
     const productsSnapshot = await getDocs(productsCollection);
@@ -37,6 +38,7 @@ export async function getProductById(id: string): Promise<Perfume | null> {
 }
 
 export async function getElectronics(): Promise<Eletronico[]> {
+  // Removido noStore() daqui para permitir o cache em páginas de listagem.
   try {
     const electronicsCollection = collection(db, 'electronics');
     const electronicsSnapshot = await getDocs(electronicsCollection);
@@ -65,6 +67,7 @@ export async function getElectronicById(id: string): Promise<Eletronico | null> 
 
 
 export async function getBebidas(): Promise<Bebida[]> {
+  // Removido noStore() daqui para permitir o cache em páginas de listagem.
   try {
     const bebidasCollection = collection(db, 'bebidas');
     const bebidasSnapshot = await getDocs(bebidasCollection);
